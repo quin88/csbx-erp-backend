@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsh.erp.datasource.mappers.SecondSettlementMethodMapperEx">
+    <resultMap extends="com.jsh.erp.datasource.mappers.SecondSettlementMethodMapper.BaseResultMap" id="ResultMapEx" type="com.jsh.erp.datasource.vo.SecondSettlementMethodVoList">
+        <result column="settlement" jdbcType="VARCHAR" property="settlement"/>
+    </resultMap>
+
+    <select id="selectByConditionSecondSettlement" parameterType="com.jsh.erp.datasource.entities.SecondSettlementMethodExample" resultMap="ResultMapEx">
+        select ssm.*,sm.settlement settlement
+        from second_settlement_method ssm
+        left join settlement_method sm on sm.id = ssm.settlement_id and ifnull(sm.delete_flag,'0')!='1'
+        where 1 = 1
+        <if test="settlement != null">
+            <bind name="bindSettlement" value="'%'+settlement+'%'"/>
+            and sm.settlement like #{bindSettlement}
+        </if>
+        <if test="settlementId != null">
+            and ssm.settlement_id = #{settlementId}
+        </if>
+        <if test="secondSettlement != null">
+            <bind name="bindSecondSettlement" value="'%'+secondSettlement+'%'"/>
+            and ssm.second_settlement_method like #{bindSecondSettlement}
+        </if>
+        and ifnull(ssm.delete_flag,'0') !='1'
+        <if test="offset != null and rows != null">
+            limit #{offset},#{rows}
+        </if>
+    </select>
+
+    <select id="countSecondSettlement" resultType="java.lang.Long">
+        select count(1)
+        from second_settlement_method ssm
+        left join settlement_method sm on sm.id = ssm.settlement_id and ifnull(sm.delete_flag,'0')!='1'
+        where 1 = 1
+        <if test="settlement != null">
+            <bind name="bindName" value="'%'+settlement+'%'"/>
+            and sm.settlement like #{bindName}
+        </if>
+        <if test="settlementId != null">
+            and ssm.settlement_id = #{settlementId}
+        </if>
+        <if test="secondSettlement != null">
+            <bind name="bindName" value="'%'+secondSettlement+'%'"/>
+            and ssm.second_settlement_method like #{bindName}
+        </if>
+        and ifnull(ssm.delete_flag,'0') !='1'
+    </select>
+
+    <update id="batchDeleteSecondSettlementMethodByIds">
+        update second_settlement_method
+        set delete_flag='1',updater=#{updater},update_time=#{updateTime}
+        where 1=1
+        and id in (
+        <foreach collection="ids" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+    </update>
+
+    <select id="findByAll" parameterType="com.jsh.erp.datasource.entities.SecondSettlementMethodExample" resultMap="ResultMapEx">
+        select ssm.*,sm.settlement settlement
+        from second_settlement_method ssm
+        left join settlement_method sm on sm.id = ssm.settlement_id and ifnull(sm.delete_flag,'0')!='1'
+        where ifnull(ssm.delete_flag,'0')!='1'
+    </select>
+</mapper>

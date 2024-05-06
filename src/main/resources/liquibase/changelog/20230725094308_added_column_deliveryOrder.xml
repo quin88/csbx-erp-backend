@@ -1,0 +1,21 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet author="mqh (generated)" id="1690249472951" dbms="mysql">
+        <addColumn tableName="jsh_depot_head">
+            <column name="supplier_id" type="BIGINT" remarks="供应商id"/>
+            <column name="simulated_annealing" type="VARCHAR(50)" remarks="冷藏算法"/>
+            <column name="period" type="VARCHAR(20)" remarks="周期"/>
+            <column name="other_cost_total" type="DECIMAL(24, 6)" defaultValue="0" remarks="杂费合计"/>
+            <column name="product_quality" type="VARCHAR(500)" remarks="产品质检资料"/>
+            <column name="customs_declaration_document" type="VARCHAR(500)"  remarks="资料相关单"/>
+            <column name="quarantine_certificate" type="VARCHAR(500)"  remarks="进出口检疫证明"/>
+            <column name="license" type="VARCHAR(500)"  remarks="许可证"/>
+            <column name="detailed_goods_list" type="VARCHAR(500)"  remarks="货品明细清单"/>
+            <column name="delivery_order" type="VARCHAR(500)" remarks="客户签收出库单"/>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

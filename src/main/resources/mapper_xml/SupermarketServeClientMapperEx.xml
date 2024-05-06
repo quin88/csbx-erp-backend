@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsh.erp.datasource.mappers.SupermarketServeClientMapperEx">
+    <resultMap extends="com.jsh.erp.datasource.mappers.SupermarketServeClientMapper.BaseResultMap" id="ResultMapEx"
+               type="com.jsh.erp.datasource.vo.SupermarketServeClientVo">
+        <result column="tenantName" jdbcType="VARCHAR" property="tenantName"/>
+    </resultMap>
+
+    <select id="selectSupplierServeClient"  resultMap="ResultMapEx">
+        select ssc.*, u.username tenantName
+        from supermarket_serve_client ssc
+        left join jsh_user u on u.id=ssc.tenant_id and ifnull(u.Status,'0') !='1'
+        where 1 = 1
+        and ifnull( ssc.delete_flag,'0') !='1'
+        order by  ssc.id asc
+        <if test="offset != null and rows != null">
+            limit #{offset},#{rows}
+        </if>
+    </select>
+
+    <select id="countSupplierServeClient" resultType="java.lang.Long">
+        select count(1)
+        from supermarket_serve_client
+        where 1 = 1
+        and ifnull(delete_flag,'0') !='1'
+    </select>
+
+    <update id="batchDeleteServeClientByIds">
+        update supermarket_serve_client
+        set delete_flag='1'
+        where 1=1
+        and id in (
+        <foreach collection="ids" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+    </update>
+</mapper>

@@ -1,0 +1,14 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+    <changeSet author="lky" id="1706769274000" dbms="mysql">
+        <!-- 充值配置表 -->
+        <createTable tableName="recharge_configuration" remarks="充值配置表">
+            <column name="id" type="bigint(20)" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="recharge_amount" type="decimal(24,6)" remarks="充值金额" />
+            <column name="amount_of_gift" type="decimal(24,6)" defaultValue="0" remarks="赠送金额" />
+            <column name="tenant_id" type="bigint(20)" remarks="租户ID" />
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

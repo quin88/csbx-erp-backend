@@ -1,0 +1,528 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsh.erp.datasource.mappers.SupermarketOrderMapper">
+  <resultMap id="BaseResultMap" type="com.jsh.erp.datasource.entities.SupermarketOrder">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="open_time" jdbcType="TIMESTAMP" property="openTime" />
+    <result column="number" jdbcType="VARCHAR" property="number" />
+    <result column="category" jdbcType="VARCHAR" property="category" />
+    <result column="naked_price_total" jdbcType="DECIMAL" property="nakedPriceTotal" />
+    <result column="tax_inclusive_total" jdbcType="DECIMAL" property="taxInclusiveTotal" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="upload_status" jdbcType="VARCHAR" property="uploadStatus" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="creator" jdbcType="BIGINT" property="creator" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="updater" jdbcType="BIGINT" property="updater" />
+    <result column="verifier" jdbcType="BIGINT" property="verifier" />
+    <result column="verifier_time" jdbcType="TIMESTAMP" property="verifierTime" />
+    <result column="comment" jdbcType="VARCHAR" property="comment" />
+    <result column="delete_flag" jdbcType="VARCHAR" property="deleteFlag" />
+    <result column="tenant_id" jdbcType="BIGINT" property="tenantId" />
+    <result column="trade_time" jdbcType="TIMESTAMP" property="tradeTime" />
+    <result column="serve_client_id" jdbcType="BIGINT" property="serveClientId" />
+    <result column="market_address_id" jdbcType="BIGINT" property="marketAddressId" />
+    <result column="difference_total" jdbcType="DECIMAL" property="differenceTotal" />
+    <result column="link_id" jdbcType="BIGINT" property="linkId" />
+    <result column="link_number" jdbcType="VARCHAR" property="linkNumber" />
+    <result column="initial_difference" jdbcType="DECIMAL" property="initialDifference" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, open_time, number, category, naked_price_total, tax_inclusive_total, status, 
+    upload_status, remark, create_time, creator, update_time, updater, verifier, verifier_time, 
+    comment, delete_flag, tenant_id, trade_time, serve_client_id, market_address_id, 
+    difference_total, link_id, link_number, initial_difference
+  </sql>
+  <select id="selectByExample" parameterType="com.jsh.erp.datasource.entities.SupermarketOrderExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from supermarket_order
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from supermarket_order
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from supermarket_order
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jsh.erp.datasource.entities.SupermarketOrderExample">
+    delete from supermarket_order
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jsh.erp.datasource.entities.SupermarketOrder">
+    insert into supermarket_order (id, open_time, number, 
+      category, naked_price_total, tax_inclusive_total, 
+      status, upload_status, remark, 
+      create_time, creator, update_time, 
+      updater, verifier, verifier_time, 
+      comment, delete_flag, tenant_id, 
+      trade_time, serve_client_id, market_address_id, 
+      difference_total, link_id, link_number, 
+      initial_difference)
+    values (#{id,jdbcType=BIGINT}, #{openTime,jdbcType=TIMESTAMP}, #{number,jdbcType=VARCHAR}, 
+      #{category,jdbcType=VARCHAR}, #{nakedPriceTotal,jdbcType=DECIMAL}, #{taxInclusiveTotal,jdbcType=DECIMAL}, 
+      #{status,jdbcType=VARCHAR}, #{uploadStatus,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{updater,jdbcType=BIGINT}, #{verifier,jdbcType=BIGINT}, #{verifierTime,jdbcType=TIMESTAMP}, 
+      #{comment,jdbcType=VARCHAR}, #{deleteFlag,jdbcType=VARCHAR}, #{tenantId,jdbcType=BIGINT}, 
+      #{tradeTime,jdbcType=TIMESTAMP}, #{serveClientId,jdbcType=BIGINT}, #{marketAddressId,jdbcType=BIGINT}, 
+      #{differenceTotal,jdbcType=DECIMAL}, #{linkId,jdbcType=BIGINT}, #{linkNumber,jdbcType=VARCHAR}, 
+      #{initialDifference,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jsh.erp.datasource.entities.SupermarketOrder">
+    insert into supermarket_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="openTime != null">
+        open_time,
+      </if>
+      <if test="number != null">
+        number,
+      </if>
+      <if test="category != null">
+        category,
+      </if>
+      <if test="nakedPriceTotal != null">
+        naked_price_total,
+      </if>
+      <if test="taxInclusiveTotal != null">
+        tax_inclusive_total,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="uploadStatus != null">
+        upload_status,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="updater != null">
+        updater,
+      </if>
+      <if test="verifier != null">
+        verifier,
+      </if>
+      <if test="verifierTime != null">
+        verifier_time,
+      </if>
+      <if test="comment != null">
+        comment,
+      </if>
+      <if test="deleteFlag != null">
+        delete_flag,
+      </if>
+      <if test="tenantId != null">
+        tenant_id,
+      </if>
+      <if test="tradeTime != null">
+        trade_time,
+      </if>
+      <if test="serveClientId != null">
+        serve_client_id,
+      </if>
+      <if test="marketAddressId != null">
+        market_address_id,
+      </if>
+      <if test="differenceTotal != null">
+        difference_total,
+      </if>
+      <if test="linkId != null">
+        link_id,
+      </if>
+      <if test="linkNumber != null">
+        link_number,
+      </if>
+      <if test="initialDifference != null">
+        initial_difference,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="openTime != null">
+        #{openTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="number != null">
+        #{number,jdbcType=VARCHAR},
+      </if>
+      <if test="category != null">
+        #{category,jdbcType=VARCHAR},
+      </if>
+      <if test="nakedPriceTotal != null">
+        #{nakedPriceTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="taxInclusiveTotal != null">
+        #{taxInclusiveTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="uploadStatus != null">
+        #{uploadStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null">
+        #{updater,jdbcType=BIGINT},
+      </if>
+      <if test="verifier != null">
+        #{verifier,jdbcType=BIGINT},
+      </if>
+      <if test="verifierTime != null">
+        #{verifierTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="comment != null">
+        #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="deleteFlag != null">
+        #{deleteFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="tenantId != null">
+        #{tenantId,jdbcType=BIGINT},
+      </if>
+      <if test="tradeTime != null">
+        #{tradeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="serveClientId != null">
+        #{serveClientId,jdbcType=BIGINT},
+      </if>
+      <if test="marketAddressId != null">
+        #{marketAddressId,jdbcType=BIGINT},
+      </if>
+      <if test="differenceTotal != null">
+        #{differenceTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="linkId != null">
+        #{linkId,jdbcType=BIGINT},
+      </if>
+      <if test="linkNumber != null">
+        #{linkNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="initialDifference != null">
+        #{initialDifference,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jsh.erp.datasource.entities.SupermarketOrderExample" resultType="java.lang.Long">
+    select count(*) from supermarket_order
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update supermarket_order
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.openTime != null">
+        open_time = #{record.openTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.number != null">
+        number = #{record.number,jdbcType=VARCHAR},
+      </if>
+      <if test="record.category != null">
+        category = #{record.category,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nakedPriceTotal != null">
+        naked_price_total = #{record.nakedPriceTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="record.taxInclusiveTotal != null">
+        tax_inclusive_total = #{record.taxInclusiveTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.uploadStatus != null">
+        upload_status = #{record.uploadStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.creator != null">
+        creator = #{record.creator,jdbcType=BIGINT},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updater != null">
+        updater = #{record.updater,jdbcType=BIGINT},
+      </if>
+      <if test="record.verifier != null">
+        verifier = #{record.verifier,jdbcType=BIGINT},
+      </if>
+      <if test="record.verifierTime != null">
+        verifier_time = #{record.verifierTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.comment != null">
+        comment = #{record.comment,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deleteFlag != null">
+        delete_flag = #{record.deleteFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tenantId != null">
+        tenant_id = #{record.tenantId,jdbcType=BIGINT},
+      </if>
+      <if test="record.tradeTime != null">
+        trade_time = #{record.tradeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.serveClientId != null">
+        serve_client_id = #{record.serveClientId,jdbcType=BIGINT},
+      </if>
+      <if test="record.marketAddressId != null">
+        market_address_id = #{record.marketAddressId,jdbcType=BIGINT},
+      </if>
+      <if test="record.differenceTotal != null">
+        difference_total = #{record.differenceTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="record.linkId != null">
+        link_id = #{record.linkId,jdbcType=BIGINT},
+      </if>
+      <if test="record.linkNumber != null">
+        link_number = #{record.linkNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.initialDifference != null">
+        initial_difference = #{record.initialDifference,jdbcType=DECIMAL},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update supermarket_order
+    set id = #{record.id,jdbcType=BIGINT},
+      open_time = #{record.openTime,jdbcType=TIMESTAMP},
+      number = #{record.number,jdbcType=VARCHAR},
+      category = #{record.category,jdbcType=VARCHAR},
+      naked_price_total = #{record.nakedPriceTotal,jdbcType=DECIMAL},
+      tax_inclusive_total = #{record.taxInclusiveTotal,jdbcType=DECIMAL},
+      status = #{record.status,jdbcType=VARCHAR},
+      upload_status = #{record.uploadStatus,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      creator = #{record.creator,jdbcType=BIGINT},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      updater = #{record.updater,jdbcType=BIGINT},
+      verifier = #{record.verifier,jdbcType=BIGINT},
+      verifier_time = #{record.verifierTime,jdbcType=TIMESTAMP},
+      comment = #{record.comment,jdbcType=VARCHAR},
+      delete_flag = #{record.deleteFlag,jdbcType=VARCHAR},
+      tenant_id = #{record.tenantId,jdbcType=BIGINT},
+      trade_time = #{record.tradeTime,jdbcType=TIMESTAMP},
+      serve_client_id = #{record.serveClientId,jdbcType=BIGINT},
+      market_address_id = #{record.marketAddressId,jdbcType=BIGINT},
+      difference_total = #{record.differenceTotal,jdbcType=DECIMAL},
+      link_id = #{record.linkId,jdbcType=BIGINT},
+      link_number = #{record.linkNumber,jdbcType=VARCHAR},
+      initial_difference = #{record.initialDifference,jdbcType=DECIMAL}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jsh.erp.datasource.entities.SupermarketOrder">
+    update supermarket_order
+    <set>
+      <if test="openTime != null">
+        open_time = #{openTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="number != null">
+        number = #{number,jdbcType=VARCHAR},
+      </if>
+      <if test="category != null">
+        category = #{category,jdbcType=VARCHAR},
+      </if>
+      <if test="nakedPriceTotal != null">
+        naked_price_total = #{nakedPriceTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="taxInclusiveTotal != null">
+        tax_inclusive_total = #{taxInclusiveTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="uploadStatus != null">
+        upload_status = #{uploadStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null">
+        updater = #{updater,jdbcType=BIGINT},
+      </if>
+      <if test="verifier != null">
+        verifier = #{verifier,jdbcType=BIGINT},
+      </if>
+      <if test="verifierTime != null">
+        verifier_time = #{verifierTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="comment != null">
+        comment = #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="deleteFlag != null">
+        delete_flag = #{deleteFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="tenantId != null">
+        tenant_id = #{tenantId,jdbcType=BIGINT},
+      </if>
+      <if test="tradeTime != null">
+        trade_time = #{tradeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="serveClientId != null">
+        serve_client_id = #{serveClientId,jdbcType=BIGINT},
+      </if>
+      <if test="marketAddressId != null">
+        market_address_id = #{marketAddressId,jdbcType=BIGINT},
+      </if>
+      <if test="differenceTotal != null">
+        difference_total = #{differenceTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="linkId != null">
+        link_id = #{linkId,jdbcType=BIGINT},
+      </if>
+      <if test="linkNumber != null">
+        link_number = #{linkNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="initialDifference != null">
+        initial_difference = #{initialDifference,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jsh.erp.datasource.entities.SupermarketOrder">
+    update supermarket_order
+    set open_time = #{openTime,jdbcType=TIMESTAMP},
+      number = #{number,jdbcType=VARCHAR},
+      category = #{category,jdbcType=VARCHAR},
+      naked_price_total = #{nakedPriceTotal,jdbcType=DECIMAL},
+      tax_inclusive_total = #{taxInclusiveTotal,jdbcType=DECIMAL},
+      status = #{status,jdbcType=VARCHAR},
+      upload_status = #{uploadStatus,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      creator = #{creator,jdbcType=BIGINT},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      updater = #{updater,jdbcType=BIGINT},
+      verifier = #{verifier,jdbcType=BIGINT},
+      verifier_time = #{verifierTime,jdbcType=TIMESTAMP},
+      comment = #{comment,jdbcType=VARCHAR},
+      delete_flag = #{deleteFlag,jdbcType=VARCHAR},
+      tenant_id = #{tenantId,jdbcType=BIGINT},
+      trade_time = #{tradeTime,jdbcType=TIMESTAMP},
+      serve_client_id = #{serveClientId,jdbcType=BIGINT},
+      market_address_id = #{marketAddressId,jdbcType=BIGINT},
+      difference_total = #{differenceTotal,jdbcType=DECIMAL},
+      link_id = #{linkId,jdbcType=BIGINT},
+      link_number = #{linkNumber,jdbcType=VARCHAR},
+      initial_difference = #{initialDifference,jdbcType=DECIMAL}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsh.erp.datasource.mappers.MarketMapperEx">
+    <select id="selectByConditionMarket" resultType="com.jsh.erp.datasource.entities.Market">
+        select *
+        from market
+        where 1=1
+        <if test="number != null">
+            <bind name="number" value="'%'+number+'%'"/>
+            and number like #{number}
+        </if>
+        <if test="name != null">
+            <bind name="name" value="'%'+name+'%'"/>
+            and name like #{name}
+        </if>
+        <if test="enabled != null">
+        and enabled = #{enabled}
+        </if>
+        and ifnull(delete_flag,'0') !='1'
+        order by id desc
+        <if test="offset != null and rows != null">
+            limit #{offset},#{rows}
+        </if>
+    </select>
+
+    <select id="countByConditionMarket" resultType="java.lang.Long">
+        select count(1)
+        from market
+        where 1=1
+        <if test="number != null">
+            <bind name="number" value="'%'+number+'%'"/>
+            and number like #{number}
+        </if>
+        <if test="name != null">
+            <bind name="name" value="'%'+name+'%'"/>
+            and name like #{name}
+        </if>
+        <if test="enabled != null">
+            and enabled = #{enabled}
+        </if>
+        and ifnull(delete_flag,'0') !='1'
+    </select>
+
+    <select id="selectMarketByNumber" resultType="java.lang.Long">
+        select id
+        from market
+        where number = #{number}
+        and ifnull(delete_flag,'0') !='1'
+    </select>
+</mapper>

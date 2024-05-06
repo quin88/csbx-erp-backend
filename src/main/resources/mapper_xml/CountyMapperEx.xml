@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsh.erp.datasource.mappers.CountyMapperEx">
+    <resultMap extends="com.jsh.erp.datasource.mappers.CountyMapper.BaseResultMap" id="CountyVo4ListEx"
+               type="com.jsh.erp.datasource.vo.CountyVo4List">
+        <result column="city" jdbcType="VARCHAR" property="city"/>
+        <result column="cityNumber" jdbcType="VARCHAR" property="cityNumber"/>
+        <result column="province" jdbcType="VARCHAR" property="province"/>
+        <result column="provinceNumber" jdbcType="VARCHAR" property="provinceNumber"/>
+    </resultMap>
+
+    <select id="getCountyById" resultType="com.jsh.erp.datasource.entities.County">
+        select *
+        from county
+        where 1=1
+        <if test="provinceId != null">
+            and province_id = #{provinceId}
+        </if>
+        <if test="cityId != null">
+            and city_id=#{cityId}
+        </if>
+        and ifnull(enabled,false)=true
+        and ifnull(delete_flag,'0') !='1'
+    </select>
+
+    <select id="selectByConditionCounty" resultMap="CountyVo4ListEx">
+        select c.*, city.city_name city, city.city_number cityNumber, p.province_name province, p.province_number
+        provinceNumber
+        from county c
+        left join city on city.id = c.city_id and ifnull(city.delete_flag,'0') !='1'
+        left join province p on p.id = city.province_id and ifnull(p.delete_flag,'0') !='1'
+        where 1=1
+        <if test="id != null">
+            and c.id=#{id}
+        </if>
+        <if test="provinceId != null">
+            and c.province_id = #{provinceId}
+        </if>
+        <if test="cityId != null">
+            and c.city_id = #{cityId}
+        </if>
+        <if test="countyName != null">
+            <bind name="countyName" value="'%'+countyName+'%'"/>
+            and c.county_name like #{countyName}
+        </if>
+        <if test="enabled != null">
+            and c.enabled = #{enabled}
+        </if>
+        and ifnull(c.delete_flag,'0') !='1'
+        order by c.id desc
+        <if test="offset != null and rows != null">
+            limit #{offset},#{rows}
+        </if>
+    </select>
+
+    <select id="countByConditionCounty" resultType="java.lang.Long">
+        select count(1)
+        from county c
+        left join city on city.id = c.city_id and ifnull(city.delete_flag,'0') !='1'
+        left join province p on p.id = city.province_id and ifnull(p.delete_flag,'0') !='1'
+        where 1=1
+        <if test="id != null">
+            and c.id=#{id}
+        </if>
+
+        <if test="provinceId != null">
+            and c.province_id = #{provinceId}
+        </if>
+        <if test="cityId != null">
+            and c.city_id = #{cityId}
+        </if>
+        <if test="countyName != null">
+            <bind name="countyName" value="'%'+countyName+'%'"/>
+            and c.county_name like #{countyName}
+        </if>
+        <if test="enabled != null">
+            and c.enabled = #{enabled}
+        </if>
+        and ifnull(c.delete_flag,'0') !='1'
+    </select>
+</mapper>

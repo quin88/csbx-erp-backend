@@ -1,0 +1,34 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet author="mqh (generated)" id="1695613122552" dbms="mysql">
+        <!-- 微信小程序用户表 -->
+        <createTable tableName="wxmini_user" remarks="微信小程序用户表">
+            <column name="id" type="bigint(20)" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="open_id" type="varchar(50)" remarks="用户唯一标识" >
+            </column>
+            <column name="nick_name" type="varchar(50)" remarks="用户昵称">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gender" type="varchar(2)" remarks="性别（0未知,1男,2女）"/>
+            <column name="phone_number" type="varchar(50)" remarks="手机号码">
+                <constraints unique="true"/>
+            </column>
+            <column name="password" type="varchar(50)" remarks="密码" />
+            <column name="city" type="varchar(50)" remarks="城市" />
+            <column name="province" type="varchar(50)" remarks="省份" />
+            <column name="country" type="varchar(50)" remarks="国家" />
+            <column name="avatar_url" type="varchar(255)" remarks="头像" />
+            <column name="union_id" type="varchar(255)" remarks="用户在开放平台的唯一标识" />
+            <column name="is_auth" type="bit" remarks="是否授权" />
+            <column name="create_time" type="datetime" remarks="创建时间" />
+            <column name="update_time" type="datetime" remarks="更新时间" />
+            <column name="delete_flag" type="varchar(1)" defaultValue="0" remarks="删除标记（0未删除，1以删除）" />
+            <column name="tenant_id" type="bigint(20)" remarks="租户ID" />
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

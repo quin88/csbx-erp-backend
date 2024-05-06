@@ -1,0 +1,24 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+<changeSet author="lky" id="1713318578000" dbms="mysql">
+    <addColumn tableName="goods_allocation">
+        <column name="small_depot_id" type="bigint(20)" remarks="仓库id" />
+        <column name="location_id" type="bigint(20)" remarks="区位id" />
+        <column name="row" type="int" defaultValue="0" remarks="排数号" />
+        <column name="goods_type" type="varchar(20)" remarks="货位类型" />
+        <column name="space_type" type="varchar(20)" remarks="空间类型" />
+        <column name="lattice" type="int" defaultValue="0" remarks="格数号" />
+        <column name="capacity" type="int" defaultValue="0" remarks="货位容量" />
+        <column name="capacity_status" type="varchar(1)" remarks="货位容量状态，0:禁用，1:空闲，2:占用，3:满载，4:异常，默认0" />
+        <column name="length" type="int" defaultValue="0" remarks="货位尺寸(长)" />
+        <column name="width" type="int" defaultValue="0" remarks="货位尺寸(宽)" />
+        <column name="height" type="int" defaultValue="0" remarks="货位尺寸(高)" />
+        <column name="weight" type="int" defaultValue="0" remarks="货位重量" />
+        <column name="weight_unit" type="varchar(20)" remarks="重量单位" />
+        <column name="number" type="varchar(100)" remarks="货位编号" />
+        <column name="enabled" type="bit" remarks="启用状态" />
+    </addColumn>
+    <!--删除active字段，统一为enabled字段-->
+    <dropColumn tableName="goods_allocation" columnName="active"/>
+    </changeSet>
+</databaseChangeLog>

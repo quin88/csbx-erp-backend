@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsh.erp.datasource.mappers.MeasurementMapperEx">
+
+    <select id="selectByConditionMeasurement" parameterType="com.jsh.erp.datasource.entities.SecondMeasurementExample" resultMap="com.jsh.erp.datasource.mappers.MeasurementMapper.BaseResultMap">
+        select *
+        from measurement
+        where 1 = 1
+        and ifnull(delete_flag,'0') !='1'
+        <if test="offset != null and rows != null">
+            limit #{offset},#{rows}
+        </if>
+    </select>
+
+    <select id="countMeasurement" resultType="java.lang.Long">
+        select count(1)
+        from measurement
+        where 1 = 1
+        and ifnull(delete_flag,'0') !='1'
+    </select>
+
+    <update id="batchDeleteMeasurementByIds">
+        update measurement
+        set delete_Flag='1'
+        where 1=1
+        and id in (
+        <foreach collection="ids" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+    </update>
+
+</mapper>

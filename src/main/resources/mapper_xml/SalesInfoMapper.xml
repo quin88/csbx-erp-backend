@@ -1,0 +1,480 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsh.erp.datasource.mappers.SalesInfoMapper">
+  <resultMap id="BaseResultMap" type="com.jsh.erp.datasource.entities.SalesInfo">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="material_id" jdbcType="BIGINT" property="materialId" />
+    <result column="store_number" jdbcType="VARCHAR" property="storeNumber" />
+    <result column="tax_purchase_price" jdbcType="DECIMAL" property="taxPurchasePrice" />
+    <result column="tax_selling_price" jdbcType="DECIMAL" property="taxSellingPrice" />
+    <result column="standard" jdbcType="VARCHAR" property="standard" />
+    <result column="shipping_cost" jdbcType="BIT" property="shippingCost" />
+    <result column="source_type" jdbcType="VARCHAR" property="sourceType" />
+    <result column="sales_channel" jdbcType="VARCHAR" property="salesChannel" />
+    <result column="shipping_method" jdbcType="VARCHAR" property="shippingMethod" />
+    <result column="box_spec" jdbcType="VARCHAR" property="boxSpec" />
+    <result column="small_quantity" jdbcType="DECIMAL" property="smallQuantity" />
+    <result column="large_quantity" jdbcType="DECIMAL" property="largeQuantity" />
+    <result column="weight" jdbcType="DECIMAL" property="weight" />
+    <result column="box_barcode" jdbcType="VARCHAR" property="boxBarcode" />
+    <result column="launch_date" jdbcType="VARCHAR" property="launchDate" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="province" jdbcType="BIGINT" property="province" />
+    <result column="city" jdbcType="BIGINT" property="city" />
+    <result column="county" jdbcType="BIGINT" property="county" />
+    <result column="delete_flag" jdbcType="VARCHAR" property="deleteFlag" />
+    <result column="tenant_id" jdbcType="BIGINT" property="tenantId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, material_id, store_number, tax_purchase_price, tax_selling_price, standard, shipping_cost, 
+    source_type, sales_channel, shipping_method, box_spec, small_quantity, large_quantity, 
+    weight, box_barcode, launch_date, remark, province, city, county, delete_flag, tenant_id
+  </sql>
+  <select id="selectByExample" parameterType="com.jsh.erp.datasource.entities.SalesInfoExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from sales_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sales_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sales_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jsh.erp.datasource.entities.SalesInfoExample">
+    delete from sales_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jsh.erp.datasource.entities.SalesInfo">
+    insert into sales_info (id, material_id, store_number, 
+      tax_purchase_price, tax_selling_price, standard, 
+      shipping_cost, source_type, sales_channel, 
+      shipping_method, box_spec, small_quantity, 
+      large_quantity, weight, box_barcode, 
+      launch_date, remark, province, 
+      city, county, delete_flag, 
+      tenant_id)
+    values (#{id,jdbcType=BIGINT}, #{materialId,jdbcType=BIGINT}, #{storeNumber,jdbcType=VARCHAR}, 
+      #{taxPurchasePrice,jdbcType=DECIMAL}, #{taxSellingPrice,jdbcType=DECIMAL}, #{standard,jdbcType=VARCHAR}, 
+      #{shippingCost,jdbcType=BIT}, #{sourceType,jdbcType=VARCHAR}, #{salesChannel,jdbcType=VARCHAR}, 
+      #{shippingMethod,jdbcType=VARCHAR}, #{boxSpec,jdbcType=VARCHAR}, #{smallQuantity,jdbcType=DECIMAL}, 
+      #{largeQuantity,jdbcType=DECIMAL}, #{weight,jdbcType=DECIMAL}, #{boxBarcode,jdbcType=VARCHAR}, 
+      #{launchDate,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{province,jdbcType=BIGINT}, 
+      #{city,jdbcType=BIGINT}, #{county,jdbcType=BIGINT}, #{deleteFlag,jdbcType=VARCHAR}, 
+      #{tenantId,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jsh.erp.datasource.entities.SalesInfo">
+    insert into sales_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="materialId != null">
+        material_id,
+      </if>
+      <if test="storeNumber != null">
+        store_number,
+      </if>
+      <if test="taxPurchasePrice != null">
+        tax_purchase_price,
+      </if>
+      <if test="taxSellingPrice != null">
+        tax_selling_price,
+      </if>
+      <if test="standard != null">
+        standard,
+      </if>
+      <if test="shippingCost != null">
+        shipping_cost,
+      </if>
+      <if test="sourceType != null">
+        source_type,
+      </if>
+      <if test="salesChannel != null">
+        sales_channel,
+      </if>
+      <if test="shippingMethod != null">
+        shipping_method,
+      </if>
+      <if test="boxSpec != null">
+        box_spec,
+      </if>
+      <if test="smallQuantity != null">
+        small_quantity,
+      </if>
+      <if test="largeQuantity != null">
+        large_quantity,
+      </if>
+      <if test="weight != null">
+        weight,
+      </if>
+      <if test="boxBarcode != null">
+        box_barcode,
+      </if>
+      <if test="launchDate != null">
+        launch_date,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="province != null">
+        province,
+      </if>
+      <if test="city != null">
+        city,
+      </if>
+      <if test="county != null">
+        county,
+      </if>
+      <if test="deleteFlag != null">
+        delete_flag,
+      </if>
+      <if test="tenantId != null">
+        tenant_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="materialId != null">
+        #{materialId,jdbcType=BIGINT},
+      </if>
+      <if test="storeNumber != null">
+        #{storeNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="taxPurchasePrice != null">
+        #{taxPurchasePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="taxSellingPrice != null">
+        #{taxSellingPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="standard != null">
+        #{standard,jdbcType=VARCHAR},
+      </if>
+      <if test="shippingCost != null">
+        #{shippingCost,jdbcType=BIT},
+      </if>
+      <if test="sourceType != null">
+        #{sourceType,jdbcType=VARCHAR},
+      </if>
+      <if test="salesChannel != null">
+        #{salesChannel,jdbcType=VARCHAR},
+      </if>
+      <if test="shippingMethod != null">
+        #{shippingMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="boxSpec != null">
+        #{boxSpec,jdbcType=VARCHAR},
+      </if>
+      <if test="smallQuantity != null">
+        #{smallQuantity,jdbcType=DECIMAL},
+      </if>
+      <if test="largeQuantity != null">
+        #{largeQuantity,jdbcType=DECIMAL},
+      </if>
+      <if test="weight != null">
+        #{weight,jdbcType=DECIMAL},
+      </if>
+      <if test="boxBarcode != null">
+        #{boxBarcode,jdbcType=VARCHAR},
+      </if>
+      <if test="launchDate != null">
+        #{launchDate,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null">
+        #{province,jdbcType=BIGINT},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=BIGINT},
+      </if>
+      <if test="county != null">
+        #{county,jdbcType=BIGINT},
+      </if>
+      <if test="deleteFlag != null">
+        #{deleteFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="tenantId != null">
+        #{tenantId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jsh.erp.datasource.entities.SalesInfoExample" resultType="java.lang.Long">
+    select count(*) from sales_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update sales_info
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.materialId != null">
+        material_id = #{record.materialId,jdbcType=BIGINT},
+      </if>
+      <if test="record.storeNumber != null">
+        store_number = #{record.storeNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.taxPurchasePrice != null">
+        tax_purchase_price = #{record.taxPurchasePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.taxSellingPrice != null">
+        tax_selling_price = #{record.taxSellingPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.standard != null">
+        standard = #{record.standard,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shippingCost != null">
+        shipping_cost = #{record.shippingCost,jdbcType=BIT},
+      </if>
+      <if test="record.sourceType != null">
+        source_type = #{record.sourceType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.salesChannel != null">
+        sales_channel = #{record.salesChannel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shippingMethod != null">
+        shipping_method = #{record.shippingMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="record.boxSpec != null">
+        box_spec = #{record.boxSpec,jdbcType=VARCHAR},
+      </if>
+      <if test="record.smallQuantity != null">
+        small_quantity = #{record.smallQuantity,jdbcType=DECIMAL},
+      </if>
+      <if test="record.largeQuantity != null">
+        large_quantity = #{record.largeQuantity,jdbcType=DECIMAL},
+      </if>
+      <if test="record.weight != null">
+        weight = #{record.weight,jdbcType=DECIMAL},
+      </if>
+      <if test="record.boxBarcode != null">
+        box_barcode = #{record.boxBarcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.launchDate != null">
+        launch_date = #{record.launchDate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.province != null">
+        province = #{record.province,jdbcType=BIGINT},
+      </if>
+      <if test="record.city != null">
+        city = #{record.city,jdbcType=BIGINT},
+      </if>
+      <if test="record.county != null">
+        county = #{record.county,jdbcType=BIGINT},
+      </if>
+      <if test="record.deleteFlag != null">
+        delete_flag = #{record.deleteFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tenantId != null">
+        tenant_id = #{record.tenantId,jdbcType=BIGINT},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update sales_info
+    set id = #{record.id,jdbcType=BIGINT},
+      material_id = #{record.materialId,jdbcType=BIGINT},
+      store_number = #{record.storeNumber,jdbcType=VARCHAR},
+      tax_purchase_price = #{record.taxPurchasePrice,jdbcType=DECIMAL},
+      tax_selling_price = #{record.taxSellingPrice,jdbcType=DECIMAL},
+      standard = #{record.standard,jdbcType=VARCHAR},
+      shipping_cost = #{record.shippingCost,jdbcType=BIT},
+      source_type = #{record.sourceType,jdbcType=VARCHAR},
+      sales_channel = #{record.salesChannel,jdbcType=VARCHAR},
+      shipping_method = #{record.shippingMethod,jdbcType=VARCHAR},
+      box_spec = #{record.boxSpec,jdbcType=VARCHAR},
+      small_quantity = #{record.smallQuantity,jdbcType=DECIMAL},
+      large_quantity = #{record.largeQuantity,jdbcType=DECIMAL},
+      weight = #{record.weight,jdbcType=DECIMAL},
+      box_barcode = #{record.boxBarcode,jdbcType=VARCHAR},
+      launch_date = #{record.launchDate,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      province = #{record.province,jdbcType=BIGINT},
+      city = #{record.city,jdbcType=BIGINT},
+      county = #{record.county,jdbcType=BIGINT},
+      delete_flag = #{record.deleteFlag,jdbcType=VARCHAR},
+      tenant_id = #{record.tenantId,jdbcType=BIGINT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jsh.erp.datasource.entities.SalesInfo">
+    update sales_info
+    <set>
+      <if test="materialId != null">
+        material_id = #{materialId,jdbcType=BIGINT},
+      </if>
+      <if test="storeNumber != null">
+        store_number = #{storeNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="taxPurchasePrice != null">
+        tax_purchase_price = #{taxPurchasePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="taxSellingPrice != null">
+        tax_selling_price = #{taxSellingPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="standard != null">
+        standard = #{standard,jdbcType=VARCHAR},
+      </if>
+      <if test="shippingCost != null">
+        shipping_cost = #{shippingCost,jdbcType=BIT},
+      </if>
+      <if test="sourceType != null">
+        source_type = #{sourceType,jdbcType=VARCHAR},
+      </if>
+      <if test="salesChannel != null">
+        sales_channel = #{salesChannel,jdbcType=VARCHAR},
+      </if>
+      <if test="shippingMethod != null">
+        shipping_method = #{shippingMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="boxSpec != null">
+        box_spec = #{boxSpec,jdbcType=VARCHAR},
+      </if>
+      <if test="smallQuantity != null">
+        small_quantity = #{smallQuantity,jdbcType=DECIMAL},
+      </if>
+      <if test="largeQuantity != null">
+        large_quantity = #{largeQuantity,jdbcType=DECIMAL},
+      </if>
+      <if test="weight != null">
+        weight = #{weight,jdbcType=DECIMAL},
+      </if>
+      <if test="boxBarcode != null">
+        box_barcode = #{boxBarcode,jdbcType=VARCHAR},
+      </if>
+      <if test="launchDate != null">
+        launch_date = #{launchDate,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null">
+        province = #{province,jdbcType=BIGINT},
+      </if>
+      <if test="city != null">
+        city = #{city,jdbcType=BIGINT},
+      </if>
+      <if test="county != null">
+        county = #{county,jdbcType=BIGINT},
+      </if>
+      <if test="deleteFlag != null">
+        delete_flag = #{deleteFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="tenantId != null">
+        tenant_id = #{tenantId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jsh.erp.datasource.entities.SalesInfo">
+    update sales_info
+    set material_id = #{materialId,jdbcType=BIGINT},
+      store_number = #{storeNumber,jdbcType=VARCHAR},
+      tax_purchase_price = #{taxPurchasePrice,jdbcType=DECIMAL},
+      tax_selling_price = #{taxSellingPrice,jdbcType=DECIMAL},
+      standard = #{standard,jdbcType=VARCHAR},
+      shipping_cost = #{shippingCost,jdbcType=BIT},
+      source_type = #{sourceType,jdbcType=VARCHAR},
+      sales_channel = #{salesChannel,jdbcType=VARCHAR},
+      shipping_method = #{shippingMethod,jdbcType=VARCHAR},
+      box_spec = #{boxSpec,jdbcType=VARCHAR},
+      small_quantity = #{smallQuantity,jdbcType=DECIMAL},
+      large_quantity = #{largeQuantity,jdbcType=DECIMAL},
+      weight = #{weight,jdbcType=DECIMAL},
+      box_barcode = #{boxBarcode,jdbcType=VARCHAR},
+      launch_date = #{launchDate,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      province = #{province,jdbcType=BIGINT},
+      city = #{city,jdbcType=BIGINT},
+      county = #{county,jdbcType=BIGINT},
+      delete_flag = #{deleteFlag,jdbcType=VARCHAR},
+      tenant_id = #{tenantId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

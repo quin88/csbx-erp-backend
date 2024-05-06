@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <!--<classPathEntry
+            location="D:\DevelopFiles\Maven\mysql\mysql-connector-java\8.0.28\mysql-connector-java-8.0.28.jar"/>-->
+
+    <context id="DB2Tables" targetRuntime="MyBatis3" defaultModelType="flat">
+
+        <!-- 插件列表 -->
+        <!--生成的实体类自动实现java.io.Serializable接口并且添加serialVersionUID属性-->
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
+
+        <commentGenerator>
+            <property name="suppressAllComments" value="true"/>
+            <property name="suppressDate" value="true"/>
+        </commentGenerator>
+
+        <!--<jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"-->
+        <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
+                        connectionURL="jdbc:mysql://localhost:3320/jsh_erp?generateSimpleParameterMetadata=true"
+                        userId="root" password="123456">
+        </jdbcConnection>
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+            <!-- 增加下面这行，用于配置生成LocalDateTime对应数据库的DATETIME类型 -->
+<!--            <property name="useJSR310Types" value="true" />-->
+        </javaTypeResolver>
+
+        <!-- generate Model -->
+        <javaModelGenerator targetPackage="com.jsh.erp.datasource.entities"
+                            targetProject="src\main\java">
+            <property name="enableSubPackages" value="false"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <!-- generate xml -->
+        <sqlMapGenerator targetPackage="mapper_xml" targetProject="src\main\resources">
+            <property name="enableSubPackages" value="false"/>
+        </sqlMapGenerator>
+
+        <!-- generate Mapper -->
+        <javaClientGenerator type="XMLMAPPER"
+                             targetPackage="com.jsh.erp.datasource.mappers"
+                             targetProject="src\main\java">
+            <property name="enableSubPackages" value="false"/>
+            <property name="exampleMethodVisibility" value="public"/>
+        </javaClientGenerator>
+        <!-- <table tableName="jsh_account" domainObjectName="Account"></table>
+        <table tableName="jsh_account_head" domainObjectName="AccountHead"></table>
+        <table tableName="jsh_account_item" domainObjectName="AccountItem"></table>
+        <table tableName="jsh_depot" domainObjectName="Depot"></table>
+        <table tableName="jsh_depot_head" domainObjectName="DepotHead"></table>
+        <table tableName="jsh_depot_item" domainObjectName="DepotItem"></table>
+        <table tableName="jsh_function" domainObjectName="Function"></table>
+        <table tableName="jsh_in_out_item" domainObjectName="InOutItem"></table>
+        <table tableName="jsh_log" domainObjectName="Log"></table>
+        <table tableName="jsh_material" domainObjectName="Material"></table>
+        <table tableName="jsh_material_attribute" domainObjectName="MaterialAttribute"></table>
+        <table tableName="jsh_material_extend" domainObjectName="MaterialExtend"></table>
+        <table tableName="jsh_material_current_stock" domainObjectName="MaterialCurrentStock"></table>
+        <table tableName="jsh_material_initial_stock" domainObjectName="MaterialInitialStock"></table>
+        <table tableName="jsh_material_category" domainObjectName="MaterialCategory"></table>
+        <table tableName="jsh_material_property" domainObjectName="MaterialProperty"></table>
+        <table tableName="jsh_person" domainObjectName="Person"></table>
+        <table tableName="jsh_role" domainObjectName="Role"></table>
+        <table tableName="jsh_supplier" domainObjectName="Supplier"></table>
+        <table tableName="jsh_system_config" domainObjectName="SystemConfig"></table>
+        <table tableName="jsh_unit" domainObjectName="Unit"></table>
+        <table tableName="jsh_user" domainObjectName="User"></table>
+        <table tableName="jsh_user_business" domainObjectName="UserBusiness"></table>
+        <table tableName="jsh_serial_number" domainObjectName="SerialNumber"></table>
+        <table tableName="jsh_organization" domainObjectName="Organization"></table>
+        <table tableName="jsh_orga_user_rel" domainObjectName="OrgaUserRel"></table>
+        <table tableName="jsh_tenant" domainObjectName="Tenant"></table>
+        <table tableName="jsh_platform_config" domainObjectName="PlatformConfig"></table>
+        <table tableName="jsh_msg" domainObjectName="Msg"></table>
+        <table tableName="price_details" domainObjectName="PriceDetails"></table>
+        <table tableName="shipping_price" domainObjectName="ShippingPrice"></table>
+        <table tableName="daily_price_logs" domainObjectName="DailyPriceLogs"></table>
+        <table tableName="price_receipts" domainObjectName="PriceReceipts"></table>
+        <table tableName="payment_records" domainObjectName="PaymentRecords"></table>
+        <table tableName="balance_records" domainObjectName="BalanceRecords"></table>
+        <table tableName="settlement_method" domainObjectName="SettlementMethod"></table>
+        <table tableName="second_settlement_method" domainObjectName="SecondSettlementMethod">
+        <table tableName="measurement" domainObjectName="Measurement"></table>
+        <table tableName="second_measurement" domainObjectName="SecondMeasurement"></table></table>
+        <table tableName="fees_settlement" domainObjectName="FeesSettlement"></table>
+        <table tableName="serve_project" domainObjectName="ServeProject"></table>
+        <table tableName="supplier_extend" domainObjectName="SupplierExtend"></table>
+        <table tableName="supplier_serve_project" domainObjectName="SupplierServeProject"></table>
+        <table tableName="verification_code" domainObjectName="VerificationCode"></table>
+        <table tableName="wxmini_user" domainObjectName="WxminiUser"></table>
+        <table tableName="goods_allocation" domainObjectName="GoodsAllocation"></table>
+        <table tableName="country" domainObjectName="Country"></table>
+        <table tableName="province" domainObjectName="Province"></table>
+        <table tableName="city" domainObjectName="City"></table>
+        <table tableName="county" domainObjectName="County"></table>
+        <table tableName="supplier_level" domainObjectName="SupplierLevel"></table>
+        <table tableName="business_type" domainObjectName="BusinessType"></table>
+        <table tableName="cooperation_category" domainObjectName="CooperationCategory"></table>
+        <table tableName="temperature_condition" domainObjectName="TemperatureCondition"></table>
+        <table tableName="source_type" domainObjectName="SourceType"></table>
+        <table tableName="shipping_method" domainObjectName="ShippingMethod"></table>
+        <table tableName="tax_level" domainObjectName="TaxLevel"></table>
+        <table tableName="star_level" domainObjectName="StarLevel"></table>
+        <table tableName="supermarket_unit" domainObjectName="SupermarketUnit"></table>
+        <table tableName="aquatic_type" domainObjectName="AquaticType"></table>
+        <table tableName="sales_channel" domainObjectName="SalesChannel"></table>
+        <table tableName="supermarket_supplier" domainObjectName="SupermarketSupplier"></table>
+        <table tableName="market_area" domainObjectName="MarketArea"></table>
+        <table tableName="market" domainObjectName="Market"></table>
+        <table tableName="supermarket_contact" domainObjectName="SupermarketContact"></table>
+        <table tableName="supermarket_attachment" domainObjectName="SupermarketAttachment"></table>
+        <table tableName="supermarket_account" domainObjectName="SupermarketAccount"></table>
+        <table tableName="supermarket_invoice" domainObjectName="SupermarketInvoice"></table>
+        <table tableName="sales_market" domainObjectName="SalesMarket"></table>
+        <table tableName="sales_info" domainObjectName="SalesInfo"></table>
+        <table tableName="supermarket_material" domainObjectName="SupermarketMaterial"></table>
+        <table tableName="invoice_number" domainObjectName="InvoiceNumber"></table>
+        <table tableName="image_info" domainObjectName="ImageInfo"></table>
+        <table tableName="order_detail" domainObjectName="OrderDetail"></table>
+        <table tableName="order_document" domainObjectName="OrderDocument"></table>
+        <table tableName="signature" domainObjectName="Signature"></table>
+        <table tableName="supermarket_document" domainObjectName="SupermarketDocument"></table>
+        <table tableName="supermarket_cooperation" domainObjectName="SupermarketCooperation"></table>
+        <table tableName="file_info" domainObjectName="FileInfo"></table>
+        <table tableName="supermarket_document_item" domainObjectName="SupermarketDocumentItem"></table>
+        <table tableName="supermarket_order" domainObjectName="SupermarketOrder"></table>
+        <table tableName="supermarket_system_config" domainObjectName="SupermarketSystemConfig"></table>
+        <table tableName="supermarket_tax" domainObjectName="SupermarketTax"></table>
+        <table tableName="supermarket_serve_client" domainObjectName="SupermarketServeClient"></table>
+        <table tableName="opinion" domainObjectName="Opinion"></table>
+        <table tableName="value_added_serve_type" domainObjectName="ValueAddedServeType"></table>
+        <table tableName="value_added_serve" domainObjectName="ValueAddedServe"></table>
+        <table tableName="market_address" domainObjectName="MarketAddress"></table>
+        <table tableName="recharge_configuration" domainObjectName="RechargeConfiguration"></table>
+        <table tableName="depot_link_number" domainObjectName="DepotLinkNumber"></table>
+        <table tableName="supermarket_added_order" domainObjectName="SupermarketAddedOrder"></table>
+        <table tableName="supermarket_finance" domainObjectName="SupermarketFinance"></table>
+        <table tableName="supermarket_finance_extend" domainObjectName="SupermarketFinanceExtend"></table>
+        <table tableName="supermarket_finance_relevancy" domainObjectName="SupermarketFinanceRelevancy"></table>
+        <table tableName="supermarket_reconciliation" domainObjectName="SupermarketReconciliation"></table>
+        <table tableName="supermarket_reconciliation_extend" domainObjectName="SupermarketReconciliationExtend"></table>
+        <table tableName="supermarket_reconciliation_relevancy" domainObjectName="SupermarketReconciliationRelevancy"></table>
+        <table tableName="payment_config" domainObjectName="PaymentConfig"></table>
+        <table tableName="supermarket_invoice_number" domainObjectName="SupermarketInvoiceNumber"></table>
+        <table tableName="supermarket_reconciliation_aquatic_type" domainObjectName="SupermarketReconciliationAquaticType"></table>
+        <table tableName="supermarket_verification_logs" domainObjectName="SupermarketVerificationLogs"></table>
+        <table tableName="business_hours" domainObjectName="BusinessHours"></table>
+        <table tableName="small_depot" domainObjectName="SmallDepot"></table>
+        <table tableName="location" domainObjectName="Location"></table>-->
+
+    </context>
+</generatorConfiguration>

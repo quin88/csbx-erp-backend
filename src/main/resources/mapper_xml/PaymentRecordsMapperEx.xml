@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsh.erp.datasource.mappers.PaymentRecordsMapperEx">
+    <resultMap id="ResultMapEx" type="com.jsh.erp.datasource.vo.ImportPriceReceiptsVo4List">
+        <result column="createdTime" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="allPrice" jdbcType="DECIMAL" property="allPrice"/>
+        <result column="payment_amount" jdbcType="DECIMAL" property="paymentAmount"/>
+        <result column="amount_of_gift" jdbcType="DECIMAL" property="amountOfGift"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+    </resultMap>
+    <select id="selectByConditionPaymentRecords" resultType="com.jsh.erp.datasource.entities.PaymentRecords">
+        SELECT *
+        FROM payment_records
+        WHERE 1=1
+        <if test="supplierId != null">
+            AND supplier_id=#{supplierId}
+        </if>
+        <if test="statusArray != null and statusArray !=''">
+            AND status IN (
+            <foreach collection="statusArray" item="status" separator=",">
+                #{status}
+            </foreach>
+            )
+        </if>
+        <if test="beginTime != null">
+            AND bill_time &gt;= #{beginTime}
+        </if>
+        <if test="endTime != null">
+            AND bill_time &lt;= #{endTime}
+        </if>
+        AND IFNULL(delete_flag,'0') !='1'
+        <if test="offset != null and rows != null">
+            limit #{offset},#{rows}
+        </if>
+    </select>
+    <select id="getHistoricalRecordsBySupplierId" resultType="com.jsh.erp.datasource.entities.PaymentRecords">
+        SELECT *
+        FROM payment_records pr
+        WHERE 1=1
+        <if test="supplierId != null and supplierId !=''">
+            and pr.supplier_id=#{supplierId}
+        </if>
+        <if test="beginTime != null or endTime != null">
+            AND pr.create_time <![CDATA[ BETWEEN ]]> #{beginTime} <![CDATA[ AND ]]> #{endTime}
+        </if>
+        <if test="statusArray != null and statusArray !=''">
+            AND approval_status IN (
+            <foreach collection="statusArray" item="status" separator=",">
+                #{status}
+            </foreach>
+            )
+        </if>
+        AND IFNULL(pr.delete_flag,'0') !='1'
+        ORDER BY pr.create_time DESC
+        <if test="offset != null and rows != null">
+            limit #{offset},#{rows}
+        </if>
+    </select>
+    <select id="getHistoricalDocumentsBySupplierId" resultType="com.jsh.erp.datasource.entities.PaymentRecords">
+        SELECT *
+        FROM payment_records
+        WHERE 1=1
+        <if test="supplierId != null and supplierId !=''">
+            AND supplier_id=#{supplierId}
+        </if>
+        AND approval_status=1
+        AND IFNULL(delete_flag,'0') !='1'
+        <if test="beginTime != null or endTime != null">
+            AND create_time <![CDATA[ BETWEEN ]]> #{beginTime} <![CDATA[ AND ]]> #{endTime}
+        </if>
+        <if test="offset != null and rows != null">
+            limit #{offset},#{rows}
+        </if>
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="getHistoricalRecordsList" resultType="com.jsh.erp.datasource.entities.PaymentRecords">
+        SELECT pr.*
+        FROM payment_records pr
+        LEFT JOIN balance_records br on br.supplier_id = pr.supplier_id and ifnull(br.delete_flag,'0') !='1'
+        <where>
+            <if test="supplierId != null">
+                AND pr.supplier_id = #{supplierId}
+                AND pr.create_time = (
+                SELECT MAX(create_time)
+                FROM payment_records
+                WHERE supplier_id = #{supplierId}
+                AND IFNULL(delete_flag, '0') != '1'
+                )
+            </if>
+            <if test="supplierId == null">
+                AND pr.create_time = (
+                SELECT MAX(create_time)
+                FROM payment_records
+                WHERE supplier_id = pr.supplier_id
+                AND IFNULL(delete_flag, '0') != '1'
+                )
+            </if>
+            <if test="statusArray != null and statusArray !=''">
+                AND pr.approval_status IN (
+                <foreach collection="statusArray" item="status" separator=",">
+                    #{status}
+                </foreach>
+                )
+            </if>
+            <if test="paymentStatus == 0 ">
+                AND (br.subtotal IS NULL OR br.subtotal &lt;= 0)
+            </if>
+            <if test="paymentStatus == 1 ">
+                AND br.subtotal > 0
+            </if>
+            <if test="beginTime != null or endTime != null">
+                AND pr.create_time <![CDATA[BETWEEN]]> #{beginTime} <![CDATA[AND]]> #{endTime}
+            </if>
+        </where>
+        AND IFNULL(pr.delete_flag,'0') !='1'
+        ORDER BY pr.create_time DESC
+        <if test="offset != null and rows != null">
+            LIMIT #{offset}, #{rows}
+        </if>
+    </select>
+
+    <update id="batchDeletePaymentRecordsByIds">
+        update payment_records
+        set delete_flag='1',updater=#{updater},update_time=#{updateTime}
+        where 1=1
+        and id in (
+        <foreach collection="ids" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+    </update>
+
+    <select id="countsHistoricalRecordsBySupplierId" resultType="java.lang.Long">
+        SELECT
+        COUNT(pr.id)
+        FROM payment_records pr
+        where supplier_id= #{supplierId}
+        AND IFNULL(pr.delete_flag,'0') !='1'
+        <if test="beginTime != null or endTime != null">
+            AND pr.create_time <![CDATA[ BETWEEN ]]> #{beginTime} <![CDATA[ AND ]]> #{endTime}
+        </if>
+    </select>
+
+    <select id="countsHistoricalDocumentsBySupplierId" resultType="java.lang.Long">
+        SELECT
+        COUNT(pr.id)
+        FROM payment_records pr
+        WHERE 1=1
+        <if test="supplierId != null">
+            AND pr.supplier_id= #{supplierId}
+        </if>
+        <if test="beginTime != null or endTime != null">
+            AND pr.create_time <![CDATA[ BETWEEN ]]> #{beginTime} <![CDATA[ AND ]]> #{endTime}
+        </if>
+        AND pr.approval_status=1
+        AND IFNULL(pr.delete_flag,'0') !='1'
+    </select>
+
+    <select id="countsHistoricalRecordsList" resultType="java.lang.Long">
+        SELECT
+        COUNT(1)
+        FROM payment_records pr
+        LEFT JOIN balance_records br on br.supplier_id = pr.supplier_id and ifnull(br.delete_flag,'0') !='1'
+        <where>
+            <if test="supplierId != null">
+                AND pr.supplier_id = #{supplierId}
+                AND pr.create_time = (
+                SELECT MAX(create_time)
+                FROM payment_records
+                WHERE supplier_id = #{supplierId}
+                AND IFNULL(delete_flag, '0') != '1'
+                )
+            </if>
+            <if test="supplierId == null">
+                AND pr.create_time = (
+                SELECT MAX(create_time)
+                FROM payment_records
+                WHERE supplier_id = pr.supplier_id
+                AND IFNULL(delete_flag, '0') != '1'
+                )
+            </if>
+            <if test="statusArray != null and statusArray !=''">
+                AND pr.approval_status IN (
+                <foreach collection="statusArray" item="status" separator=",">
+                    #{status}
+                </foreach>
+                )
+            </if>
+            <if test="paymentStatus == 0 ">
+                AND br.subtotal &lt;= 0
+            </if>
+            <if test="paymentStatus == 1 ">
+                AND br.subtotal > 0
+            </if>
+            <if test="beginTime != null or endTime != null">
+                AND pr.create_time <![CDATA[BETWEEN]]> #{beginTime} <![CDATA[AND]]> #{endTime}
+            </if>
+        </where>
+        AND IFNULL(pr.delete_flag,'0') !='1'
+        ORDER BY pr.create_time DESC
+    </select>
+
+    <select id="selectPaymentRecordsBySupplierIdAndTime" resultMap="ResultMapEx">
+/*todo 时间问题*/
+        SELECT DATE_SUB(create_time, INTERVAL 8 HOUR) AS createdTime,
+               '缴费' AS name, payment_amount, amount_of_gift,
+               (payment_amount + amount_of_gift) AS allPrice, remark remark
+        FROM payment_records
+        WHERE 1=1
+        <if test="supplierId != null">
+            AND supplier_id= #{supplierId}
+        </if>
+        <if test="beginTime != null or endTime != null">
+            AND create_time <![CDATA[ BETWEEN ]]> #{beginTime} <![CDATA[ AND ]]> #{endTime}
+        </if>
+        AND approval_status=1
+        AND IFNULL(delete_flag,'0') !='1'
+    </select>
+
+    <select id="getRemainingSumStatistics" resultType="java.math.BigDecimal">
+        select round(sum(paymentAmount) - sum(totalExpense), 2) as result
+        from ( select sum(ifnull(payment_amount, 0) + ifnull(amount_of_gift, 0)) as paymentAmount, 0 as totalExpense
+        from payment_records
+        where 1 = 1
+        <if test="supplierId != null">
+            and supplier_id = #{supplierId}
+        </if>
+        <if test="endTime != null">
+            and create_time &lt;= #{endTime}
+        </if>
+        and approval_status = '1'
+        and ifnull(delete_flag, '0') != '1'
+        union all
+        select 0 as paymentAmount, sum(ifnull(total_price, 0)) as totalExpense
+        from price_receipts
+        where 1 = 1
+        <if test="supplierId != null">
+            and supplier_id = #{supplierId}
+        </if>
+        <if test="endTime != null">
+            and create_time &lt;= #{endTime}
+        </if>
+        and status = '1'
+        and ifnull(delete_flag, '0') != '1') tb;
+    </select>
+
+</mapper>

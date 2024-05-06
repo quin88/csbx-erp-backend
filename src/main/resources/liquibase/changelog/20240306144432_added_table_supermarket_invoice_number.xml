@@ -1,0 +1,14 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+    <changeSet author="lky" id="1709707476000" dbms="mysql">
+        <!-- 商超发票表 -->
+        <createTable tableName="supermarket_invoice_number" remarks="商超发票表">
+            <column name="id" type="bigint(20)" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="supermarket_document_id" type="bigint(20)" remarks="商超单据表id" />
+            <column name="invoice_number" type="varchar(50)" remarks="商超发票单据编号" />
+            <column name="tenant_id" type="bigint(20)" remarks="租户ID" />
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

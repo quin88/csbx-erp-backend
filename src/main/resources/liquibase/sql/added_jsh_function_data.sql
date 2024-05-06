@@ -1,0 +1,13 @@
+INSERT INTO `jsh_function` VALUES ('267', '010207', '服务管理', '0102', '/system/serves', '/system/ServesList', false, '0264', true, '电脑版', '1,2,7', 'profile', '0');
+INSERT INTO `jsh_function` VALUES ('268', '010208', '货位信息', '0102', '/system/goods_allocation', '/system/GoodsAllocationList', false, '0265', true, '电脑版', '1,2,7', 'profile', '0');
+INSERT INTO `jsh_function` VALUES ('269', '0901', '审核管理', '0', '/check', '/layouts/TabLayout', false, '1000', true, '电脑版', '1', 'audit', '0');
+INSERT INTO `jsh_function` VALUES ('270', '090101', '零售审核', '0901', '/check/check_retail', '/check/CheckRetail', false, '1001', true, '电脑版', '1,2,7', 'profile', '0');
+INSERT INTO `jsh_function` VALUES ('271', '090102', '采购审核', '0901', '/check/check_purchase', '/check/CheckPurchaseList', false, '1002', true, '电脑版', '1,2,7', 'profile', '0');
+INSERT INTO `jsh_function` VALUES ('272', '090103', '销售审核', '0901', '/check/check_sale', '/check/CheckSaleList', false, '1003', true, '电脑版', '1,2,7', 'profile', '0');
+INSERT INTO `jsh_function` VALUES ('273', '090104', '仓库审核', '0901', '/check/check_depot', '/check/CheckDepotList', false, '1004', true, '电脑版', '1,2,7', 'profile', '0');
+INSERT INTO `jsh_function` VALUES ('274', '090105', '财务审核', '0901', '/check/check_financial', '/check/CheckFinancialList', false, '1005', true, '电脑版', '1,2,7', 'profile', '0');
+INSERT INTO `jsh_function` VALUES ('275', '090106', '商品审核', '0901', '/check/check_item', '/check/CheckItemList', false, '1006', true, '电脑版', '1,2,7', 'profile', '0');
+INSERT INTO `jsh_function` VALUES ('276', '090107', '供应商审核', '0901', '/check/check_supplier', '/check/CheckSupplierList', false, '1007', true, '电脑版', '1,2,7', 'profile', '0');
+INSERT INTO `jsh_function` VALUES ('277', '090108', '客户审核', '0901', '/check/check_client', '/check/CheckClientList', false, '1008', true, '电脑版', '1,2,7', 'profile', '0');
+INSERT INTO `jsh_function` VALUES ('278', '1001', '生产管理', '0', '/billE', '/layouts/TabLayout', false, '1101', true, '电脑版', '1', 'tool', '0');
+INSERT INTO `jsh_function` VALUES ('279', '100101', 'BOM管理', '1001', '/bill/bom_management', '/check/BOMList', false, '1102', true, '电脑版', '1,2,7', 'profile', '0');

@@ -1,0 +1,25 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet author="mqh" id="1698820027061" dbms="mysql">
+        <createTable tableName="process" remarks="工序表">
+            <column name="id" type="bigint" autoIncrement="true" remarks="主键id">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="bar_code" type="varchar(50)" remarks="商品条码"/>
+            <column name="execution_sequence" type="bigint" remarks="执行顺序"/>
+            <column name="process_name" type="varchar(50)" remarks="工序名称"/>
+            <column name="user_id" type="bigint" remarks="负责人id"/>
+            <column name="process_price" type="decimal(24,6)" remarks="工价"/>
+            <column name="remark" type="varchar(255)" remarks="备注"/>
+            <column name="create_time" type="datetime" remarks="创建时间" />
+            <column name="creator" type="bigint" remarks="创建人" />
+            <column name="update_time" type="datetime" remarks="更新时间" />
+            <column name="updater" type="bigint" remarks="更新人" />
+            <column name="tenant_id" type="bigint(20)" remarks="租户ID" />
+            <column name="delete_flag" type="varchar(1)" defaultValue="0" remarks="删除标记，0未删除，1删除" />
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

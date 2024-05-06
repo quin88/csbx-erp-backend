@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsh.erp.datasource.mappers.SupermarketReconciliationMapperEx">
+    <resultMap extends="com.jsh.erp.datasource.mappers.SupermarketReconciliationMapper.BaseResultMap" id="ResultMapEx"
+               type="com.jsh.erp.datasource.vo.SupermarketReconciliationVo">
+        <result column="createdName" jdbcType="VARCHAR" property="createdName" />
+        <result column="verifierName" jdbcType="VARCHAR" property="verifierName" />
+        <result column="quantityTotal" jdbcType="DECIMAL" property="quantityTotal" />
+        <result column="billingPriceTotal" jdbcType="DECIMAL" property="billingPriceTotal" />
+        <result column="systemPriceTotal" jdbcType="DECIMAL" property="systemPriceTotal" />
+        <result column="aquaticType" jdbcType="VARCHAR" property="aquaticType" />
+        <result column="priceTotal" jdbcType="DECIMAL" property="priceTotal" />
+        </resultMap>
+
+    <select id="selectIdByNumber" resultType="java.lang.Long">
+        select id
+        from supermarket_reconciliation
+        where number = #{number}
+          and ifnull(delete_flag,'0') !='1'
+    </select>
+
+    <select id="selectSupermarketReconciliation" resultMap="ResultMapEx">
+        SELECT sr.*,
+        ju1.username AS createdName,
+        ju2.username AS verifierName,
+        SUM(sre.quantity) AS quantityTotal,
+        SUM(sre.billing_price) AS billingPriceTotal,
+        SUM(sre.system_price) AS systemPriceTotal,
+        SUM(sre.price) AS priceTotal,
+        aq.name AS aquaticType
+        FROM supermarket_reconciliation sr
+        LEFT JOIN jsh_user ju1 ON ju1.id = sr.creator
+        LEFT JOIN jsh_user ju2 ON ju2.id = sr.verifier
+        LEFT JOIN supermarket_reconciliation_extend sre ON sre.supermarket_reconciliation_id = sr.id
+        AND ifnull(sre.delete_flag,'0') != '1'
+        LEFT JOIN supermarket_reconciliation_aquatic_type srat ON srat.supermarket_reconciliation_id = sr.id
+        LEFT JOIN aquatic_type aq ON aq.id = sr.aquatic_type_id AND ifnull(aq.delete_flag, '0') != '1'
+        WHERE 1=1
+        <if test="id != null">
+            AND sr.id = #{id}
+        </if>
+        <if test="atIdArray != null and atIdArray !=''">
+            AND srat.aquatic_type_id IN (
+            <foreach collection="atIdArray" item="atId" separator=",">
+                #{atId}
+            </foreach>
+            )
+        </if>
+        <if test="number != null">
+            <bind name="number" value="'%'+number+'%'"/>
+            AND sr.number LIKE #{number}
+        </if>
+        <if test="statusArray != null and statusArray !=''">
+            AND sr.status IN (
+            <foreach collection="statusArray" item="status" separator=",">
+                #{status}
+            </foreach>
+            )
+        </if>
+        <if test="beginTime != null">
+            AND sr.update_time >= #{beginTime}
+        </if>
+        <if test="endTime != null">
+            AND sr.update_time &lt;= #{endTime}
+        </if>
+        <if test="reconciliationBeginTime != null and reconciliationEndTime != null">
+            AND sr.reconciliation_begin_time >= #{reconciliationBeginTime}
+            AND sr.reconciliation_end_time &lt;= #{reconciliationEndTime}
+        </if>
+        AND ifnull(sr.delete_flag,'0') != '1'
+        GROUP BY sr.id
+        ORDER BY sr.id DESC
+        <if test="offset != null and rows != null">
+            LIMIT #{offset}, #{rows}
+        </if>
+    </select>
+
+    <select id="countSupermarketReconciliation" resultType="java.lang.Long">
+        SELECT count(sr.id)
+        FROM supermarket_reconciliation sr
+        LEFT JOIN jsh_user ju1 ON ju1.id = sr.creator
+        LEFT JOIN jsh_user ju2 ON ju2.id = sr.verifier
+        LEFT JOIN aquatic_type aq ON aq.id = sr.aquatic_type_id AND ifnull(aq.delete_flag, '0') != '1'
+        LEFT JOIN supermarket_reconciliation_aquatic_type srat ON srat.supermarket_reconciliation_id = sr.id
+        WHERE 1=1
+        <if test="id != null">
+            AND sr.id = #{id}
+        </if>
+        <if test="atIdArray != null and atIdArray !=''">
+            AND srat.aquatic_type_id IN (
+            <foreach collection="atIdArray" item="atId" separator=",">
+                #{atId}
+            </foreach>
+            )
+        </if>
+        <if test="number != null">
+            <bind name="number" value="'%'+number+'%'"/>
+            AND sr.number LIKE #{number}
+        </if>
+        <if test="statusArray != null and statusArray !=''">
+            AND sr.status IN (
+            <foreach collection="statusArray" item="status" separator=",">
+                #{status}
+            </foreach>
+            )
+        </if>
+        <if test="beginTime != null">
+            AND sr.update_time >= #{beginTime}
+        </if>
+        <if test="endTime != null">
+            AND sr.update_time &lt;= #{endTime}
+        </if>
+        <if test="reconciliationBeginTime != null and reconciliationEndTime != null">
+            AND sr.reconciliation_begin_time >= #{reconciliationBeginTime}
+            AND sr.reconciliation_end_time &lt;= #{reconciliationEndTime}
+        </if>
+        AND ifnull(sr.delete_flag,'0') !='1'
+    </select>
+
+    <select id="selectSupermarketReconciliationById" resultMap="ResultMapEx">
+        SELECT sr.*,
+        ju1.username AS createdName,
+        ju2.username AS verifierName,
+        aq.name AS aquaticType
+        FROM supermarket_reconciliation sr
+        LEFT JOIN jsh_user ju1 ON ju1.id = sr.creator
+        LEFT JOIN jsh_user ju2 ON ju2.id = sr.verifier
+        LEFT JOIN aquatic_type aq ON aq.id = sr.aquatic_type_id AND ifnull(aq.delete_flag, '0') != '1'
+        WHERE 1=1
+        <if test="id != null">
+            AND sr.id = #{id}
+        </if>
+        AND ifnull(sr.delete_flag,'0') !='1'
+    </select>
+    
+    <update id="batchDeleteByIds">
+        update supermarket_reconciliation
+        set delete_flag='1',updater=#{updater},update_time=#{updateTime}
+        where 1=1
+        and id in (
+        <foreach collection="ids" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+    </update>
+</mapper>

@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsh.erp.datasource.mappers.SupermarketFinanceExtendMapper">
+  <resultMap id="BaseResultMap" type="com.jsh.erp.datasource.entities.SupermarketFinanceExtend">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="supermarket_finance_id" jdbcType="BIGINT" property="supermarketFinanceId" />
+    <result column="account_name" jdbcType="VARCHAR" property="accountName" />
+    <result column="account_number" jdbcType="VARCHAR" property="accountNumber" />
+    <result column="bank_name" jdbcType="VARCHAR" property="bankName" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="proof_of_payment" jdbcType="VARCHAR" property="proofOfPayment" />
+    <result column="delete_flag" jdbcType="VARCHAR" property="deleteFlag" />
+    <result column="tenant_id" jdbcType="BIGINT" property="tenantId" />
+    <result column="link_id" jdbcType="BIGINT" property="linkId" />
+    <result column="download_status" jdbcType="VARCHAR" property="downloadStatus" />
+    <result column="payment_status" jdbcType="VARCHAR" property="paymentStatus" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, supermarket_finance_id, account_name, account_number, bank_name, price, proof_of_payment, 
+    delete_flag, tenant_id, link_id, download_status, payment_status
+  </sql>
+  <select id="selectByExample" parameterType="com.jsh.erp.datasource.entities.SupermarketFinanceExtendExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from supermarket_finance_extend
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from supermarket_finance_extend
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from supermarket_finance_extend
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jsh.erp.datasource.entities.SupermarketFinanceExtendExample">
+    delete from supermarket_finance_extend
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jsh.erp.datasource.entities.SupermarketFinanceExtend">
+    insert into supermarket_finance_extend (id, supermarket_finance_id, account_name, 
+      account_number, bank_name, price, 
+      proof_of_payment, delete_flag, tenant_id, 
+      link_id, download_status, payment_status
+      )
+    values (#{id,jdbcType=BIGINT}, #{supermarketFinanceId,jdbcType=BIGINT}, #{accountName,jdbcType=VARCHAR}, 
+      #{accountNumber,jdbcType=VARCHAR}, #{bankName,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, 
+      #{proofOfPayment,jdbcType=VARCHAR}, #{deleteFlag,jdbcType=VARCHAR}, #{tenantId,jdbcType=BIGINT}, 
+      #{linkId,jdbcType=BIGINT}, #{downloadStatus,jdbcType=VARCHAR}, #{paymentStatus,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jsh.erp.datasource.entities.SupermarketFinanceExtend">
+    insert into supermarket_finance_extend
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="supermarketFinanceId != null">
+        supermarket_finance_id,
+      </if>
+      <if test="accountName != null">
+        account_name,
+      </if>
+      <if test="accountNumber != null">
+        account_number,
+      </if>
+      <if test="bankName != null">
+        bank_name,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="proofOfPayment != null">
+        proof_of_payment,
+      </if>
+      <if test="deleteFlag != null">
+        delete_flag,
+      </if>
+      <if test="tenantId != null">
+        tenant_id,
+      </if>
+      <if test="linkId != null">
+        link_id,
+      </if>
+      <if test="downloadStatus != null">
+        download_status,
+      </if>
+      <if test="paymentStatus != null">
+        payment_status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="supermarketFinanceId != null">
+        #{supermarketFinanceId,jdbcType=BIGINT},
+      </if>
+      <if test="accountName != null">
+        #{accountName,jdbcType=VARCHAR},
+      </if>
+      <if test="accountNumber != null">
+        #{accountNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null">
+        #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="proofOfPayment != null">
+        #{proofOfPayment,jdbcType=VARCHAR},
+      </if>
+      <if test="deleteFlag != null">
+        #{deleteFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="tenantId != null">
+        #{tenantId,jdbcType=BIGINT},
+      </if>
+      <if test="linkId != null">
+        #{linkId,jdbcType=BIGINT},
+      </if>
+      <if test="downloadStatus != null">
+        #{downloadStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentStatus != null">
+        #{paymentStatus,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jsh.erp.datasource.entities.SupermarketFinanceExtendExample" resultType="java.lang.Long">
+    select count(*) from supermarket_finance_extend
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update supermarket_finance_extend
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.supermarketFinanceId != null">
+        supermarket_finance_id = #{record.supermarketFinanceId,jdbcType=BIGINT},
+      </if>
+      <if test="record.accountName != null">
+        account_name = #{record.accountName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.accountNumber != null">
+        account_number = #{record.accountNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bankName != null">
+        bank_name = #{record.bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.price != null">
+        price = #{record.price,jdbcType=DECIMAL},
+      </if>
+      <if test="record.proofOfPayment != null">
+        proof_of_payment = #{record.proofOfPayment,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deleteFlag != null">
+        delete_flag = #{record.deleteFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tenantId != null">
+        tenant_id = #{record.tenantId,jdbcType=BIGINT},
+      </if>
+      <if test="record.linkId != null">
+        link_id = #{record.linkId,jdbcType=BIGINT},
+      </if>
+      <if test="record.downloadStatus != null">
+        download_status = #{record.downloadStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.paymentStatus != null">
+        payment_status = #{record.paymentStatus,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update supermarket_finance_extend
+    set id = #{record.id,jdbcType=BIGINT},
+      supermarket_finance_id = #{record.supermarketFinanceId,jdbcType=BIGINT},
+      account_name = #{record.accountName,jdbcType=VARCHAR},
+      account_number = #{record.accountNumber,jdbcType=VARCHAR},
+      bank_name = #{record.bankName,jdbcType=VARCHAR},
+      price = #{record.price,jdbcType=DECIMAL},
+      proof_of_payment = #{record.proofOfPayment,jdbcType=VARCHAR},
+      delete_flag = #{record.deleteFlag,jdbcType=VARCHAR},
+      tenant_id = #{record.tenantId,jdbcType=BIGINT},
+      link_id = #{record.linkId,jdbcType=BIGINT},
+      download_status = #{record.downloadStatus,jdbcType=VARCHAR},
+      payment_status = #{record.paymentStatus,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jsh.erp.datasource.entities.SupermarketFinanceExtend">
+    update supermarket_finance_extend
+    <set>
+      <if test="supermarketFinanceId != null">
+        supermarket_finance_id = #{supermarketFinanceId,jdbcType=BIGINT},
+      </if>
+      <if test="accountName != null">
+        account_name = #{accountName,jdbcType=VARCHAR},
+      </if>
+      <if test="accountNumber != null">
+        account_number = #{accountNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null">
+        bank_name = #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="proofOfPayment != null">
+        proof_of_payment = #{proofOfPayment,jdbcType=VARCHAR},
+      </if>
+      <if test="deleteFlag != null">
+        delete_flag = #{deleteFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="tenantId != null">
+        tenant_id = #{tenantId,jdbcType=BIGINT},
+      </if>
+      <if test="linkId != null">
+        link_id = #{linkId,jdbcType=BIGINT},
+      </if>
+      <if test="downloadStatus != null">
+        download_status = #{downloadStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentStatus != null">
+        payment_status = #{paymentStatus,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jsh.erp.datasource.entities.SupermarketFinanceExtend">
+    update supermarket_finance_extend
+    set supermarket_finance_id = #{supermarketFinanceId,jdbcType=BIGINT},
+      account_name = #{accountName,jdbcType=VARCHAR},
+      account_number = #{accountNumber,jdbcType=VARCHAR},
+      bank_name = #{bankName,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DECIMAL},
+      proof_of_payment = #{proofOfPayment,jdbcType=VARCHAR},
+      delete_flag = #{deleteFlag,jdbcType=VARCHAR},
+      tenant_id = #{tenantId,jdbcType=BIGINT},
+      link_id = #{linkId,jdbcType=BIGINT},
+      download_status = #{downloadStatus,jdbcType=VARCHAR},
+      payment_status = #{paymentStatus,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

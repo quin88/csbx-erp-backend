@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsh.erp.datasource.mappers.SupermarketVerificationLogsMapperEx">
+    <resultMap extends="com.jsh.erp.datasource.mappers.SupermarketVerificationLogsMapper.BaseResultMap" id="ResultMapEx"
+               type="com.jsh.erp.datasource.vo.SupermarketVerificationLogsVo">
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        </resultMap>
+
+  <!--  <select id="selectVerificationLogsById" resultMap="ResultMapEx">
+        SELECT  svl.*,
+        ju.username AS name
+        FROM supermarket_verification_logs svl
+        LEFT JOIN jsh_user ju ON ju.id = svl.user_id
+        WHERE 1=1
+        <if test="orderId != null">
+            AND svl.order_id = #{orderId}
+        </if>
+        <if test="sfId != null">/*查询财务的数据，同时查询商超订单的数据，使用位置：商超财务-查看流程*/
+            AND (svl.supermarket_finance_id = #{sfId} OR svl.order_id IN
+               (SELECT order_id FROM supermarket_verification_logs WHERE supermarket_finance_id = #{sfId}))
+        </if>
+        AND ifnull(svl.delete_flag,'0') !='1'
+    </select>-->
+    <select id="selectVerificationLogsById" resultMap="ResultMapEx">
+        <!-- 根据 time 字段去重，保留其他字段的值 -->
+        SELECT svl.*, ju.username AS name
+        FROM supermarket_verification_logs svl
+        LEFT JOIN jsh_user ju ON ju.id = svl.user_id
+        WHERE 1=1
+        <if test="orderId != null">
+            AND svl.order_id = #{orderId}
+        </if>
+        <if test="sfId != null">
+        AND svl.id IN (
+        <!-- 子查询选择了每个时间戳的第一条记录 -->
+        SELECT MIN(id)
+        FROM supermarket_verification_logs
+        WHERE 1=1
+            AND (supermarket_finance_id = #{sfId} OR order_id IN (
+            SELECT order_id
+            FROM supermarket_verification_logs
+            WHERE supermarket_finance_id = #{sfId}
+            AND ifnull(delete_flag,'0') !='1'
+            ))
+        GROUP BY time
+        )
+        </if>
+        AND ifnull(svl.delete_flag, '0') != '1'
+    </select>
+
+</mapper>

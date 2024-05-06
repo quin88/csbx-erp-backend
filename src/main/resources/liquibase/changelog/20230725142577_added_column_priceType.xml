@@ -1,0 +1,10 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+    <changeSet author="lky (generated)" id="1690266391000" dbms="mysql">
+        <addColumn tableName="price_receipts">
+            <column name="price_type" type="varchar(50)" remarks="费用类型"/>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

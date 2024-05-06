@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsh.erp.datasource.mappers.SalesInfoMapperEx">
+    <resultMap extends="com.jsh.erp.datasource.mappers.SalesInfoMapper.BaseResultMap" id="ResultMapEx" type="com.jsh.erp.datasource.vo.SalesInfoVoList">
+        <result column="materialName" jdbcType="VARCHAR" property="materialName" />
+        <result column="provinceName" jdbcType="VARCHAR" property="provinceName" />
+        <result column="cityName" jdbcType="VARCHAR" property="cityName" />
+        <result column="countyName" jdbcType="VARCHAR" property="countyName" />
+    </resultMap>
+
+    <select id="getExistingIds" resultType="java.lang.Long">
+        select id
+        from sales_info
+        where 1=1
+        <if test="materialId != null and materialId != ''">
+            AND material_id = #{materialId}
+        </if>
+        and ifnull(delete_flag,'0') !='1'
+    </select>
+
+    <update id="batchDeleteSalesInfoByIds">
+        update sales_info
+        set delete_flag='1'
+        where 1=1
+        and id in (
+        <foreach collection="ids" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+    </update>
+
+    <update id="batchDeleteSalesInfoByMaterialIds">
+        update sales_info
+        set delete_flag='1'
+        where 1=1
+        and material_id in (
+        <foreach collection="materialIds" item="materialId" separator=",">
+            #{materialId}
+        </foreach>
+        )
+    </update>
+
+    <select id="findByAll" parameterType="com.jsh.erp.datasource.entities.SalesMarketExample" resultMap="ResultMapEx">
+        select si.*, s.name materialName, p.province_name provinceName, c.city_name cityName, c2.county_name countyName
+        from sales_info si
+        left join supermarket_material s on si.material_id = s.id and ifnull(s.delete_flag, '0') != '1'
+        left join province p on si.province = p.id and ifnull(p.delete_flag, '0') != '1'
+        left join city c on si.city = c.id and ifnull(c.delete_flag, '0') != '1'
+        left join county c2 on si.county = c2.id and ifnull(c2.delete_flag, '0') != '1'
+        where 1 = 1
+        <if test="materialIds != null and materialIds.size() > 0">
+            and si.material_id in (
+            <foreach collection="materialIds" item="materialId" separator=",">
+                #{materialId}
+            </foreach>
+            )
+        </if>
+        and ifnull(si.delete_flag, '0') != '1'
+    </select>
+</mapper>

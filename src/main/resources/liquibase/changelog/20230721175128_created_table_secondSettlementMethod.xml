@@ -1,0 +1,23 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+    <changeSet author="mqh (generated)" id="1689933129068" dbms="mysql">
+        <!-- 二级结算方式表 -->
+        <createTable tableName="second_settlement_method" remarks="二级结算方式表">
+            <column name="id" type="bigint(20)" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="settlement_id" type="bigint(20)" remarks="一级结算方式id" />
+            <column name="second_settlement_method" type="varchar(50)" remarks="二级结算方式名称" />
+            <column name="create_time" type="datetime" remarks="创建时间" />
+            <column name="creator" type="bigint" remarks="创建人" />
+            <column name="update_time" type="datetime" remarks="更新时间" />
+            <column name="updater" type="bigint" remarks="更新人" />
+            <column name="remark" type="varchar(1024)" remarks="备注" />
+            <column name="status" type="varchar(1)" defaultValue="1" remarks="0禁用，1启用" />
+            <column name="tenant_id" type="bigint(20)" remarks="租户ID" />
+            <column name="delete_flag" type="varchar(1)" defaultValue="0" remarks="删除标记，0未删除，1删除" />
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

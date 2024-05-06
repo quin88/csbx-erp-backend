@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsh.erp.datasource.mappers.SupermarketOrderMapperEx">
+  <resultMap extends="com.jsh.erp.datasource.mappers.SupermarketOrderMapper.BaseResultMap" id="ResultMapEx"
+             type="com.jsh.erp.datasource.vo.SupermarketOrderVo">
+    <result column="createdName" jdbcType="VARCHAR" property="createdName" />
+    <result column="verifierName" jdbcType="VARCHAR" property="verifierName" />
+    <result column="serveClientName" jdbcType="VARCHAR" property="serveClientName" />
+    <result column="tax" jdbcType="DECIMAL" property="tax" />
+    <result column="marketAddress" jdbcType="VARCHAR" property="marketAddress" />
+    <result column="linkedDifferenceTotal" jdbcType="DECIMAL" property="linkedDifferenceTotal" />
+  </resultMap>
+
+  <resultMap id="SupermarketOrderDifferenceDetailVo" type="com.jsh.erp.datasource.vo.SupermarketOrderDifferenceDetailVo">
+    <result column="supplementaryAmount" jdbcType="DECIMAL" property="supplementaryAmount" />
+    <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="number" jdbcType="VARCHAR" property="number" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+  </resultMap>
+
+  <select id="selectIdByNumber" resultType="java.lang.Long">
+    select id
+    from supermarket_order
+    where number = #{number}
+      and ifnull(delete_flag,'0') !='1'
+  </select>
+
+  <select id="selectSupermarketOrder" resultMap="ResultMapEx">
+    SELECT so.*, ju1.username AS createdName, ju2.username AS verifierName, m.name AS marketAddress,
+    CASE
+    WHEN so.link_id IS NOT NULL THEN s_order.difference_total
+    ELSE NULL
+    END AS linkedDifferenceTotal
+    FROM supermarket_order so
+    LEFT JOIN jsh_user ju1 ON ju1.id = so.creator
+    LEFT JOIN jsh_user ju2 ON ju2.id = so.verifier
+    LEFT JOIN supermarket_order s_order ON s_order.id = so.link_id
+    LEFT JOIN market m ON m.id = so.market_address_id AND ifnull(m.delete_flag,'0') !='1'
+    WHERE 1=1
+    <if test="id != null">
+      AND so.id = #{id}
+    </if>
+    <if test="number != null">
+      <bind name="number" value="'%'+number+'%'"/>
+      AND so.number LIKE #{number}
+    </if>
+    <if test="categoryArray != null and categoryArray !=''">
+      AND  so.category IN (
+      <foreach collection="categoryArray" item="category" separator=",">
+        #{category}
+      </foreach>
+      )
+    </if>
+    <if test="statusArray != null and statusArray !=''">
+      AND so.status IN (
+      <foreach collection="statusArray" item="status" separator=",">
+        #{status}
+      </foreach>
+      )
+    </if>
+    <if test="uploadStatusArray != null and uploadStatusArray !=''">
+      AND so.upload_status IN (
+      <foreach collection="uploadStatusArray" item="uploadStatus" separator=",">
+        #{uploadStatus}
+      </foreach>
+      )
+    </if>
+    <if test="beginTime != null">
+      AND so.open_time >= #{beginTime}
+    </if>
+    <if test="endTime != null">
+      AND so.open_time &lt;= #{endTime}
+    </if>
+    <if test="serveClientId != null">
+      AND so.serve_client_id = #{serveClientId}
+    </if>
+    <if test="marketAddressId != null">
+      AND so.market_address_id = #{marketAddressId}
+    </if>
+    <if test="tradeBeginTime != null">
+      AND so.trade_time >= #{tradeBeginTime}
+    </if>
+    <if test="tradeEndTime != null">
+      AND so.trade_time &lt;= #{tradeEndTime}
+    </if>
+    <if test="linkFlag =='1' ">
+      AND NOT EXISTS (SELECT 1 FROM supermarket_finance_relevancy sf WHERE sf.supermarket_order_id = so.id)
+    </if>
+    AND ifnull(so.delete_flag,'0') !='1'
+    ORDER BY so.id DESC
+    <if test="offset != null and rows != null">
+      LIMIT #{offset}, #{rows}
+    </if>
+  </select>
+
+  <select id="countSupermarketOrder" resultType="java.lang.Long">
+    SELECT count(1)
+    FROM supermarket_order so
+    LEFT JOIN jsh_user ju1 ON ju1.id = so.creator
+    LEFT JOIN jsh_user ju2 ON ju2.id = so.verifier
+    LEFT JOIN (
+    SELECT order_id,
+    SUM(difference) AS totalDifference,
+    SUM(supplementary_amount) AS totalSupplementary
+    FROM order_detail
+    GROUP BY order_id
+    ) AS od ON od.order_id = so.id
+    WHERE 1=1
+    <if test="id != null">
+      AND so.id = #{id}
+    </if>
+    <if test="number != null">
+      <bind name="number" value="'%'+number+'%'"/>
+      AND so.number LIKE #{number}
+    </if>
+    <if test="categoryArray != null and categoryArray !=''">
+      AND  so.category IN (
+      <foreach collection="categoryArray" item="category" separator=",">
+        #{category}
+      </foreach>
+      )
+    </if>
+    <if test="statusArray != null and statusArray !=''">
+      AND so.status IN (
+      <foreach collection="statusArray" item="status" separator=",">
+        #{status}
+      </foreach>
+      )
+    </if>
+    <if test="uploadStatusArray != null and uploadStatusArray !=''">
+      AND so.upload_status IN (
+      <foreach collection="uploadStatusArray" item="uploadStatus" separator=",">
+        #{uploadStatus}
+      </foreach>
+      )
+    </if>
+    <if test="beginTime != null">
+      AND so.open_time >= #{beginTime}
+    </if>
+    <if test="endTime != null">
+      AND so.open_time &lt;= #{endTime}
+    </if>
+    <if test="serveClientId != null">
+      AND so.serve_client_id = #{serveClientId}
+    </if>
+    <if test="marketAddressId != null">
+      AND so.market_address_id = #{marketAddressId}
+    </if>
+    <if test="tradeBeginTime != null">
+      AND so.trade_time >= #{tradeBeginTime}
+    </if>
+    <if test="tradeEndTime != null">
+      AND so.trade_time &lt;= #{tradeEndTime}
+    </if>
+    <if test="linkFlag =='1' ">
+      AND NOT EXISTS (SELECT 1 FROM supermarket_finance_relevancy sf WHERE sf.supermarket_order_id = so.id)
+    </if>
+    AND ifnull(so.delete_flag,'0') !='1'
+  </select>
+
+  <update id="batchDeleteSupermarketOrderByIds">
+    update supermarket_order
+    set delete_flag='1',updater=#{updater},update_time=#{updateTime}
+    where 1=1
+    and id in (
+    <foreach collection="ids" item="id" separator=",">
+      #{id}
+    </foreach>
+    )
+  </update>
+
+  <select id="selectSupermarketOrderById" resultMap="ResultMapEx">
+    SELECT so.*,
+    ju1.username AS createdName,
+    ju2.username AS verifierName,
+    ss.name AS serveClientName,
+    st.tax,
+    m.name AS marketAddress,
+    CASE
+    WHEN so.link_id IS NOT NULL THEN s_order.difference_total
+    ELSE NULL
+    END AS linkedDifferenceTotal
+    FROM supermarket_order so
+    LEFT JOIN jsh_user ju1 ON ju1.id = so.creator
+    LEFT JOIN jsh_user ju2 ON ju2.id = so.verifier
+    LEFT JOIN supermarket_serve_client ss ON so.serve_client_id = ss.id AND ifnull(ss.delete_flag,'0') !='1'
+    LEFT JOIN supermarket_tax st ON st.serve_client_id = so.serve_client_id AND ifnull(st.delete_flag,'0') !='1'
+    LEFT JOIN supermarket_order s_order ON s_order.id = so.link_id
+    LEFT JOIN market m ON m.id = so.market_address_id AND ifnull(m.delete_flag,'0') !='1'
+    WHERE 1=1
+    <if test="id != null">
+      AND so.id = #{id}
+    </if>
+    AND ifnull(so.delete_flag,'0') !='1'
+  </select>
+
+  <select id="getDifferenceDetail" resultMap="SupermarketOrderDifferenceDetailVo">
+    SELECT so.id, so.verifier_time AS updateTime, so.number,'订单编号' AS type,
+    SUM(od.supplementary_amount) AS supplementaryAmount
+    FROM supermarket_order so
+    LEFT JOIN order_detail od ON od.order_id = so.id
+    WHERE so.link_id = #{linkId}
+    AND so.status IN ('1' , '2')
+    AND ifnull(so.delete_flag,'0') !='1'
+    GROUP BY so.id
+  </select>
+</mapper>

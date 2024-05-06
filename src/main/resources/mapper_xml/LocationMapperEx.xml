@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsh.erp.datasource.mappers.LocationMapperEx">
+    <resultMap extends="com.jsh.erp.datasource.mappers.LocationMapper.BaseResultMap" id="ResultMapList"
+               type="com.jsh.erp.datasource.vo.LocationVo">
+        <result column="depotName" jdbcType="VARCHAR" property="depotName" />
+        <result column="smallDepotName" jdbcType="VARCHAR" property="smallDepotName" />
+    </resultMap>
+
+    <select id="selectLocation" resultMap="ResultMapList">
+        SELECT lo.*,de.name as depotName , sd.name as smallDepotName
+        FROM location lo
+        LEFT JOIN jsh_depot de ON de.id = lo.depot_id AND ifnull(de.delete_flag,'0') !='1'
+        LEFT JOIN small_depot sd ON sd.id = lo.small_depot_id AND ifnull(sd.delete_flag,'0') !='1'
+        WHERE 1=1
+        <if test="depotId != null">
+            AND lo.depot_id = #{depotId}
+        </if>
+        <if test="smallDepotId != null">
+            AND lo.small_depot_id = #{smallDepotId}
+        </if>
+        <if test="enabledFlag == 1">
+            AND lo.enabled = true
+        </if>
+        AND ifnull(lo.delete_flag,'0') !='1'
+        ORDER BY lo.id DESC
+        <if test="offset != null and rows != null">
+            LIMIT #{offset},#{rows}
+        </if>
+    </select>
+
+    <select id="countLocation" resultType="java.lang.Long">
+        SELECT COUNT(id)
+        FROM location
+        WHERE 1=1
+        <if test="depotId != null">
+            AND depot_id = #{depotId}
+        </if>
+        <if test="smallDepotId != null">
+            AND small_depot_id = #{smallDepotId}
+        </if>
+        <if test="enabledFlag == 1">
+            AND enabled = true
+        </if>
+        AND ifnull(delete_flag,'0') !='1'
+    </select>
+</mapper>

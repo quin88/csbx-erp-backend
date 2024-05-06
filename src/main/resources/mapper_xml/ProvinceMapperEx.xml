@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsh.erp.datasource.mappers.ProvinceMapperEx">
+  <resultMap id="provinceResultMap" type="com.jsh.erp.datasource.dto.ProvinceDTO">
+      <result column="provinceId" jdbcType="BIGINT" property="provinceId"/>
+      <result column="provinceName" jdbcType="VARCHAR" property="provinceName"/>
+      <result column="provinceNumber" jdbcType="VARCHAR" property="provinceNumber"/>
+      <collection property="cities" ofType="com.jsh.erp.datasource.dto.CityDTO" resultMap="cityResultMap"/>
+  </resultMap>
+
+      <resultMap id="cityResultMap" type="com.jsh.erp.datasource.dto.CityDTO">
+          <result column="cityId" jdbcType="BIGINT" property="cityId"/>
+          <result column="cityName" jdbcType="VARCHAR" property="cityName"/>
+          <result column="cityNumber" jdbcType="VARCHAR" property="cityNumber"/>
+         <collection property="counties" ofType="com.jsh.erp.datasource.dto.CountyDTO" resultMap="countyResultMap"/>
+     </resultMap>
+
+     <resultMap id="countyResultMap" type="com.jsh.erp.datasource.dto.CountyDTO">
+         <result column="countyId" jdbcType="BIGINT" property="countyId"/>
+         <result column="countyName" jdbcType="VARCHAR" property="countyName"/>
+         <result column="countyNumber" jdbcType="VARCHAR" property="countyNumber"/>
+         <result column="enabled" jdbcType="BOOLEAN" property="enabled"/>
+     </resultMap>
+
+    <select id="selectAllCountiesInTree" resultMap="provinceResultMap">
+        select
+            p.id as provinceId,
+            p.province_name as provinceName,
+            p.province_number as provinceNumber,
+            c.id as cityId,
+            c.city_name as cityName,
+            c.city_number as cityNumber,
+            ct.id as countyId,
+            ct.county_name as countyName,
+            ct.county_number as countyNumber,
+            ct.enabled as enabled
+        from province p
+        left join city c on p.id = c.province_id
+        left join county ct on (c.id = ct.city_id or ( c.id is null and p.id = ct.province_id))
+        where 1=1
+        and ifnull(p.delete_flag,'0') !='1'
+        and ifnull(c.delete_flag,'0') !='1'
+        and ifnull(ct.delete_flag,'0') !='1'
+        order by
+            p.id asc;
+    </select>
+</mapper>

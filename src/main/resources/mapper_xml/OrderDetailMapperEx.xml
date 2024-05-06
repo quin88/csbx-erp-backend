@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsh.erp.datasource.mappers.OrderDetailMapperEx">
+  <resultMap extends="com.jsh.erp.datasource.mappers.OrderDetailMapper.BaseResultMap" id="ResultMapList"
+             type="com.jsh.erp.datasource.vo.OrderDetailVo">
+    <result column="supplier" jdbcType="VARCHAR" property="supplier" />
+    <result column="material" jdbcType="VARCHAR" property="material" />
+    <result column="accountNumber" jdbcType="VARCHAR" property="accountNumber" />
+    <result column="number" jdbcType="VARCHAR" property="number" />
+    <result column="supplyingZeroName" jdbcType="VARCHAR" property="supplyingZeroName" />
+    <result column="supplyingZeroNumber" jdbcType="VARCHAR" property="supplyingZeroNumber" />
+  </resultMap>
+
+  <select id="getOrderDetailListByMaterialIds" resultType="com.jsh.erp.datasource.entities.OrderDetail">
+    select *
+    from order_detail
+    where 1=1
+    and material_id in (
+    <foreach collection="ids" item="id" separator=",">
+      #{id}
+    </foreach>
+    )
+    and ifnull(delete_flag,'0') !='1'
+  </select>
+
+  <select id="findBySelect" resultMap="ResultMapList">
+    select o.*, ss.name supplier, sm.name material, sm.supplying_zero_name supplyingZeroName,
+    sm.supplying_zero_number supplyingZeroNumber, sa.account_number accountNumber, so.number number
+    FROM order_detail o
+    left join supermarket_supplier ss on ss.id = o.supplier_id and ifnull(ss.delete_Flag,'0') !='1'
+    left join supermarket_material sm on sm.id = o.material_id and ifnull(sm.delete_Flag,'0') !='1'
+    left join supermarket_account sa on sa.id = o.account_id and ifnull(sa.delete_Flag,'0') !='1'
+    left join supermarket_order so on so.id = o.order_id and ifnull(so.delete_Flag,'0') !='1'
+    where 1=1
+    <if test="idArray != null">
+      and o.order_id in (
+      <foreach collection="idArray" item="id" separator=",">
+        #{id}
+      </foreach>
+      )
+    </if>
+    and ifnull(o.delete_flag,'0') !='1'
+  </select>
+
+  <select id="findByCondition" resultMap="ResultMapList">
+    select o.*, ss.name supplier, sm.name material, sa.account_number accountNumber, sm.supplying_zero_name supplyingZeroName,
+    sm.supplying_zero_number supplyingZeroNumber
+    FROM order_detail o
+    left join supermarket_supplier ss on ss.id = o.supplier_id and ifnull(ss.delete_Flag,'0') !='1'
+    left join supermarket_material sm on sm.id = o.material_id and ifnull(sm.delete_Flag,'0') !='1'
+    left join supermarket_account sa on sa.id = o.account_id and ifnull(sa.delete_Flag,'0') !='1'
+    where 1=1
+    <if test="orderId != null">
+      and o.order_id = #{orderId}
+    </if>
+    <if test="supplierId != null">
+      and o.supplier_id = #{supplierId}
+    </if>
+    <if test="accountId != null">
+      and o.account_id = #{accountId}
+    </if>
+    and ifnull(o.delete_flag,'0') !='1'
+  </select>
+
+  <select id="getSupplementaryAmountTotalById" resultType="java.math.BigDecimal">
+    select sum(supplementary_amount)
+    FROM order_detail
+    where 1 = 1
+    <if test="orderId != null">
+      and order_id = #{orderId}
+    </if>
+    and ifnull(delete_flag,'0') !='1'
+  </select>
+</mapper>

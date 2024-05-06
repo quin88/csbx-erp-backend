@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsh.erp.datasource.mappers.SupermarketTaxMapperEx">
+    <resultMap extends="com.jsh.erp.datasource.mappers.SupermarketTaxMapper.BaseResultMap" id="ResultMapEx"
+               type="com.jsh.erp.datasource.vo.SupermarketTaxVo">
+        <result column="serveClientName" jdbcType="VARCHAR" property="serveClientName"/>
+        <result column="tenantName" jdbcType="VARCHAR" property="tenantName"/>
+    </resultMap>
+    <select id="selectByConditionSupermarketTax"  resultMap="ResultMapEx">
+        select st.id, st.tax, st.serve_client_id, ss.name serveClientName, u.username tenantName
+        from supermarket_tax st
+        left join supermarket_serve_client ss on st.serve_client_id = ss.id and ifnull(ss.delete_flag,'0') !='1'
+        left join jsh_user u on u.id=st.tenant_id and ifnull(u.Status,'0') !='1'
+        where 1 = 1
+        and ifnull(st.delete_flag,'0') !='1'
+        order by st.id asc
+        <if test="offset != null and rows != null">
+            limit #{offset},#{rows}
+        </if>
+    </select>
+
+    <select id="countSupermarketSystemTax" resultType="java.lang.Long">
+        select count(1)
+        from supermarket_tax st
+        left join supermarket_serve_client ss on st.serve_client_id = ss.id and ifnull(ss.delete_flag,'0') !='1'
+        where 1 = 1
+        and ifnull(st.delete_flag,'0') !='1'
+    </select>
+
+    <update id="batchDeleteSystemTaxByIds">
+        update supermarket_tax
+        set delete_flag='1'
+        where 1=1
+        and id in (
+        <foreach collection="ids" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+    </update>
+
+    <select id="selectByClientId" resultType="com.jsh.erp.datasource.entities.SupermarketTax">
+        select *
+        from supermarket_tax
+        where 1 = 1
+        <if test="serveClientId != null">
+            and serve_client_id = #{serveClientId}
+        </if>
+        and ifnull(delete_flag,'0') !='1'
+    </select>
+
+    <select id="selectTaxIdById" resultType="java.lang.Long">
+        select id
+        from supermarket_tax
+        where 1=1
+        and serve_client_id in (
+        <foreach collection="ids" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+        and ifnull(delete_flag,'0') !='1'
+    </select>
+</mapper>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsh.erp.datasource.mappers.InvoiceNumberMapperEx">
+    <resultMap extends="com.jsh.erp.datasource.mappers.InvoiceNumberMapper.BaseResultMap" id="ResultMapEx" type="com.jsh.erp.datasource.vo.InvoiceNumberVoList">
+        <result column="materialName" jdbcType="VARCHAR" property="materialName" />
+    </resultMap>
+
+    <select id="getExistingIds" resultType="java.lang.Long">
+        select id
+        from invoice_number
+        where 1=1
+        <if test="materialId != null and materialId != ''">
+            AND material_id = #{materialId}
+        </if>
+        and ifnull(delete_flag,'0') !='1'
+    </select>
+
+    <update id="batchDeleteInvoiceByIds">
+        update invoice_number
+        set delete_flag='1'
+        where 1=1
+        and id in (
+        <foreach collection="ids" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+    </update>
+
+    <update id="batchDeleteInvoiceByMaterialIds">
+        update invoice_number
+        set delete_flag='1'
+        where 1=1
+        and material_id in (
+        <foreach collection="materialIds" item="materialId" separator=",">
+            #{materialId}
+        </foreach>
+        )
+    </update>
+
+    <select id="findByAll" parameterType="com.jsh.erp.datasource.entities.InvoiceNumberExample" resultMap="ResultMapEx">
+        select invoice.*, s.name materialName
+        from invoice_number as invoice
+        left join supermarket_material s on invoice.material_id = s.id and ifnull(s.delete_flag, '0') != '1'
+        where 1 = 1
+        <if test="materialIds != null and materialIds.size() > 0">
+            and invoice.material_id in (
+            <foreach collection="materialIds" item="materialId" separator=",">
+                #{materialId}
+            </foreach>
+            )
+        </if>
+        and ifnull(invoice.delete_flag, '0') != '1'
+    </select>
+</mapper>

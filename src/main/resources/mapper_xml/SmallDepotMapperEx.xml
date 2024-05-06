@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsh.erp.datasource.mappers.SmallDepotMapperEx">
+
+    <select id="selectSmallDepot" resultType="com.jsh.erp.datasource.entities.SmallDepot">
+        SELECT *
+        FROM small_depot
+        WHERE 1=1
+        <if test="depotId != null">
+            AND depot_id = #{depotId}
+        </if>
+        <if test="enabledFlag == 1">
+            AND enabled = true
+        </if>
+        AND ifnull(delete_flag,'0') !='1'
+        ORDER BY id DESC
+        <if test="offset != null and rows != null">
+            LIMIT #{offset},#{rows}
+        </if>
+    </select>
+
+    <select id="countSmallDepot" resultType="java.lang.Long">
+        SELECT COUNT(id)
+        FROM small_depot
+        WHERE 1=1
+        <if test="depotId != null">
+            AND depot_id = #{depotId}
+        </if>
+        <if test="enabledFlag == 1">
+            AND enabled = true
+        </if>
+        AND ifnull(delete_flag,'0') !='1'
+    </select>
+</mapper>

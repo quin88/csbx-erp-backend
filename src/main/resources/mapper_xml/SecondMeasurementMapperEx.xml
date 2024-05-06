@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsh.erp.datasource.mappers.SecondMeasurementMapperEx">
+    <resultMap extends="com.jsh.erp.datasource.mappers.SecondMeasurementMapper.BaseResultMap" id="ResultExMap"
+               type="com.jsh.erp.datasource.vo.SecondMeasurementVo">
+        <result column="measurement" jdbcType="VARCHAR" property="measurement"/>
+    </resultMap>
+    <select id="selectByConditionSecondMeasurement"
+            parameterType="com.jsh.erp.datasource.entities.SecondMeasurementExample" resultMap="ResultExMap">
+        select sm.*,m.measurement_unit measurement
+        from second_measurement sm
+        left join measurement m on m.id = sm.measurement_id and ifnull(m.delete_flag,'0')!='1'
+        where 1 = 1
+        <if test="measurementId != null">
+            and sm.measurement_id = #{measurementId}
+        </if>
+        and ifnull(sm.delete_flag,'0') !='1'
+        <if test="offset != null and rows != null">
+            limit #{offset},#{rows}
+        </if>
+    </select>
+
+    <select id="countSecondMeasurement" resultType="java.lang.Long">
+        select count(1)
+        from second_measurement sm
+        left join measurement m on m.id = sm.measurement_id and ifnull(m.delete_flag,'0')!='1'
+        where 1 = 1
+        <if test="measurementId != null">
+            and sm.measurement_id = #{measurementId}
+        </if>
+        and ifnull(sm.delete_flag,'0') !='1'
+    </select>
+
+    <update id="batchDeleteSecondMeasurementByIds">
+        update second_measurement
+        set delete_flag='1'
+        where 1=1
+        and id in (
+        <foreach collection="ids" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+    </update>
+</mapper>

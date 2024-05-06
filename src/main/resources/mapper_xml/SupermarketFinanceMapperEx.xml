@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsh.erp.datasource.mappers.SupermarketFinanceMapperEx">
+    <resultMap extends="com.jsh.erp.datasource.mappers.SupermarketFinanceMapper.BaseResultMap" id="ResultMapEx"
+               type="com.jsh.erp.datasource.vo.SupermarketFinanceVo">
+        <result column="createdName" jdbcType="VARCHAR" property="createdName" />
+        <result column="verifierName" jdbcType="VARCHAR" property="verifierName" />
+        <result column="uploaderName" jdbcType="VARCHAR" property="uploaderName" />
+        <result column="paymenterName" jdbcType="VARCHAR" property="paymenterName" />
+        <result column="aquaticType" jdbcType="VARCHAR" property="aquaticType" />
+        <result column="market" jdbcType="VARCHAR" property="market" />
+        <result column="priceTotal" jdbcType="DECIMAL" property="priceTotal" />
+        </resultMap>
+
+    <select id="selectIdByNumber" resultType="java.lang.Long">
+        select id
+        from supermarket_finance
+        where number = #{number}
+          and ifnull(delete_flag,'0') !='1'
+    </select>
+
+    <select id="selectSupermarketFinance" resultMap="ResultMapEx">
+    SELECT sf.*,
+    ju1.username AS createdName,
+    ju2.username AS verifierName,
+    aq.name AS aquaticType,
+    m.name AS market,
+    (SELECT COALESCE(SUM(sfe.price), 0) FROM supermarket_finance_extend sfe WHERE sfe.supermarket_finance_id = sf.id AND ifnull(sfe.delete_flag, '0') != '1') AS priceTotal
+    FROM supermarket_finance sf
+    LEFT JOIN jsh_user ju1 ON ju1.id = sf.creator
+    LEFT JOIN jsh_user ju2 ON ju2.id = sf.verifier
+    LEFT JOIN aquatic_type aq ON aq.id = sf.aquatic_type_id AND ifnull(aq.delete_flag, '0') != '1'
+    LEFT JOIN market m ON m.id = sf.market_id AND ifnull(m.delete_flag, '0') != '1'
+    LEFT JOIN supermarket_finance_relevancy sfr ON sfr.supermarket_finance_id = sf.id AND ifnull(sfr.delete_flag, '0') != '1'
+    WHERE 1=1
+        <if test="id != null">
+            AND sf.id = #{id}
+        </if>
+        <if test="aquaticTypeId != null">
+            AND sf.aquatic_type_id = #{aquaticTypeId}
+        </if>
+        <if test="marketId != null">
+            AND sf.market_id = #{marketId}
+        </if>
+        <if test="number != null">
+            <bind name="number" value="'%'+number+'%'"/>
+            AND sf.number LIKE #{number}
+        </if>
+        <if test="statusArray != null and statusArray !=''">
+            AND sf.status IN (
+            <foreach collection="statusArray" item="status" separator=",">
+                #{status}
+            </foreach>
+            )
+        </if>
+        <if test="linkNumber != null">
+            <bind name="linkNumber" value="'%'+linkNumber+'%'"/>
+            AND sfr.supermarket_order_number LIKE #{linkNumber}
+        </if>
+        <if test="beginTime != null">
+            AND sf.pay_date >= #{beginTime}
+        </if>
+        <if test="endTime != null">
+            AND sf.pay_date &lt;= #{endTime}
+        </if>
+        AND ifnull(sf.delete_flag,'0') !='1'
+        GROUP BY sf.id
+        ORDER BY sf.id DESC
+        <if test="offset != null and rows != null">
+            LIMIT #{offset},#{rows}
+        </if>
+</select>
+
+    <select id="countSupermarketFinance" resultType="java.lang.Long">
+        SELECT COUNT(DISTINCT sf.id)
+        FROM supermarket_finance sf
+        LEFT JOIN supermarket_finance_relevancy sfr ON sfr.supermarket_finance_id = sf.id AND ifnull(sfr.delete_flag, '0') != '1'
+        WHERE 1=1
+        <if test="id != null">
+            AND sf.id = #{id}
+        </if>
+        <if test="aquaticTypeId != null">
+            AND sf.aquatic_type_id = #{aquaticTypeId}
+        </if>
+        <if test="marketId != null">
+            AND sf.market_id = #{marketId}
+        </if>
+        <if test="number != null">
+            <bind name="number" value="'%'+number+'%'"/>
+            AND sf.number LIKE #{number}
+        </if>
+        <if test="statusArray != null and statusArray !=''">
+            AND sf.status IN (
+            <foreach collection="statusArray" item="status" separator=",">
+                #{status}
+            </foreach>
+            )
+        </if>
+        <if test="linkNumber != null">
+            <bind name="linkNumber" value="'%'+linkNumber+'%'"/>
+            AND sfr.supermarket_order_number LIKE #{linkNumber}
+        </if>
+        <if test="beginTime != null">
+            AND sf.pay_date >= #{beginTime}
+        </if>
+        <if test="endTime != null">
+            AND sf.pay_date &lt;= #{endTime}
+        </if>
+        AND ifnull(sf.delete_flag,'0') !='1'
+    </select>
+
+    <select id="selectSupermarketFinanceById" resultMap="ResultMapEx">
+        SELECT sf.*,
+        ju1.username AS createdName,
+        ju2.username AS verifierName,
+        aq.name AS aquaticType,
+        m.name AS market,
+        SUM(sfe.price) AS priceTotal
+        FROM supermarket_finance sf
+        LEFT JOIN jsh_user ju1 ON ju1.id = sf.creator
+        LEFT JOIN jsh_user ju2 ON ju2.id = sf.verifier
+        LEFT JOIN aquatic_type aq ON aq.id = sf.aquatic_type_id AND ifnull(aq.delete_flag, '0') != '1'
+        LEFT JOIN market m ON m.id = sf.market_id AND ifnull(m.delete_flag, '0') != '1'
+        LEFT JOIN supermarket_finance_extend sfe ON sfe.supermarket_finance_id = sf.id AND ifnull(sfe.delete_flag, '0') != '1'
+        WHERE 1=1
+        <if test="id != null">
+            AND sf.id = #{id}
+        </if>
+        AND ifnull(sf.delete_flag,'0') !='1'
+    </select>
+
+    <update id="batchDeleteByIds">
+        update supermarket_finance
+        set delete_flag='1',updater=#{updater},update_time=#{updateTime}
+        where 1=1
+        and id in (
+        <foreach collection="ids" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+    </update>
+
+    <select id="selectSupermarketFinanceByPayDate" resultMap="ResultMapEx">
+        SELECT sf.*,
+        ju1.username AS createdName,
+        aq.name AS aquaticType,
+        m.name AS market,
+        COALESCE(sfe.priceTotal, 0) AS priceTotal
+        FROM supermarket_finance sf
+        LEFT JOIN jsh_user ju1 ON ju1.id = sf.creator
+        LEFT JOIN aquatic_type aq ON aq.id = sf.aquatic_type_id AND ifnull(aq.delete_flag, '0') != '1'
+        LEFT JOIN market m ON m.id = sf.market_id AND ifnull(m.delete_flag, '0') != '1'
+        LEFT JOIN (SELECT supermarket_finance_id, COALESCE(SUM(price), 0) AS priceTotal
+        FROM supermarket_finance_extend
+        WHERE ifnull(delete_flag, '0') != '1'
+        GROUP BY
+        supermarket_finance_id) sfe ON sfe.supermarket_finance_id = sf.id
+        WHERE
+        1=1
+        <if test="startDate != null">
+            AND sf.pay_date >= #{startDate}
+        </if>
+        <if test="endDate != null">
+            AND sf.pay_date &lt;= #{endDate}
+        </if>
+        AND ifnull(sf.delete_flag,'0') !='1'
+    </select>
+
+    <select id="selectSupermarketFinanceByOrderId" resultMap="ResultMapEx">
+        SELECT sf.*,
+        ju1.username AS createdName,
+        ju2.username AS verifierName,
+        ju3.username AS uploaderName,
+        ju4.username AS paymenterName
+        FROM
+        supermarket_finance sf
+        LEFT JOIN
+        jsh_user ju1 ON ju1.id = sf.creator
+        LEFT JOIN
+        jsh_user ju2 ON ju2.id = sf.verifier
+        LEFT JOIN
+        jsh_user ju3 ON ju3.id = sf.uploader
+        LEFT JOIN
+        jsh_user ju4 ON ju4.id = sf.paymenter
+        LEFT JOIN
+        supermarket_finance_relevancy sfr ON sfr.supermarket_finance_id = sf.id
+        WHERE 1=1
+        <if test="orderId != null">
+            AND sfr.supermarket_order_id = #{orderId}
+        </if>
+        <if test="sfId != null">
+            AND sfr.supermarket_finance_id = #{sfId}
+        </if>
+        AND ifnull(sf.delete_flag,'0') !='1'
+        AND ifnull(sfr.delete_flag,'0') !='1'
+    </select>
+</mapper>

@@ -1,0 +1,543 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsh.erp.datasource.mappers.GoodsAllocationMapper">
+  <resultMap id="BaseResultMap" type="com.jsh.erp.datasource.entities.GoodsAllocation">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="goods_allocation" jdbcType="VARCHAR" property="goodsAllocation" />
+    <result column="depot_id" jdbcType="BIGINT" property="depotId" />
+    <result column="depot" jdbcType="VARCHAR" property="depot" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="creator" jdbcType="BIGINT" property="creator" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="updater" jdbcType="BIGINT" property="updater" />
+    <result column="tenant_id" jdbcType="BIGINT" property="tenantId" />
+    <result column="delete_flag" jdbcType="VARCHAR" property="deleteFlag" />
+    <result column="small_depot_id" jdbcType="BIGINT" property="smallDepotId" />
+    <result column="location_id" jdbcType="BIGINT" property="locationId" />
+    <result column="row" jdbcType="INTEGER" property="row" />
+    <result column="goods_type" jdbcType="VARCHAR" property="goodsType" />
+    <result column="space_type" jdbcType="VARCHAR" property="spaceType" />
+    <result column="lattice" jdbcType="INTEGER" property="lattice" />
+    <result column="capacity" jdbcType="INTEGER" property="capacity" />
+    <result column="capacity_status" jdbcType="VARCHAR" property="capacityStatus" />
+    <result column="length" jdbcType="INTEGER" property="length" />
+    <result column="width" jdbcType="INTEGER" property="width" />
+    <result column="height" jdbcType="INTEGER" property="height" />
+    <result column="weight" jdbcType="INTEGER" property="weight" />
+    <result column="weight_unit" jdbcType="VARCHAR" property="weightUnit" />
+    <result column="number" jdbcType="VARCHAR" property="number" />
+    <result column="enabled" jdbcType="BIT" property="enabled" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, goods_allocation, depot_id, depot, remark, create_time, creator, update_time, 
+    updater, tenant_id, delete_flag, small_depot_id, location_id, row, goods_type, space_type, 
+    lattice, capacity, capacity_status, length, width, height, weight, weight_unit, number, 
+    enabled
+  </sql>
+  <select id="selectByExample" parameterType="com.jsh.erp.datasource.entities.GoodsAllocationExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from goods_allocation
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from goods_allocation
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from goods_allocation
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jsh.erp.datasource.entities.GoodsAllocationExample">
+    delete from goods_allocation
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jsh.erp.datasource.entities.GoodsAllocation">
+    insert into goods_allocation (id, goods_allocation, depot_id, 
+      depot, remark, create_time, 
+      creator, update_time, updater, 
+      tenant_id, delete_flag, small_depot_id, 
+      location_id, row, goods_type, 
+      space_type, lattice, capacity, 
+      capacity_status, length, width, 
+      height, weight, weight_unit, 
+      number, enabled)
+    values (#{id,jdbcType=BIGINT}, #{goodsAllocation,jdbcType=VARCHAR}, #{depotId,jdbcType=BIGINT}, 
+      #{depot,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{creator,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=BIGINT}, 
+      #{tenantId,jdbcType=BIGINT}, #{deleteFlag,jdbcType=VARCHAR}, #{smallDepotId,jdbcType=BIGINT}, 
+      #{locationId,jdbcType=BIGINT}, #{row,jdbcType=INTEGER}, #{goodsType,jdbcType=VARCHAR}, 
+      #{spaceType,jdbcType=VARCHAR}, #{lattice,jdbcType=INTEGER}, #{capacity,jdbcType=INTEGER}, 
+      #{capacityStatus,jdbcType=VARCHAR}, #{length,jdbcType=INTEGER}, #{width,jdbcType=INTEGER}, 
+      #{height,jdbcType=INTEGER}, #{weight,jdbcType=INTEGER}, #{weightUnit,jdbcType=VARCHAR}, 
+      #{number,jdbcType=VARCHAR}, #{enabled,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jsh.erp.datasource.entities.GoodsAllocation">
+    insert into goods_allocation
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="goodsAllocation != null">
+        goods_allocation,
+      </if>
+      <if test="depotId != null">
+        depot_id,
+      </if>
+      <if test="depot != null">
+        depot,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="updater != null">
+        updater,
+      </if>
+      <if test="tenantId != null">
+        tenant_id,
+      </if>
+      <if test="deleteFlag != null">
+        delete_flag,
+      </if>
+      <if test="smallDepotId != null">
+        small_depot_id,
+      </if>
+      <if test="locationId != null">
+        location_id,
+      </if>
+      <if test="row != null">
+        row,
+      </if>
+      <if test="goodsType != null">
+        goods_type,
+      </if>
+      <if test="spaceType != null">
+        space_type,
+      </if>
+      <if test="lattice != null">
+        lattice,
+      </if>
+      <if test="capacity != null">
+        capacity,
+      </if>
+      <if test="capacityStatus != null">
+        capacity_status,
+      </if>
+      <if test="length != null">
+        length,
+      </if>
+      <if test="width != null">
+        width,
+      </if>
+      <if test="height != null">
+        height,
+      </if>
+      <if test="weight != null">
+        weight,
+      </if>
+      <if test="weightUnit != null">
+        weight_unit,
+      </if>
+      <if test="number != null">
+        number,
+      </if>
+      <if test="enabled != null">
+        enabled,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="goodsAllocation != null">
+        #{goodsAllocation,jdbcType=VARCHAR},
+      </if>
+      <if test="depotId != null">
+        #{depotId,jdbcType=BIGINT},
+      </if>
+      <if test="depot != null">
+        #{depot,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null">
+        #{updater,jdbcType=BIGINT},
+      </if>
+      <if test="tenantId != null">
+        #{tenantId,jdbcType=BIGINT},
+      </if>
+      <if test="deleteFlag != null">
+        #{deleteFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="smallDepotId != null">
+        #{smallDepotId,jdbcType=BIGINT},
+      </if>
+      <if test="locationId != null">
+        #{locationId,jdbcType=BIGINT},
+      </if>
+      <if test="row != null">
+        #{row,jdbcType=INTEGER},
+      </if>
+      <if test="goodsType != null">
+        #{goodsType,jdbcType=VARCHAR},
+      </if>
+      <if test="spaceType != null">
+        #{spaceType,jdbcType=VARCHAR},
+      </if>
+      <if test="lattice != null">
+        #{lattice,jdbcType=INTEGER},
+      </if>
+      <if test="capacity != null">
+        #{capacity,jdbcType=INTEGER},
+      </if>
+      <if test="capacityStatus != null">
+        #{capacityStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="length != null">
+        #{length,jdbcType=INTEGER},
+      </if>
+      <if test="width != null">
+        #{width,jdbcType=INTEGER},
+      </if>
+      <if test="height != null">
+        #{height,jdbcType=INTEGER},
+      </if>
+      <if test="weight != null">
+        #{weight,jdbcType=INTEGER},
+      </if>
+      <if test="weightUnit != null">
+        #{weightUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null">
+        #{number,jdbcType=VARCHAR},
+      </if>
+      <if test="enabled != null">
+        #{enabled,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jsh.erp.datasource.entities.GoodsAllocationExample" resultType="java.lang.Long">
+    select count(*) from goods_allocation
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update goods_allocation
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.goodsAllocation != null">
+        goods_allocation = #{record.goodsAllocation,jdbcType=VARCHAR},
+      </if>
+      <if test="record.depotId != null">
+        depot_id = #{record.depotId,jdbcType=BIGINT},
+      </if>
+      <if test="record.depot != null">
+        depot = #{record.depot,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.creator != null">
+        creator = #{record.creator,jdbcType=BIGINT},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updater != null">
+        updater = #{record.updater,jdbcType=BIGINT},
+      </if>
+      <if test="record.tenantId != null">
+        tenant_id = #{record.tenantId,jdbcType=BIGINT},
+      </if>
+      <if test="record.deleteFlag != null">
+        delete_flag = #{record.deleteFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="record.smallDepotId != null">
+        small_depot_id = #{record.smallDepotId,jdbcType=BIGINT},
+      </if>
+      <if test="record.locationId != null">
+        location_id = #{record.locationId,jdbcType=BIGINT},
+      </if>
+      <if test="record.row != null">
+        row = #{record.row,jdbcType=INTEGER},
+      </if>
+      <if test="record.goodsType != null">
+        goods_type = #{record.goodsType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.spaceType != null">
+        space_type = #{record.spaceType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lattice != null">
+        lattice = #{record.lattice,jdbcType=INTEGER},
+      </if>
+      <if test="record.capacity != null">
+        capacity = #{record.capacity,jdbcType=INTEGER},
+      </if>
+      <if test="record.capacityStatus != null">
+        capacity_status = #{record.capacityStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.length != null">
+        length = #{record.length,jdbcType=INTEGER},
+      </if>
+      <if test="record.width != null">
+        width = #{record.width,jdbcType=INTEGER},
+      </if>
+      <if test="record.height != null">
+        height = #{record.height,jdbcType=INTEGER},
+      </if>
+      <if test="record.weight != null">
+        weight = #{record.weight,jdbcType=INTEGER},
+      </if>
+      <if test="record.weightUnit != null">
+        weight_unit = #{record.weightUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.number != null">
+        number = #{record.number,jdbcType=VARCHAR},
+      </if>
+      <if test="record.enabled != null">
+        enabled = #{record.enabled,jdbcType=BIT},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update goods_allocation
+    set id = #{record.id,jdbcType=BIGINT},
+      goods_allocation = #{record.goodsAllocation,jdbcType=VARCHAR},
+      depot_id = #{record.depotId,jdbcType=BIGINT},
+      depot = #{record.depot,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      creator = #{record.creator,jdbcType=BIGINT},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      updater = #{record.updater,jdbcType=BIGINT},
+      tenant_id = #{record.tenantId,jdbcType=BIGINT},
+      delete_flag = #{record.deleteFlag,jdbcType=VARCHAR},
+      small_depot_id = #{record.smallDepotId,jdbcType=BIGINT},
+      location_id = #{record.locationId,jdbcType=BIGINT},
+      row = #{record.row,jdbcType=INTEGER},
+      goods_type = #{record.goodsType,jdbcType=VARCHAR},
+      space_type = #{record.spaceType,jdbcType=VARCHAR},
+      lattice = #{record.lattice,jdbcType=INTEGER},
+      capacity = #{record.capacity,jdbcType=INTEGER},
+      capacity_status = #{record.capacityStatus,jdbcType=VARCHAR},
+      length = #{record.length,jdbcType=INTEGER},
+      width = #{record.width,jdbcType=INTEGER},
+      height = #{record.height,jdbcType=INTEGER},
+      weight = #{record.weight,jdbcType=INTEGER},
+      weight_unit = #{record.weightUnit,jdbcType=VARCHAR},
+      number = #{record.number,jdbcType=VARCHAR},
+      enabled = #{record.enabled,jdbcType=BIT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jsh.erp.datasource.entities.GoodsAllocation">
+    update goods_allocation
+    <set>
+      <if test="goodsAllocation != null">
+        goods_allocation = #{goodsAllocation,jdbcType=VARCHAR},
+      </if>
+      <if test="depotId != null">
+        depot_id = #{depotId,jdbcType=BIGINT},
+      </if>
+      <if test="depot != null">
+        depot = #{depot,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null">
+        updater = #{updater,jdbcType=BIGINT},
+      </if>
+      <if test="tenantId != null">
+        tenant_id = #{tenantId,jdbcType=BIGINT},
+      </if>
+      <if test="deleteFlag != null">
+        delete_flag = #{deleteFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="smallDepotId != null">
+        small_depot_id = #{smallDepotId,jdbcType=BIGINT},
+      </if>
+      <if test="locationId != null">
+        location_id = #{locationId,jdbcType=BIGINT},
+      </if>
+      <if test="row != null">
+        row = #{row,jdbcType=INTEGER},
+      </if>
+      <if test="goodsType != null">
+        goods_type = #{goodsType,jdbcType=VARCHAR},
+      </if>
+      <if test="spaceType != null">
+        space_type = #{spaceType,jdbcType=VARCHAR},
+      </if>
+      <if test="lattice != null">
+        lattice = #{lattice,jdbcType=INTEGER},
+      </if>
+      <if test="capacity != null">
+        capacity = #{capacity,jdbcType=INTEGER},
+      </if>
+      <if test="capacityStatus != null">
+        capacity_status = #{capacityStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="length != null">
+        length = #{length,jdbcType=INTEGER},
+      </if>
+      <if test="width != null">
+        width = #{width,jdbcType=INTEGER},
+      </if>
+      <if test="height != null">
+        height = #{height,jdbcType=INTEGER},
+      </if>
+      <if test="weight != null">
+        weight = #{weight,jdbcType=INTEGER},
+      </if>
+      <if test="weightUnit != null">
+        weight_unit = #{weightUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null">
+        number = #{number,jdbcType=VARCHAR},
+      </if>
+      <if test="enabled != null">
+        enabled = #{enabled,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jsh.erp.datasource.entities.GoodsAllocation">
+    update goods_allocation
+    set goods_allocation = #{goodsAllocation,jdbcType=VARCHAR},
+      depot_id = #{depotId,jdbcType=BIGINT},
+      depot = #{depot,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      creator = #{creator,jdbcType=BIGINT},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      updater = #{updater,jdbcType=BIGINT},
+      tenant_id = #{tenantId,jdbcType=BIGINT},
+      delete_flag = #{deleteFlag,jdbcType=VARCHAR},
+      small_depot_id = #{smallDepotId,jdbcType=BIGINT},
+      location_id = #{locationId,jdbcType=BIGINT},
+      row = #{row,jdbcType=INTEGER},
+      goods_type = #{goodsType,jdbcType=VARCHAR},
+      space_type = #{spaceType,jdbcType=VARCHAR},
+      lattice = #{lattice,jdbcType=INTEGER},
+      capacity = #{capacity,jdbcType=INTEGER},
+      capacity_status = #{capacityStatus,jdbcType=VARCHAR},
+      length = #{length,jdbcType=INTEGER},
+      width = #{width,jdbcType=INTEGER},
+      height = #{height,jdbcType=INTEGER},
+      weight = #{weight,jdbcType=INTEGER},
+      weight_unit = #{weightUnit,jdbcType=VARCHAR},
+      number = #{number,jdbcType=VARCHAR},
+      enabled = #{enabled,jdbcType=BIT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,19 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+    <changeSet author="lky" id="1705388659000" dbms="mysql">
+        <!-- 意见表 -->
+        <createTable tableName="opinion" remarks="意见表">
+            <column name="id" type="bigint(20)" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="supplier_id" type="bigint(20)" remarks="供应商id" />
+            <column name="feedback_type" type="varchar(100)" defaultValue="0" remarks="反馈类型" />
+            <column name="problem_type" type="varchar(100)" defaultValue="0" remarks="问题类型" />
+            <column name="problem_content" type="varchar(255)" defaultValue="0" remarks="问题描述" />
+            <column name="contact_information" type="varchar(100)" defaultValue="0" remarks="联系方式" />
+            <column name="create_time" type="datetime" remarks="创建时间" />
+            <column name="delete_flag" type="varchar(1)" defaultValue="0" remarks="删除标记" />
+            <column name="tenant_id" type="bigint(20)" remarks="租户ID" />
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsh.erp.datasource.mappers.SupermarketFinanceExtendMapperEx">
+
+    <!--统计付款凭证不为空的数据-->
+    <select id="countProofOfPayment" resultType="java.lang.Integer">
+        SELECT COUNT(id)
+        FROM supermarket_finance_extend
+        WHERE supermarket_finance_id = #{sfId}
+        AND proof_of_payment IS NOT NULL
+        AND proof_of_payment != ''
+        AND IFNULL(delete_flag, '0') != '1'
+    </select>
+
+    <!--统计结款状态为 已结款 数据-->
+    <select id="countPaymentStatus" resultType="java.lang.Integer">
+        SELECT COUNT(id)
+        FROM supermarket_finance_extend
+        WHERE supermarket_finance_id = #{sfId}
+          AND payment_status = '1'
+        AND IFNULL(delete_flag, '0') != '1'
+    </select>
+
+    <select id="getProofOfPaymentByOrderId" resultType="com.jsh.erp.datasource.entities.SupermarketFinanceExtend">
+        SELECT sfe.*
+        FROM supermarket_finance_extend sfe
+        LEFT JOIN supermarket_finance sf ON sf.id = sfe.supermarket_finance_id AND ifnull(sf.delete_flag,'0') !='1'
+        LEFT JOIN supermarket_finance_relevancy sfr ON sfr.supermarket_finance_id = sf.id
+        WHERE 1=1
+        <if test="linkId != null">
+            AND sfr.supermarket_order_id = #{linkId}
+        </if>
+          AND IFNULL(sfe.delete_flag, '0') != '1'
+    </select>
+
+  <!--  <update id="updateStatus" parameterType="map">
+        UPDATE supermarket_finance_extend
+        SET download_status =
+        <if test="downloadStatus != null and downloadStatus != ''">
+            #{downloadStatus}
+        </if>,
+        payment_status =
+        <if test="paymentStatus != null and paymentStatus != ''">
+            #{paymentStatus}
+        </if>
+        WHERE id id IN (
+        <foreach collection="idArray" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+    </update>-->
+
+    <update id="updateStatus" parameterType="map">
+        UPDATE supermarket_finance_extend
+        SET download_status =
+        <choose>
+            <when test="downloadStatus != null and downloadStatus != ''">
+                #{downloadStatus}
+            </when>
+            <otherwise>
+                download_status  <!-- 如果 downloadStatus 为空，则不改变原 download_status 值 -->
+            </otherwise>
+        </choose>,
+        payment_status =
+        <choose>
+            <when test="paymentStatus != null and paymentStatus != ''">
+                #{paymentStatus}
+            </when>
+            <otherwise>
+                payment_status  <!-- 如果 paymentStatus 为空，则不改变原 payment_status 值 -->
+            </otherwise>
+        </choose>
+        WHERE id IN (
+        <foreach collection="idArray" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+    </update>
+
+</mapper>

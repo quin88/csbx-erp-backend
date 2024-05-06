@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsh.erp.datasource.mappers.SupermarketInvoiceMapperEx">
+    <resultMap extends="com.jsh.erp.datasource.mappers.SupermarketInvoiceMapper.BaseResultMap" id="ResultMapEx" type="com.jsh.erp.datasource.vo.SupermarketInvoiceVoList">
+        <result column="supplierName" jdbcType="VARCHAR" property="supplierName" />
+    </resultMap>
+
+    <select id="getExistingIds" resultType="java.lang.Long">
+        select id
+        from supermarket_invoice
+        where 1=1
+        <if test="supplierId != null and supplierId != ''">
+            AND supplier_id = #{supplierId}
+        </if>
+        and ifnull(delete_flag,'0') !='1'
+    </select>
+
+    <update id="batchDeleteSupermarketInvoiceByIds">
+        update supermarket_invoice
+        set delete_flag='1',updater=#{updater},update_time=#{updateTime}
+        where 1=1
+        and id in (
+        <foreach collection="ids" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+    </update>
+
+    <update id="batchDeleteSupermarketInvoiceBySupplierIds">
+        update supermarket_invoice
+        set delete_flag='1',updater=#{updater},update_time=#{updateTime}
+        where 1=1
+        and supplier_id in (
+        <foreach collection="supplierIds" item="supplierId" separator=",">
+            #{supplierId}
+        </foreach>
+        )
+    </update>
+
+    <select id="findByAll" parameterType="com.jsh.erp.datasource.entities.SupermarketInvoiceExample" resultMap="ResultMapEx">
+        select si.*,s.name supplierName
+        from supermarket_invoice si
+        left join supermarket_supplier s on si.supplier_id = s.id and ifnull(s.delete_flag, '0') != '1'
+        where 1 = 1
+        <if test="supplierIds != null and supplierIds.size() > 0">
+            and si.supplier_id in (
+            <foreach collection="supplierIds" item="supplierId" separator=",">
+                #{supplierId}
+            </foreach>
+            )
+        </if>
+        and ifnull(si.delete_flag, '0') != '1'
+    </select>
+</mapper>

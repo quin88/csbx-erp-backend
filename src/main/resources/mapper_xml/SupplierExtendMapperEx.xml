@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsh.erp.datasource.mappers.SupplierExtendMapperEx">
+    <resultMap extends="com.jsh.erp.datasource.mappers.SupplierExtendMapper.BaseResultMap" id="ResultMapEx"
+               type="com.jsh.erp.datasource.vo.SupplierExtendVoList">
+        <result column="verifierName" jdbcType="VARCHAR" property="verifierName"/>
+    </resultMap>
+    <select id="selectByConditionSupplierExtend" parameterType="com.jsh.erp.datasource.entities.SupplierExtendExample"
+            resultMap="ResultMapEx">
+        select se.*, u.username verifierName
+        from supplier_extend se
+        left join jsh_user u on se.verifier = u.id and ifnull(u.Status,'0') !='1'
+        where 1=1
+        <if test="supplierId != null and supplierId !=''">
+            and se.supplier_id=#{supplierId}
+        </if>
+        <if test="role != null and role !=''">
+            and se.role=#{role}
+        </if>
+        <if test="name != null and name !=''">
+            <bind name="bindName" value="'%'+name+'%'"/>
+            and se.name like #{bindName}
+        </if>
+        <if test="phone != null and phone !=''">
+            <bind name="bindPhone" value="'%'+phone+'%'"/>
+            and se.phone like #{bindPhone}
+        </if>
+        <if test="active != null">
+            and se.active = #{active}
+        </if>
+        <if test="statusArray != null and statusArray !=''">
+            and se.check_status in (
+            <foreach collection="statusArray" item="status" separator=",">
+                #{status}
+            </foreach>
+            )
+        </if>
+        and ifnull(se.delete_flag,'0') !='1'
+        order by id desc
+        <if test="offset != null and rows != null">
+            limit #{offset},#{rows}
+        </if>
+    </select>
+
+    <select id="countByConditionSupplierExtend" resultType="java.lang.Long">
+        select count(1)
+        from supplier_extend
+        where 1=1
+        <if test="supplierId != null and supplierId !=''">
+            and supplier_id=#{supplierId}
+        </if>
+        <if test="role != null and role !=''">
+            and role=#{role}
+        </if>
+        <if test="name != null and name !=''">
+            <bind name="bindName" value="'%'+name+'%'"/>
+            and name like #{bindName}
+        </if>
+        <if test="phone != null and phone !=''">
+            <bind name="bindPhone" value="'%'+phone+'%'"/>
+            and phone like #{bindPhone}
+        </if>
+        <if test="active != null">
+            and active = #{active}
+        </if>
+        <if test="statusArray != null and statusArray !=''">
+            and check_status in (
+            <foreach collection="statusArray" item="status" separator=",">
+                #{status}
+            </foreach>
+            )
+        </if>
+        and ifnull(delete_flag,'0') !='1'
+    </select>
+
+    <select id="countIsActive" resultType="java.lang.Long">
+        select count(1)
+        from supplier_extend
+        where 1=1
+        and id in (
+        <foreach collection="idArray" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+        and active = 1
+        and ifnull(delete_flag, '0') != '1'
+    </select>
+
+    <update id="batchDeleteSupplierExtendByIds">
+        update supplier_extend
+        set delete_flag='1',updater=#{updater},update_time=#{updateTime}
+        where 1=1
+        and id in (
+        <foreach collection="ids" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+    </update>
+
+    <select id="selectBySupplierIdAndRole"  resultType="com.jsh.erp.datasource.entities.SupplierExtend">
+        select *
+        from supplier_extend
+        where 1=1
+        <if test="supplierId != null and supplierId !=''">
+            and supplier_id=#{supplierId}
+        </if>
+        and role = '主账户'
+        and ifnull(delete_flag,'0') !='1'
+        order by id desc
+    </select>
+
+    <select id="getSupplierExtendByPhone"  resultType="com.jsh.erp.datasource.vo.UserVo">
+        select id,supplier_id,role,name,active,check_status,supplier,image_path
+        from supplier_extend
+        where 1=1
+        <if test="phone != null and phone !=''">
+            and phone = #{phone}
+        </if>
+        and ifnull(delete_flag,'0') !='1'
+    </select>
+
+    <select id="countIsActiveSupplierExtend" resultType="java.lang.Integer">
+        select count(1)
+        from supplier_extend
+        where 1=1
+        and supplier_id = #{supplierId}
+        <if test="activeFlag == 1">
+            and active = 1
+        </if>
+        and ifnull(delete_flag, '0') != '1'
+    </select>
+</mapper>

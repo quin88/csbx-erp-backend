@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsh.erp.datasource.mappers.SupermarketFinanceMapper">
+  <resultMap id="BaseResultMap" type="com.jsh.erp.datasource.entities.SupermarketFinance">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="number" jdbcType="VARCHAR" property="number" />
+    <result column="market_id" jdbcType="BIGINT" property="marketId" />
+    <result column="aquatic_type_id" jdbcType="BIGINT" property="aquaticTypeId" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="application_status" jdbcType="VARCHAR" property="applicationStatus" />
+    <result column="pay_status" jdbcType="VARCHAR" property="payStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="creator" jdbcType="BIGINT" property="creator" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="updater" jdbcType="BIGINT" property="updater" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="verifier" jdbcType="BIGINT" property="verifier" />
+    <result column="verifier_time" jdbcType="TIMESTAMP" property="verifierTime" />
+    <result column="delete_flag" jdbcType="VARCHAR" property="deleteFlag" />
+    <result column="tenant_id" jdbcType="BIGINT" property="tenantId" />
+    <result column="comment" jdbcType="VARCHAR" property="comment" />
+    <result column="pay_date" jdbcType="TIMESTAMP" property="payDate" />
+    <result column="uploader" jdbcType="BIGINT" property="uploader" />
+    <result column="upload_time" jdbcType="TIMESTAMP" property="uploadTime" />
+    <result column="payment_status" jdbcType="VARCHAR" property="paymentStatus" />
+    <result column="payment_date" jdbcType="TIMESTAMP" property="paymentDate" />
+    <result column="paymenter" jdbcType="BIGINT" property="paymenter" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, number, market_id, aquatic_type_id, remark, application_status, pay_status, create_time, 
+    creator, update_time, updater, status, verifier, verifier_time, delete_flag, tenant_id, 
+    comment, pay_date, uploader, upload_time, payment_status, payment_date, paymenter
+  </sql>
+  <select id="selectByExample" parameterType="com.jsh.erp.datasource.entities.SupermarketFinanceExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from supermarket_finance
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from supermarket_finance
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from supermarket_finance
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jsh.erp.datasource.entities.SupermarketFinanceExample">
+    delete from supermarket_finance
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jsh.erp.datasource.entities.SupermarketFinance">
+    insert into supermarket_finance (id, number, market_id, 
+      aquatic_type_id, remark, application_status, 
+      pay_status, create_time, creator, 
+      update_time, updater, status, 
+      verifier, verifier_time, delete_flag, 
+      tenant_id, comment, pay_date, 
+      uploader, upload_time, payment_status, 
+      payment_date, paymenter)
+    values (#{id,jdbcType=BIGINT}, #{number,jdbcType=VARCHAR}, #{marketId,jdbcType=BIGINT}, 
+      #{aquaticTypeId,jdbcType=BIGINT}, #{remark,jdbcType=VARCHAR}, #{applicationStatus,jdbcType=VARCHAR}, 
+      #{payStatus,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=BIGINT}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=BIGINT}, #{status,jdbcType=VARCHAR}, 
+      #{verifier,jdbcType=BIGINT}, #{verifierTime,jdbcType=TIMESTAMP}, #{deleteFlag,jdbcType=VARCHAR}, 
+      #{tenantId,jdbcType=BIGINT}, #{comment,jdbcType=VARCHAR}, #{payDate,jdbcType=TIMESTAMP}, 
+      #{uploader,jdbcType=BIGINT}, #{uploadTime,jdbcType=TIMESTAMP}, #{paymentStatus,jdbcType=VARCHAR}, 
+      #{paymentDate,jdbcType=TIMESTAMP}, #{paymenter,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jsh.erp.datasource.entities.SupermarketFinance">
+    insert into supermarket_finance
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="number != null">
+        number,
+      </if>
+      <if test="marketId != null">
+        market_id,
+      </if>
+      <if test="aquaticTypeId != null">
+        aquatic_type_id,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="applicationStatus != null">
+        application_status,
+      </if>
+      <if test="payStatus != null">
+        pay_status,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="updater != null">
+        updater,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="verifier != null">
+        verifier,
+      </if>
+      <if test="verifierTime != null">
+        verifier_time,
+      </if>
+      <if test="deleteFlag != null">
+        delete_flag,
+      </if>
+      <if test="tenantId != null">
+        tenant_id,
+      </if>
+      <if test="comment != null">
+        comment,
+      </if>
+      <if test="payDate != null">
+        pay_date,
+      </if>
+      <if test="uploader != null">
+        uploader,
+      </if>
+      <if test="uploadTime != null">
+        upload_time,
+      </if>
+      <if test="paymentStatus != null">
+        payment_status,
+      </if>
+      <if test="paymentDate != null">
+        payment_date,
+      </if>
+      <if test="paymenter != null">
+        paymenter,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="number != null">
+        #{number,jdbcType=VARCHAR},
+      </if>
+      <if test="marketId != null">
+        #{marketId,jdbcType=BIGINT},
+      </if>
+      <if test="aquaticTypeId != null">
+        #{aquaticTypeId,jdbcType=BIGINT},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="applicationStatus != null">
+        #{applicationStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="payStatus != null">
+        #{payStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null">
+        #{updater,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="verifier != null">
+        #{verifier,jdbcType=BIGINT},
+      </if>
+      <if test="verifierTime != null">
+        #{verifierTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteFlag != null">
+        #{deleteFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="tenantId != null">
+        #{tenantId,jdbcType=BIGINT},
+      </if>
+      <if test="comment != null">
+        #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="payDate != null">
+        #{payDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="uploader != null">
+        #{uploader,jdbcType=BIGINT},
+      </if>
+      <if test="uploadTime != null">
+        #{uploadTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paymentStatus != null">
+        #{paymentStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentDate != null">
+        #{paymentDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paymenter != null">
+        #{paymenter,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jsh.erp.datasource.entities.SupermarketFinanceExample" resultType="java.lang.Long">
+    select count(*) from supermarket_finance
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update supermarket_finance
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.number != null">
+        number = #{record.number,jdbcType=VARCHAR},
+      </if>
+      <if test="record.marketId != null">
+        market_id = #{record.marketId,jdbcType=BIGINT},
+      </if>
+      <if test="record.aquaticTypeId != null">
+        aquatic_type_id = #{record.aquaticTypeId,jdbcType=BIGINT},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.applicationStatus != null">
+        application_status = #{record.applicationStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.payStatus != null">
+        pay_status = #{record.payStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.creator != null">
+        creator = #{record.creator,jdbcType=BIGINT},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updater != null">
+        updater = #{record.updater,jdbcType=BIGINT},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.verifier != null">
+        verifier = #{record.verifier,jdbcType=BIGINT},
+      </if>
+      <if test="record.verifierTime != null">
+        verifier_time = #{record.verifierTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.deleteFlag != null">
+        delete_flag = #{record.deleteFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tenantId != null">
+        tenant_id = #{record.tenantId,jdbcType=BIGINT},
+      </if>
+      <if test="record.comment != null">
+        comment = #{record.comment,jdbcType=VARCHAR},
+      </if>
+      <if test="record.payDate != null">
+        pay_date = #{record.payDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.uploader != null">
+        uploader = #{record.uploader,jdbcType=BIGINT},
+      </if>
+      <if test="record.uploadTime != null">
+        upload_time = #{record.uploadTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.paymentStatus != null">
+        payment_status = #{record.paymentStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.paymentDate != null">
+        payment_date = #{record.paymentDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.paymenter != null">
+        paymenter = #{record.paymenter,jdbcType=BIGINT},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update supermarket_finance
+    set id = #{record.id,jdbcType=BIGINT},
+      number = #{record.number,jdbcType=VARCHAR},
+      market_id = #{record.marketId,jdbcType=BIGINT},
+      aquatic_type_id = #{record.aquaticTypeId,jdbcType=BIGINT},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      application_status = #{record.applicationStatus,jdbcType=VARCHAR},
+      pay_status = #{record.payStatus,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      creator = #{record.creator,jdbcType=BIGINT},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      updater = #{record.updater,jdbcType=BIGINT},
+      status = #{record.status,jdbcType=VARCHAR},
+      verifier = #{record.verifier,jdbcType=BIGINT},
+      verifier_time = #{record.verifierTime,jdbcType=TIMESTAMP},
+      delete_flag = #{record.deleteFlag,jdbcType=VARCHAR},
+      tenant_id = #{record.tenantId,jdbcType=BIGINT},
+      comment = #{record.comment,jdbcType=VARCHAR},
+      pay_date = #{record.payDate,jdbcType=TIMESTAMP},
+      uploader = #{record.uploader,jdbcType=BIGINT},
+      upload_time = #{record.uploadTime,jdbcType=TIMESTAMP},
+      payment_status = #{record.paymentStatus,jdbcType=VARCHAR},
+      payment_date = #{record.paymentDate,jdbcType=TIMESTAMP},
+      paymenter = #{record.paymenter,jdbcType=BIGINT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jsh.erp.datasource.entities.SupermarketFinance">
+    update supermarket_finance
+    <set>
+      <if test="number != null">
+        number = #{number,jdbcType=VARCHAR},
+      </if>
+      <if test="marketId != null">
+        market_id = #{marketId,jdbcType=BIGINT},
+      </if>
+      <if test="aquaticTypeId != null">
+        aquatic_type_id = #{aquaticTypeId,jdbcType=BIGINT},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="applicationStatus != null">
+        application_status = #{applicationStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="payStatus != null">
+        pay_status = #{payStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null">
+        updater = #{updater,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="verifier != null">
+        verifier = #{verifier,jdbcType=BIGINT},
+      </if>
+      <if test="verifierTime != null">
+        verifier_time = #{verifierTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteFlag != null">
+        delete_flag = #{deleteFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="tenantId != null">
+        tenant_id = #{tenantId,jdbcType=BIGINT},
+      </if>
+      <if test="comment != null">
+        comment = #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="payDate != null">
+        pay_date = #{payDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="uploader != null">
+        uploader = #{uploader,jdbcType=BIGINT},
+      </if>
+      <if test="uploadTime != null">
+        upload_time = #{uploadTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paymentStatus != null">
+        payment_status = #{paymentStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentDate != null">
+        payment_date = #{paymentDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paymenter != null">
+        paymenter = #{paymenter,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jsh.erp.datasource.entities.SupermarketFinance">
+    update supermarket_finance
+    set number = #{number,jdbcType=VARCHAR},
+      market_id = #{marketId,jdbcType=BIGINT},
+      aquatic_type_id = #{aquaticTypeId,jdbcType=BIGINT},
+      remark = #{remark,jdbcType=VARCHAR},
+      application_status = #{applicationStatus,jdbcType=VARCHAR},
+      pay_status = #{payStatus,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      creator = #{creator,jdbcType=BIGINT},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      updater = #{updater,jdbcType=BIGINT},
+      status = #{status,jdbcType=VARCHAR},
+      verifier = #{verifier,jdbcType=BIGINT},
+      verifier_time = #{verifierTime,jdbcType=TIMESTAMP},
+      delete_flag = #{deleteFlag,jdbcType=VARCHAR},
+      tenant_id = #{tenantId,jdbcType=BIGINT},
+      comment = #{comment,jdbcType=VARCHAR},
+      pay_date = #{payDate,jdbcType=TIMESTAMP},
+      uploader = #{uploader,jdbcType=BIGINT},
+      upload_time = #{uploadTime,jdbcType=TIMESTAMP},
+      payment_status = #{paymentStatus,jdbcType=VARCHAR},
+      payment_date = #{paymentDate,jdbcType=TIMESTAMP},
+      paymenter = #{paymenter,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

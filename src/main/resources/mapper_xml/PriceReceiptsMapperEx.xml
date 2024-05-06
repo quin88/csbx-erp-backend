@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsh.erp.datasource.mappers.PriceReceiptsMapperEx">
+    <resultMap extends="com.jsh.erp.datasource.mappers.PriceReceiptsMapper.BaseResultMap" id="ResultMapEx"
+               type="com.jsh.erp.datasource.vo.PriceReceiptsVo">
+        <result column="userName" jdbcType="VARCHAR" property="userName"/>
+    </resultMap>
+
+    <resultMap id="PriceReceiptsMapEx" type="com.jsh.erp.datasource.vo.ImportPriceReceiptsVo4List">
+        <result column="createdTime" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="allPrice" jdbcType="DECIMAL" property="allPrice"/>
+        <result column="supplier" jdbcType="VARCHAR" property="supplier"/>
+    </resultMap>
+    <select id="selectPriceReceiptsByNumber" resultType="com.jsh.erp.datasource.entities.PriceReceipts">
+        SELECT *
+        FROM price_receipts
+        WHERE 1=1
+        <if test="number != null">
+            AND number = #{number}
+        </if>
+        AND IFNULL(delete_flag, '0') !='1'
+    </select>
+    <select id="selectPriceReceiptsByReceiptsNumber" resultType="com.jsh.erp.datasource.entities.PriceReceipts">
+        SELECT *
+        FROM price_receipts
+        WHERE 1=1
+        <if test="receiptsNumber != null">
+            AND receipts_number = #{receiptsNumber}
+        </if>
+        AND IFNULL(delete_flag, '0') !='1'
+    </select>
+
+    <select id="selectPriceReceiptsList" resultMap="ResultMapEx">
+        SELECT pr.*, ju.username userName
+        FROM price_receipts pr
+        LEFT JOIN jsh_user ju ON pr.creator = ju.id
+        WHERE 1=1
+        <if test="priceType != null">
+            AND pr.price_type = #{priceType}
+        </if>
+        <if test="supplierId != null">
+            AND pr.supplier_id = #{supplierId}
+        </if>
+        <if test="beginTime != null or endTime != null">
+            AND pr.create_time <![CDATA[ BETWEEN ]]> #{beginTime} <![CDATA[ AND ]]> #{endTime}
+        </if>
+        <if test="statusArray != null and statusArray !=''">
+            and pr.status in (
+            <foreach collection="statusArray" item="status" separator=",">
+                #{status}
+            </foreach>
+            )
+        </if>
+        AND IFNULL(delete_flag, '0') !='1'
+        <if test="offset != null and rows != null">
+            limit #{offset},#{rows}
+        </if>
+    </select>
+
+    <select id="countsPriceReceipts" resultType="java.lang.Long">
+        SELECT
+        COUNT(pr.id)
+        FROM price_receipts pr
+        LEFT JOIN jsh_user ju ON pr.creator = ju.id
+        WHERE 1=1
+        <if test="priceType != null">
+            AND pr.price_type = #{priceType}
+        </if>
+        <if test="supplierId != null">
+            AND pr.supplier_id LIKE CONCAT('%', #{supplierId}, '%')
+        </if>
+        <if test="beginTime != null or endTime != null">
+            AND pr.create_time <![CDATA[ BETWEEN ]]> #{beginTime} <![CDATA[ AND ]]> #{endTime}
+        </if>
+        <if test="statusArray != null and statusArray !=''">
+            and pr.status in (
+            <foreach collection="statusArray" item="status" separator=",">
+                #{status}
+            </foreach>
+            )
+        </if>
+        AND IFNULL(delete_flag, '0') !='1'
+    </select>
+
+    <update id="batchDeletePriceReceiptsByIds">
+        update price_receipts
+        set delete_flag='1',updater=#{updater},update_time=#{updateTime}
+        where 1=1
+        and id in (
+        <foreach collection="ids" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+    </update>
+
+    <select id="findPriceDetailReceiptsNumberByIdArray" resultType="java.lang.String">
+        select receipts_number
+        from price_receipts
+        where 1=1
+        and id in (
+        <foreach collection="idArray" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+    </select>
+
+    <select id="getStatisticsBySupplier" resultType="java.math.BigDecimal">
+        select ifnull(sum(total_price),0) as totalAmount
+        from price_receipts
+        where 1=1
+        and price_type='每日存储费用'
+        <if test="supplierId != null">
+            and supplier_id=#{supplierId}
+        </if>
+        <if test="beginTime != null">
+            and create_time >= #{beginTime}
+        </if>
+        <if test="endTime != null">
+            and create_time &lt;= #{endTime}
+        </if>
+        and status=1
+        and ifnull(delete_flag,'0')!='1'
+    </select>
+
+    <select id="selectShippingPriceBySupplierIdAndTime" resultMap="PriceReceiptsMapEx">
+        SELECT pr.create_time createdTime, pr.price_type name, pr.total_price allPrice, js.supplier supplier
+        FROM price_receipts pr
+        LEFT JOIN jsh_supplier js ON js.id = pr.supplier_id AND ifnull(js.delete_flag,'0') !='1'
+        WHERE 1=1
+        <if test="supplierId != null">
+            AND pr.supplier_id= #{supplierId}
+        </if>
+        <if test="beginTime != null or endTime != null">
+            AND pr.create_time <![CDATA[ BETWEEN ]]> #{beginTime} <![CDATA[ AND ]]> #{endTime}
+        </if>
+        AND pr.price_type= '每月物流费用'
+        AND pr.status=1
+        AND IFNULL(pr.delete_flag,'0') !='1'
+    </select>
+
+    <select id="getCurrentMonthStatistics" resultType="java.math.BigDecimal">
+        select
+        ifnull(sum(total_price),0) from
+        (select distinct pr.id, pr.total_price
+        from price_receipts pr
+        where 1=1
+        <if test="supplierId != null">
+            and pr.supplier_id =#{supplierId}
+        </if>
+        <if test="beginTime != null">
+            and pr.create_time >= #{beginTime}
+        </if>
+        <if test="endTime != null">
+            and pr.create_time &lt;= #{endTime}
+        </if>
+        and pr.status = '1'
+        and ifnull(pr.delete_flag,'0') !='1') tb
+    </select>
+
+    <select id="findMonthTotalExpense" resultType="com.jsh.erp.datasource.vo.PriceReceiptsVoSMonthExpense">
+        select distinct year(pr.create_time) as year,
+            month(pr.create_time) as month,
+            sum(pr.total_price)as monthlyTotalExpense
+        from price_receipts pr
+        where 1 = 1
+        <if test="supplierId != null">
+            and pr.supplier_id =#{supplierId}
+        </if>
+        <if test="beginTime != null">
+            and pr.create_time >= #{beginTime}
+        </if>
+        <if test="endTime != null">
+            and pr.create_time &lt;= #{endTime}
+        </if>
+        and pr.status = '1'
+        and ifnull(pr.delete_flag, '0') != '1'
+        group by month
+        order by year desc,month desc;
+    </select>
+
+    <select id="findDayTotalExpense" resultType="com.jsh.erp.datasource.vo.PriceReceiptsVoSExpense">
+        select
+        distinct sum(pr.total_price)as dayTotalExpense,date (pr.create_time)as day
+        from price_receipts pr
+        where 1 = 1
+        <if test="supplierId != null">
+            and pr.supplier_id =#{supplierId}
+        </if>
+        <if test="beginTime != null">
+            and pr.create_time >= #{beginTime}
+        </if>
+        <if test="endTime != null">
+            and pr.create_time &lt;= #{endTime}
+        </if>
+        and pr.status = '1'
+        and ifnull(pr.delete_flag, '0') != '1'
+        group by day
+        order by day desc
+    </select>
+
+</mapper>

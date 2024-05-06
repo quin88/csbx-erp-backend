@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+    <property name="now" value="now()" dbms="h2"/>
+    <property name="now" value="now()" dbms="mysql, mariadb"/>
+    <property name="floatType" value="float4" dbms="postgresql, h2"/>
+    <property name="floatType" value="float" dbms="mysql, oracle, mssql, mariadb"/>
+    <property name="clobType" value="clob" dbms="h2"/>
+    <property name="clobType" value="clob" dbms="mysql, oracle, mssql, mariadb, postgresql"/>
+    <property name="uuidType" value="varchar(36)" dbms="h2, mysql, mariadb"/>
+    <property name="datetimeType" value="datetime(6)" dbms="mysql, mariadb"/>
+    <property name="datetimeType" value="datetime" dbms="oracle, mssql, postgresql, h2"/>
+
+    <include file="liquibase/changelog/20230613163006_created_jsh_account.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20230721174885_added_table_price_main.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20230721165928_created_table_settlementMethod.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20230721175128_created_table_secondSettlementMethod.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20230721190528_created_table_measurement.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20230721190758_created_table_secondMeasurement.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20230721195428_created_table_feesSettlement.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20230721200148_update_table_supplier.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20230724165308_added_column_supplierId.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20230725142577_added_column_priceType.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20230725094308_added_column_deliveryOrder.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20230725152008_added_column_totalWeight.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20230726163541_added_column_receiptsNumber.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20230801170745_created_initialize_date.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20230804103706_added_column_weight.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20230815142712_added_measurement_secondMeasurement_data.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20230815174012_added_created_initialize_test_data.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20230815182741_update_column_price_number.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20230816162142_update_initialize_test_data.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20230918141524_added_table_serve_project.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20230925113802_added_table_wxminiUser.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20231009123056_update_initialize_date.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20231011095748_added_column_supplier.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20231011173241_added_column_comment.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20231016144782_added_jsh_function_data.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20231019145671_added_column_remark.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20231025101415_added_column_originType.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20231031145858_added_column_goodsAllocationId.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20231101142502_created_table_process.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20231101170002_created_table_produce_bom.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20231101184427_created_table_goods_allocation.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20231102101647_added_column_origin_type.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20231125105806_added_column_image_path.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20231125105806_created_table_country_province_city_county.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20231127143530_created_initialize_country_province_city_date.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20231123164724_added_jsh_function_data_V2.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20231123164725_added_table_supplier_level.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20231125154874_added_table_supermarket_supplier.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20231125165032_added_table_market_area.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20231125165054_added_table_market.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20231125170714_added_table_supermarket_contact.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20231125172324_added_table_supermarket_attachment.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20231125174255_added_table_supermarket_account.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20231125174734_added_table_supermarket_invoice.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20231125175044_added_table_sales_market.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20231125181722_added_table_sales_info.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20231125182847_added_table_supermarket_material.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20231127150474_added_table_invoice.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20231127150827_added_table_image_info.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20231127151654_added_table_supermarket_order.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20231127152515_added_table_order_detail.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20231127153744_added_table_order_document.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20231127154177_added_table_signature.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20231127154622_added_table_supermarket_document.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20231128101657_added_jsh_sequence_data.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20231128110530_import_business_constant_date.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20231130091845_added_table_supermarket_cooperation.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20231201145174_added_column_type.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20231204094875_added_jsh_sequence_data_V2.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20231206162374_added_table_supermarket_document_item.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20231213103741_added_table_file_info.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20231226093414_added_column_import_flag.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20231227181020_update_jsh_sequence_data_20231227.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240102161545_added_column_branchCode.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240103174816_delete_column_tenantId.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240104143314_update_column_bank_name.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240105103257_added_column_version.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240105105211_update_jsh_function_data.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240109123044_added_table_supermarket_system_config.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240109160147_added_jsh_function_data_V3.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240112165822_added_column_serve_client_id.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240115155647_delete_column_serve_client_id.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240115104522_added_column_amount_of_gift.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240115112520_modify_column_remarks.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240116150347_added_table_opinion.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240120103812_added_table_value_added_serve_type.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240129153630_added_jsh_function_data.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240130142230_update_settlementAndSecondSettlement_status.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240131095641_added_column_supplying_zero_name.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240131113741_created_market_address_initialize_data.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240201143321_added_table_recharge_configuration.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240201171922_added_jsh_function_data.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240302092017_added_jsh_function_data_V5.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240302094914_added_table_depot_link_number.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240304102613_added_column_active.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240305172417_added_table_supermarket_added_order.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240305173541_added_table_supermarket_finance.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240306091950_added_table_supermarket_finance_extend.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240306093922_added_table_supermarket_finance_relevancy.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240306110814_added_column_difference_total.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240306111225_added_table_supermarket_reconciliation.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240306112105_added_table_supermarket_reconciliation_extend.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240306113624_added_table_supermarket_reconciliation_relevancy.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240306141322_added_table_payment_config.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240306144432_added_table_supermarket_invoice_number.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240308143026_added_column_link_id.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240312152246_added_column_comment.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240316162121_update_supermarket_added_order_column.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240320144011_added_column_initial_difference.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240320113142_created_initialize_supermarket_system_config_data.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240321113242_added_column_pay_date.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240325160821_update_column_aquatic_type.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240326105414_added_column_formula.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240326141322_added_table_supermarket_reconciliation_aquatic_type.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240327102322_update_column_payment_config_aquatic_type.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240327165641_update_table_supermarket_document_item.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240328104725_created_initialize_supermarket_system_config_data_V2.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240328154725_added_column_remark.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240329141423_added_column_uploader.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240331091847_added_table_supermarket_verification_logs.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240331102714_added_column_supplying_zero_number.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240403181822_added_column_verifier_time.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240407144725_added_column_supermarket_finance_id.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240410091247_added_column_delete_flag.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240411155223_added_column_depot_abbreviation.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240411160744_added_table_business_hours.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240413090329_added_table_small_depot.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240415091922_added_table_location.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changelog/20240416135741_added_jsh_function_data_V6.xml" relativeToChangelogFile="false"/>
+   <!-- <include file="liquibase/changelog/20240417094823_added_column_small_depot_id.xml" relativeToChangelogFile="false"/>
+-->
+    <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
+    <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
+    <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
+</databaseChangeLog>

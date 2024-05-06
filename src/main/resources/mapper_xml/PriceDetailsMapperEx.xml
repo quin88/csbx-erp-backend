@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsh.erp.datasource.mappers.PriceDetailsMapperEx">
+    <resultMap id="ResultMapEx" type="com.jsh.erp.datasource.vo.ImportPriceReceiptsVo4List">
+        <result column="createdTime" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="materialUnit" jdbcType="VARCHAR" property="materialUnit"/>
+        <result column="unitPrice" jdbcType="DECIMAL" property="unitPrice"/>
+        <result column="operNumber" jdbcType="DECIMAL" property="operNumber"/>
+        <result column="allPrice" jdbcType="DECIMAL" property="allPrice"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="number" jdbcType="VARCHAR" property="number"/>
+        <result column="supplier" jdbcType="VARCHAR" property="supplier"/>
+        <result column="timeMeasurement" jdbcType="VARCHAR" property="timeMeasurement"/>
+        <result column="weightMeasurement" jdbcType="VARCHAR" property="weightMeasurement"/>
+    </resultMap>
+  <!-- 批量逻辑删除 -->
+  <update id="batchDeletePriceDetailByIds">
+      update price_details
+      set delete_flag='1',updater=#{updater},update_time=#{updateTime}
+      where 1=1
+      and id in (
+      <foreach collection="ids" item="id" separator=",">
+          #{id}
+      </foreach>
+      )
+  </update>
+
+    <select id="selectDetailsByReceiptsNumber" resultType="java.lang.String">
+        SELECT pd.other_price_type
+        FROM price_details pd
+        WHERE pd.receipts_number = #{receiptsNumber}
+          AND IFNULL(delete_flag, '0') !='1'
+    </select>
+
+    <select id="selectPriceNumberByReceiptsNumber" parameterType="java.lang.String" resultType="java.math.BigDecimal">
+        SELECT pd.price_number
+        FROM price_details pd
+        WHERE pd.receipts_number = #{receiptsNumber}
+          AND IFNULL(delete_flag, '0') !='1'
+    </select>
+
+    <!-- 批量逻辑删除 -->
+    <update id="batchDeletePriceDetailByReceiptsNumbers">
+        update price_details
+        set delete_flag='1',updater=#{updater},update_time=#{updateTime}
+        where 1=1
+        and receipts_number in (
+        <foreach collection="receiptsNumberArray" item="receiptsNumber" separator=",">
+            #{receiptsNumber}
+        </foreach>
+        )
+    </update>
+
+    <!-- 批量修改状态 -->
+    <update id="batchSetStatusByReceiptsNumberArray">
+        update price_details
+        set status=#{status},updater=#{updater},update_time=#{updateTime}
+        where 1=1
+        and receipts_number in (
+        <foreach collection="receiptsNumberArray" item="receiptsNumber" separator=",">
+            #{receiptsNumber}
+        </foreach>
+        )
+    </update>
+
+    <select id="selectPriceDetailBySupplierIdAndTime" resultMap="ResultMapEx">
+        SELECT pr.create_time createdTime, pd.other_price_type name, pd.weight_measurement materialUnit, pd.price unitPrice,
+        pd.price_number operNumber, pd.subtotal allPrice, pd.remark remark,pd.number, pd.supplier, pd.time_measurement timeMeasurement,
+        pd.weight_measurement weightMeasurement
+        FROM price_details pd
+        left join price_receipts pr on pr.receipts_number = pd.receipts_number and ifnull(pr.delete_flag,'0') !='1'
+        WHERE 1=1
+        <if test="supplierId != null">
+            AND pd.supplier_id= #{supplierId}
+        </if>
+        <if test="beginTime != null or endTime != null">
+            AND pr.create_time <![CDATA[ BETWEEN ]]> #{beginTime} <![CDATA[ AND ]]> #{endTime}
+        </if>
+        AND  pd.status=1
+        AND IFNULL(pd.delete_flag,'0') !='1'
+    </select>
+
+    <select id="selectListByReceiptsNumber" resultType="com.jsh.erp.datasource.entities.PriceDetails">
+        SELECT *
+        FROM price_details
+        WHERE 1=1
+        <if test="receiptsNumber != null">
+            AND receipts_number = #{receiptsNumber}
+        </if>
+        AND IFNULL(delete_flag, '0') !='1'
+    </select>
+</mapper>

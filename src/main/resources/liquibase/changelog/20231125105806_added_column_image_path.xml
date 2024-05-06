@@ -1,0 +1,16 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet author="mqh" id="1700881107452" dbms="mysql">
+        <!-- 供应商表 -->
+        <addColumn tableName="jsh_supplier">
+            <column name="image_path" type="varchar(500)" remarks="图片路径" />
+        </addColumn>
+        <!-- 子账户表 -->
+        <addColumn tableName="supplier_extend">
+            <column name="image_path" type="varchar(500)" remarks="图片路径" />
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

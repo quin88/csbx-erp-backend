@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsh.erp.datasource.mappers.SupermarketReconciliationMapper">
+  <resultMap id="BaseResultMap" type="com.jsh.erp.datasource.entities.SupermarketReconciliation">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="number" jdbcType="VARCHAR" property="number" />
+    <result column="aquatic_type_id" jdbcType="BIGINT" property="aquaticTypeId" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="reconciliation_begin_time" jdbcType="TIMESTAMP" property="reconciliationBeginTime" />
+    <result column="reconciliation_end_time" jdbcType="TIMESTAMP" property="reconciliationEndTime" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="creator" jdbcType="BIGINT" property="creator" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="updater" jdbcType="BIGINT" property="updater" />
+    <result column="verifier" jdbcType="BIGINT" property="verifier" />
+    <result column="verifier_time" jdbcType="TIMESTAMP" property="verifierTime" />
+    <result column="delete_flag" jdbcType="VARCHAR" property="deleteFlag" />
+    <result column="tenant_id" jdbcType="BIGINT" property="tenantId" />
+    <result column="comment" jdbcType="VARCHAR" property="comment" />
+    <result column="formula" jdbcType="VARCHAR" property="formula" />
+    <result column="document_name" jdbcType="VARCHAR" property="documentName" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, number, aquatic_type_id, remark, reconciliation_begin_time, reconciliation_end_time, 
+    status, create_time, creator, update_time, updater, verifier, verifier_time, delete_flag, 
+    tenant_id, comment, formula, document_name
+  </sql>
+  <select id="selectByExample" parameterType="com.jsh.erp.datasource.entities.SupermarketReconciliationExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from supermarket_reconciliation
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from supermarket_reconciliation
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from supermarket_reconciliation
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jsh.erp.datasource.entities.SupermarketReconciliationExample">
+    delete from supermarket_reconciliation
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jsh.erp.datasource.entities.SupermarketReconciliation">
+    insert into supermarket_reconciliation (id, number, aquatic_type_id, 
+      remark, reconciliation_begin_time, reconciliation_end_time, 
+      status, create_time, creator, 
+      update_time, updater, verifier, 
+      verifier_time, delete_flag, tenant_id, 
+      comment, formula, document_name
+      )
+    values (#{id,jdbcType=BIGINT}, #{number,jdbcType=VARCHAR}, #{aquaticTypeId,jdbcType=BIGINT}, 
+      #{remark,jdbcType=VARCHAR}, #{reconciliationBeginTime,jdbcType=TIMESTAMP}, #{reconciliationEndTime,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=BIGINT}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=BIGINT}, #{verifier,jdbcType=BIGINT}, 
+      #{verifierTime,jdbcType=TIMESTAMP}, #{deleteFlag,jdbcType=VARCHAR}, #{tenantId,jdbcType=BIGINT}, 
+      #{comment,jdbcType=VARCHAR}, #{formula,jdbcType=VARCHAR}, #{documentName,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jsh.erp.datasource.entities.SupermarketReconciliation">
+    insert into supermarket_reconciliation
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="number != null">
+        number,
+      </if>
+      <if test="aquaticTypeId != null">
+        aquatic_type_id,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="reconciliationBeginTime != null">
+        reconciliation_begin_time,
+      </if>
+      <if test="reconciliationEndTime != null">
+        reconciliation_end_time,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="updater != null">
+        updater,
+      </if>
+      <if test="verifier != null">
+        verifier,
+      </if>
+      <if test="verifierTime != null">
+        verifier_time,
+      </if>
+      <if test="deleteFlag != null">
+        delete_flag,
+      </if>
+      <if test="tenantId != null">
+        tenant_id,
+      </if>
+      <if test="comment != null">
+        comment,
+      </if>
+      <if test="formula != null">
+        formula,
+      </if>
+      <if test="documentName != null">
+        document_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="number != null">
+        #{number,jdbcType=VARCHAR},
+      </if>
+      <if test="aquaticTypeId != null">
+        #{aquaticTypeId,jdbcType=BIGINT},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="reconciliationBeginTime != null">
+        #{reconciliationBeginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reconciliationEndTime != null">
+        #{reconciliationEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null">
+        #{updater,jdbcType=BIGINT},
+      </if>
+      <if test="verifier != null">
+        #{verifier,jdbcType=BIGINT},
+      </if>
+      <if test="verifierTime != null">
+        #{verifierTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteFlag != null">
+        #{deleteFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="tenantId != null">
+        #{tenantId,jdbcType=BIGINT},
+      </if>
+      <if test="comment != null">
+        #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="formula != null">
+        #{formula,jdbcType=VARCHAR},
+      </if>
+      <if test="documentName != null">
+        #{documentName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jsh.erp.datasource.entities.SupermarketReconciliationExample" resultType="java.lang.Long">
+    select count(*) from supermarket_reconciliation
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update supermarket_reconciliation
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.number != null">
+        number = #{record.number,jdbcType=VARCHAR},
+      </if>
+      <if test="record.aquaticTypeId != null">
+        aquatic_type_id = #{record.aquaticTypeId,jdbcType=BIGINT},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.reconciliationBeginTime != null">
+        reconciliation_begin_time = #{record.reconciliationBeginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.reconciliationEndTime != null">
+        reconciliation_end_time = #{record.reconciliationEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.creator != null">
+        creator = #{record.creator,jdbcType=BIGINT},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updater != null">
+        updater = #{record.updater,jdbcType=BIGINT},
+      </if>
+      <if test="record.verifier != null">
+        verifier = #{record.verifier,jdbcType=BIGINT},
+      </if>
+      <if test="record.verifierTime != null">
+        verifier_time = #{record.verifierTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.deleteFlag != null">
+        delete_flag = #{record.deleteFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tenantId != null">
+        tenant_id = #{record.tenantId,jdbcType=BIGINT},
+      </if>
+      <if test="record.comment != null">
+        comment = #{record.comment,jdbcType=VARCHAR},
+      </if>
+      <if test="record.formula != null">
+        formula = #{record.formula,jdbcType=VARCHAR},
+      </if>
+      <if test="record.documentName != null">
+        document_name = #{record.documentName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update supermarket_reconciliation
+    set id = #{record.id,jdbcType=BIGINT},
+      number = #{record.number,jdbcType=VARCHAR},
+      aquatic_type_id = #{record.aquaticTypeId,jdbcType=BIGINT},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      reconciliation_begin_time = #{record.reconciliationBeginTime,jdbcType=TIMESTAMP},
+      reconciliation_end_time = #{record.reconciliationEndTime,jdbcType=TIMESTAMP},
+      status = #{record.status,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      creator = #{record.creator,jdbcType=BIGINT},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      updater = #{record.updater,jdbcType=BIGINT},
+      verifier = #{record.verifier,jdbcType=BIGINT},
+      verifier_time = #{record.verifierTime,jdbcType=TIMESTAMP},
+      delete_flag = #{record.deleteFlag,jdbcType=VARCHAR},
+      tenant_id = #{record.tenantId,jdbcType=BIGINT},
+      comment = #{record.comment,jdbcType=VARCHAR},
+      formula = #{record.formula,jdbcType=VARCHAR},
+      document_name = #{record.documentName,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jsh.erp.datasource.entities.SupermarketReconciliation">
+    update supermarket_reconciliation
+    <set>
+      <if test="number != null">
+        number = #{number,jdbcType=VARCHAR},
+      </if>
+      <if test="aquaticTypeId != null">
+        aquatic_type_id = #{aquaticTypeId,jdbcType=BIGINT},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="reconciliationBeginTime != null">
+        reconciliation_begin_time = #{reconciliationBeginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reconciliationEndTime != null">
+        reconciliation_end_time = #{reconciliationEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null">
+        updater = #{updater,jdbcType=BIGINT},
+      </if>
+      <if test="verifier != null">
+        verifier = #{verifier,jdbcType=BIGINT},
+      </if>
+      <if test="verifierTime != null">
+        verifier_time = #{verifierTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteFlag != null">
+        delete_flag = #{deleteFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="tenantId != null">
+        tenant_id = #{tenantId,jdbcType=BIGINT},
+      </if>
+      <if test="comment != null">
+        comment = #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="formula != null">
+        formula = #{formula,jdbcType=VARCHAR},
+      </if>
+      <if test="documentName != null">
+        document_name = #{documentName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jsh.erp.datasource.entities.SupermarketReconciliation">
+    update supermarket_reconciliation
+    set number = #{number,jdbcType=VARCHAR},
+      aquatic_type_id = #{aquaticTypeId,jdbcType=BIGINT},
+      remark = #{remark,jdbcType=VARCHAR},
+      reconciliation_begin_time = #{reconciliationBeginTime,jdbcType=TIMESTAMP},
+      reconciliation_end_time = #{reconciliationEndTime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      creator = #{creator,jdbcType=BIGINT},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      updater = #{updater,jdbcType=BIGINT},
+      verifier = #{verifier,jdbcType=BIGINT},
+      verifier_time = #{verifierTime,jdbcType=TIMESTAMP},
+      delete_flag = #{deleteFlag,jdbcType=VARCHAR},
+      tenant_id = #{tenantId,jdbcType=BIGINT},
+      comment = #{comment,jdbcType=VARCHAR},
+      formula = #{formula,jdbcType=VARCHAR},
+      document_name = #{documentName,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

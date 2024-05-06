@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsh.erp.datasource.mappers.SupermarketSupplierMapperEx">
+    <resultMap extends="com.jsh.erp.datasource.mappers.SupermarketSupplierMapper.BaseResultMap" id="ResultMapEx"
+               type="com.jsh.erp.datasource.vo.SupermarketSupplierVoList">
+        <result column="marketName" jdbcType="VARCHAR" property="marketName" />
+        <result column="provinceName" jdbcType="VARCHAR" property="provinceName" />
+        <result column="cityName" jdbcType="VARCHAR" property="cityName" />
+        <result column="createdName" jdbcType="VARCHAR" property="createdName"/>
+    </resultMap>
+
+
+    <select id="selectByPrimaryKey" parameterType="com.jsh.erp.datasource.entities.SupermarketSupplierExample"
+            resultMap="ResultMapEx">
+        select ss.*, m.name marketName, p.province_name provinceName, c.city_name cityName
+        from supermarket_supplier ss
+        left join market m on m.id = ss.market_id and ifnull(m.delete_flag,'0') !='1'
+        left join province p on p.id = ss.province
+        left join city c on c.id = ss.city
+        where 1 = 1
+        <if test="id != null">
+            and ss.id=#{id}
+        </if>
+        and ifnull(ss.delete_flag,'0') !='1'
+    </select>
+
+    <select id="selectByConditionSupermarketSupplier" parameterType="com.jsh.erp.datasource.entities.SupermarketSupplierExample" resultMap="ResultMapEx">
+        select ss.*, m.name marketName, p.province_name provinceName, c.city_name cityName, ju.username createdName
+        from supermarket_supplier ss
+        left join market m on m.id = ss.market_id and ifnull(m.delete_flag,'0') !='1'
+        left join province p on p.id = ss.province
+        left join city c on c.id = ss.city
+        left join jsh_user ju on ju.id =ss.creator
+        where 1 = 1
+        <if test="number != null and number !=''">
+            <bind name="bindNumber" value="'%'+number+'%'"/>
+            and ss.number like #{bindNumber}
+        </if>
+        <if test="name != null and name !=''">
+            <bind name="bindName" value="'%'+name+'%'"/>
+            and ss.name like #{bindName}
+        </if>
+        <if test="supplierLevel != null and supplierLevel !=''">
+            and ss.supplier_level=#{supplierLevel}
+        </if>
+        <if test="statusArray != null and statusArray !=''">
+            and ss.status in (
+            <foreach collection="statusArray" item="status" separator=",">
+                #{status}
+            </foreach>
+            )
+        </if>
+        and ifnull(ss.delete_flag,'0') !='1'
+        order by ss.id desc
+        <if test="offset != null and rows != null">
+            limit #{offset},#{rows}
+        </if>
+    </select>
+
+    <select id="countSupermarketSupplier" resultType="java.lang.Long">
+        select count(1)
+        from supermarket_supplier ss
+        left join market m on m.id = ss.market_id and ifnull(m.delete_flag,'0') !='1'
+        left join province p on p.id = ss.province
+        left join city c on c.id = ss.city
+        where 1 = 1
+        <if test="number != null and number !=''">
+            <bind name="bindNumber" value="'%'+number+'%'"/>
+            and ss.number like #{bindNumber}
+        </if>
+        <if test="name != null and name !=''">
+            <bind name="bindName" value="'%'+name+'%'"/>
+            and ss.name like #{bindName}
+        </if>
+        <if test="supplierLevel != null and supplierLevel !=''">
+            and ss.supplier_level=#{supplierLevel}
+        </if>
+        <if test="statusArray != null and statusArray !=''">
+            and ss.status in (
+            <foreach collection="statusArray" item="status" separator=",">
+                #{status}
+            </foreach>
+            )
+        </if>
+        and ifnull(ss.delete_flag,'0') !='1'
+    </select>
+
+    <update id="batchDeleteSuperMarketSupplierByIds">
+        update supermarket_supplier
+        set delete_flag='1',updater=#{updater},update_time=#{updateTime}
+        where 1=1
+        and id in (
+        <foreach collection="ids" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+    </update>
+
+    <select id="countHasSupplier" resultType="java.lang.Long">
+        select count(1)
+        from supermarket_supplier
+        where 1 = 1
+        <if test="marketIds != null">
+            and market_id in
+            <foreach item="marketId" collection="marketIds" open="(" separator="," close=")">
+                #{marketId}
+            </foreach>
+        </if>
+        and ifnull(delete_flag,'0') != '1'
+    </select>
+
+    <select id="findByAll" parameterType="com.jsh.erp.datasource.entities.SupermarketSupplierExample" resultMap="ResultMapEx">
+        select s.*,m.name marketName,p.province_name provinceName,c.city_name cityName
+        from supermarket_supplier s
+        left join market m on s.market_id = m.id and ifnull(m.delete_flag, '0') != '1'
+        left join province p on s.province = p.id and ifnull(p.delete_flag, '0') != '1'
+        left join city c on s.city = c.id and ifnull(p.delete_flag, '0') != '1'
+        where 1 = 1
+        <if test="ids != null and ids.size() > 0">
+        and s.id in (
+        <foreach collection="ids" item="id" separator=",">
+            #{id}
+        </foreach>
+            )
+        </if>
+        and ifnull(s.delete_flag,'0')!='1'
+    </select>
+</mapper>

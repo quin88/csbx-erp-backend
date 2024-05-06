@@ -1,0 +1,22 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+    <changeSet author="lky" id="1700905417000" dbms="mysql">
+        <!-- 商超账户表 -->
+        <createTable tableName="supermarket_account" remarks="商超账户表">
+            <column name="id" type="bigint(20)" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="supplier_id" type="bigint(20)" remarks="供应商id" />
+            <column name="account_name" type="varchar(100)" remarks="账户名称" />
+            <column name="account_number" type="varchar(200)" remarks="账号" />
+            <column name="bank_name" type="varchar(100)" remarks="开户银行名称" />
+            <column name="remark" type="varchar(255)" remarks="备注" />
+            <column name="create_time" type="datetime" remarks="创建时间" />
+            <column name="creator" type="bigint(20)" remarks="创建人" />
+            <column name="update_time" type="datetime" remarks="更新时间" />
+            <column name="updater" type="bigint(20)" remarks="更新人" />
+            <column name="delete_flag" type="varchar(1)" defaultValue="0" remarks="删除标记" />
+            <column name="tenant_id" type="bigint(20)" remarks="租户ID" />
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

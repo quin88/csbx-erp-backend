@@ -1,0 +1,20 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+    <changeSet author="lky" id="1706666182000" dbms="mysql">
+        <addColumn tableName="supermarket_material">
+            <column name="supplying_zero_name" type="varchar(100)" remarks="供零名称"/>
+            <column name="supplying_zero_number" type="varchar(50)" remarks="供零编码"/>
+        </addColumn>
+
+        <createTable tableName="market_address" remarks="市场地区表">
+            <column name="id" type="bigint(20)" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="market_address" type="varchar(50)" remarks="市场地区" />
+        </createTable>
+
+        <addColumn tableName="supermarket_order">
+            <column name="market_address_id" type="bigint" remarks="市场地区地址"/>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsh.erp.datasource.mappers.WxminiUserMapperEx">
+    <resultMap extends="com.jsh.erp.datasource.mappers.RoleMapper.BaseResultMap" id="ResultExMap"
+               type="com.jsh.erp.datasource.entities.WxminiUser">
+    </resultMap>
+    <select id="selectByPhoneNumber" resultType="com.jsh.erp.datasource.entities.WxminiUser">
+        select *
+        from wxmini_user
+        where 1 = 1
+          and phone_number = #{phoneNumber}
+          and ifnull(delete_flag, '0') !='1'
+    </select>
+
+    <select id="selectByOpenId" resultType="com.jsh.erp.datasource.entities.WxminiUser">
+        select *
+        from wxmini_user
+        where 1 = 1
+          and open_id = #{openId}
+          and ifnull(delete_flag, '0') !='1'
+    </select>
+</mapper>

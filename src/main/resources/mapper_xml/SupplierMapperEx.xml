@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsh.erp.datasource.mappers.SupplierMapperEx">
+    <resultMap extends="com.jsh.erp.datasource.mappers.SupplierMapper.BaseResultMap" id="ResultMapEx"
+               type="com.jsh.erp.datasource.vo.SupplierVoList">
+        <result column="verifierName" jdbcType="VARCHAR" property="verifierName"/>
+    </resultMap>
+    <select id="selectByConditionSupplier" parameterType="com.jsh.erp.datasource.entities.SupplierExample" resultMap="ResultMapEx">
+        select js.*, u.username verifierName
+        FROM jsh_supplier js
+        left join jsh_user u on js.verifier = u.id and ifnull(u.Status,'0') !='1'
+        where 1=1
+        <if test="supplier != null and supplier !=''">
+            <bind name="bindSupplier" value="'%'+supplier+'%'"/>
+            and js.supplier like #{bindSupplier}
+        </if>
+        <if test="type != null and type !=''">
+            and js.type=#{type}
+        </if>
+        <if test="statusArray != null and statusArray !=''">
+            and js.check_status in (
+            <foreach collection="statusArray" item="status" separator=",">
+                #{status}
+            </foreach>
+            )
+        </if>
+        <if test="phonenum != null and phonenum !=''">
+            <bind name="bindPhoneNum" value="'%'+phonenum+'%'"/>
+            and js.phone_num like #{bindPhoneNum}
+        </if>
+        <if test="telephone != null and telephone !=''">
+            <bind name="bindTelephone" value="'%'+telephone+'%'"/>
+            and js.telephone like #{bindTelephone}
+        </if>
+        and ifnull(js.delete_flag,'0') !='1'
+        order by sort asc, id desc
+        <if test="offset != null and rows != null">
+            limit #{offset},#{rows}
+        </if>
+    </select>
+    <select id="countsBySupplier" resultType="java.lang.Long">
+        SELECT
+        COUNT(id)
+        FROM jsh_supplier
+        WHERE 1=1
+        <if test="supplier != null and supplier !=''">
+            <bind name="bindSupplier" value="'%'+supplier+'%'"/>
+            and supplier like #{bindSupplier}
+        </if>
+        <if test="type != null and type !=''">
+            and type=#{type}
+        </if>
+        <if test="phonenum != null and phonenum !=''">
+            <bind name="bindPhoneNum" value="'%'+phonenum+'%'"/>
+            and phone_num like #{bindPhoneNum}
+        </if>
+        <if test="telephone != null and telephone !=''">
+            <bind name="bindTelephone" value="'%'+telephone+'%'"/>
+            and telephone like #{bindTelephone}
+        </if>
+        <if test="statusArray != null and statusArray !=''">
+            and check_status in (
+            <foreach collection="statusArray" item="status" separator=",">
+                #{status}
+            </foreach>
+            )
+        </if>
+        and ifnull(delete_flag,'0') !='1'
+    </select>
+
+    <select id="findByAll" parameterType="com.jsh.erp.datasource.entities.SupplierExample" resultMap="com.jsh.erp.datasource.mappers.SupplierMapper.BaseResultMap">
+        select *
+        FROM jsh_supplier
+        where 1=1
+        <if test="supplier != null and supplier !=''">
+            <bind name="bindSupplier" value="'%'+supplier+'%'"/>
+            and supplier like #{bindSupplier}
+        </if>
+        <if test="type != null and type !=''">
+            and type=#{type}
+        </if>
+        <if test="phonenum != null and phonenum !=''">
+            <bind name="bindPhoneNum" value="'%'+phonenum+'%'"/>
+            and phone_num like #{bindPhoneNum}
+        </if>
+        <if test="telephone != null and telephone !=''">
+            <bind name="bindTelephone" value="'%'+telephone+'%'"/>
+            and telephone like #{bindTelephone}
+        </if>
+        and ifnull(delete_flag,'0') !='1'
+        order by sort asc, id desc
+    </select>
+
+    <update id="batchDeleteSupplierByIds">
+        update jsh_supplier
+        set delete_flag='1'
+        where 1=1
+        and id in (
+        <foreach collection="ids" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+    </update>
+
+    <select id="getSupplierByNameAndType" resultType="com.jsh.erp.datasource.entities.Supplier">
+        select *
+        from jsh_supplier
+        where supplier = #{supplier} and type = #{type}
+        and ifnull(delete_flag,'0') !='1'
+    </select>
+
+    <select id="getSupplierByPhone" resultType="com.jsh.erp.datasource.vo.UserVo">
+        select id id,id supplierId,contacts name,enabled active,check_status,supplier,image_path
+        from jsh_supplier
+        where 1=1
+        <if test="telephone != null and telephone !=''">
+        and telephone = #{telephone}
+    </if>
+        and ifnull(delete_flag,'0') !='1'
+    </select>
+
+    <select id="selectSupplierIdBySupplier" resultType="java.lang.Long">
+        select id
+        from jsh_supplier
+        where 1=1
+        <if test="supplier != null and supplier !=''">
+            and supplier = #{supplier}
+        </if>
+        and ifnull(delete_flag,'0') !='1'
+    </select>
+
+    <select id="getSupplierNumberByPhone" resultType="java.lang.Integer">
+        select
+        count(1)
+        from jsh_supplier
+        where 1=1
+        <if test="telephone != null and telephone !=''">
+            and telephone = #{telephone}
+        </if>
+        and id != #{id}
+        and enabled=true
+        and type = '供应商'
+        and ifnull(delete_flag,'0') !='1'
+    </select>
+</mapper>

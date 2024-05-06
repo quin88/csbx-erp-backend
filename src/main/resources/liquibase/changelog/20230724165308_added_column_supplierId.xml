@@ -1,0 +1,11 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+    <changeSet author="mqh (generated)" id="1690188870175" dbms="mysql">
+        <addColumn tableName="jsh_material">
+            <column name="supplier_id" type="bigint" defaultValue="0" remarks="供应商id"/>
+            <column name="approval_status" type="VARCHAR(1)" defaultValue="0" remarks="审核状态，0未审核，1审核中，2已审核"/>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

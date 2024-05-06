@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsh.erp.datasource.mappers.SupermarketAddedOrderMapperEx">
+    <resultMap extends="com.jsh.erp.datasource.mappers.SupermarketAddedOrderMapper.BaseResultMap" id="ResultMapEx"
+               type="com.jsh.erp.datasource.vo.SupermarketAddedOrderVo">
+        <result column="createdName" jdbcType="VARCHAR" property="createdName" />
+        <result column="verifierName" jdbcType="VARCHAR" property="verifierName" />
+        <result column="linkedDifferenceTotal" jdbcType="DECIMAL" property="linkedDifferenceTotal" />
+        </resultMap>
+
+    <resultMap id="SupermarketOrderDifferenceDetailVo" type="com.jsh.erp.datasource.vo.SupermarketOrderDifferenceDetailVo">
+        <result column="supplementaryAmount" jdbcType="DECIMAL" property="supplementaryAmount" />
+        <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
+        <result column="number" jdbcType="VARCHAR" property="number" />
+        <result column="type" jdbcType="VARCHAR" property="type" />
+    </resultMap>
+
+    <select id="selectSupermarketAddedOrderById" resultMap="ResultMapEx">
+        SELECT sao.*,
+        so.difference_total AS linkedDifferenceTotal
+        FROM supermarket_added_order sao
+        LEFT JOIN supermarket_order so ON so.id = sao.link_id AND ifnull(so.delete_flag,'0') !='1'
+        WHERE 1=1
+        <if test="id != null">
+            AND sao.id = #{id}
+        </if>
+        AND ifnull(sao.delete_flag,'0') !='1'
+    </select>
+
+    <select id="selectSupermarketAddedOrder" resultMap="ResultMapEx">
+        SELECT sao.*,
+        ju1.username AS createdName,
+        ju2.username AS verifierName,
+        so.difference_total AS linkedDifferenceTotal
+        FROM supermarket_added_order sao
+        LEFT JOIN jsh_user ju1 ON ju1.id = sao.creator
+        LEFT JOIN jsh_user ju2 ON ju2.id = sao.verifier
+        LEFT JOIN supermarket_order so ON so.id = sao.link_id AND ifnull(so.delete_flag,'0') !='1'
+        WHERE 1=1
+        <if test="id != null">
+            AND sao.id = #{id}
+        </if>
+        <if test="number != null">
+            <bind name="number" value="'%'+number+'%'"/>
+            AND sao.number LIKE #{number}
+        </if>
+        <if test="statusArray != null and statusArray !=''">
+            AND sao.status IN (
+            <foreach collection="statusArray" item="status" separator=",">
+                #{status}
+            </foreach>
+            )
+        </if>
+        <if test="linkNumber != null">
+            <bind name="linkNumber" value="'%'+linkNumber+'%'"/>
+            AND sao.link_number LIKE #{linkNumber}
+        </if>
+        <if test="beginTime != null">
+            AND sao.payment_date >= #{beginTime}
+        </if>
+        <if test="endTime != null">
+            AND sao.payment_date &lt;= #{endTime}
+        </if>
+        AND ifnull(sao.delete_flag,'0') !='1'
+        ORDER BY sao.id DESC
+        <if test="offset != null and rows != null">
+            limit #{offset},#{rows}
+        </if>
+    </select>
+
+    <select id="countSupermarketAddedOrder" resultType="java.lang.Long">
+        SELECT count(1)
+        FROM supermarket_added_order sao
+        LEFT JOIN jsh_user ju1 ON ju1.id = sao.creator
+        LEFT JOIN jsh_user ju2 ON ju2.id = sao.verifier
+        WHERE 1=1
+        <if test="id != null">
+            AND sao.id = #{id}
+        </if>
+        <if test="number != null">
+            <bind name="number" value="'%'+number+'%'"/>
+            AND sao.number LIKE #{number}
+        </if>
+        <if test="statusArray != null and statusArray !=''">
+            AND sao.status IN (
+            <foreach collection="statusArray" item="status" separator=",">
+                #{status}
+            </foreach>
+            )
+        </if>
+        <if test="linkNumber != null">
+            <bind name="linkNumber" value="'%'+linkNumber+'%'"/>
+            AND sao.link_number LIKE #{linkNumber}
+        </if>
+        <if test="beginTime != null">
+            AND sao.payment_date >= #{beginTime}
+        </if>
+        <if test="endTime != null">
+            AND sao.payment_date &lt;= #{endTime}
+        </if>
+        AND ifnull(sao.delete_flag,'0') !='1'
+    </select>
+
+    <update id="batchDeleteSupermarketOrderByIds">
+        update supermarket_order
+        set delete_flag='1',updater=#{updater},update_time=#{updateTime}
+        where 1=1
+        and id in (
+        <foreach collection="ids" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+    </update>
+
+    <update id="batchDeleteByIds">
+        update supermarket_added_order
+        set delete_flag='1',updater=#{updater},update_time=#{updateTime}
+        where 1=1
+        and id in (
+        <foreach collection="ids" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+    </update>
+
+    <select id="getDifferenceDetail" resultMap="SupermarketOrderDifferenceDetailVo">
+        SELECT verifier_time AS updateTime, number, transfer_amount AS supplementaryAmount, '补单编号' AS type
+        FROM supermarket_added_order
+        WHERE link_id = #{linkId}
+          AND status IN ('1' , '2')
+          AND ifnull(delete_flag,'0') !='1'
+    </select>
+</mapper>

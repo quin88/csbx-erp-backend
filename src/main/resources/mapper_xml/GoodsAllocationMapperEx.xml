@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsh.erp.datasource.mappers.GoodsAllocationMapperEx">
+
+    <resultMap extends="com.jsh.erp.datasource.mappers.GoodsAllocationMapper.BaseResultMap" id="ResultMapEx"
+               type="com.jsh.erp.datasource.vo.GoodsAllocationVo">
+        <result column="smallDepotName" jdbcType="VARCHAR" property="smallDepotName"/>
+        <result column="locationName" jdbcType="VARCHAR" property="locationName"/>
+        <result column="createdName" jdbcType="VARCHAR" property="createdName"/>
+    </resultMap>
+
+    <select id="selectByConditionGoodsAllocation" parameterType="com.jsh.erp.datasource.entities.GoodsAllocationExample"
+            resultMap="ResultMapEx">
+        select *, u.username createdName, sd.name smallDepotName, l.name locationName
+        from goods_allocation ga
+        left join small_depot sd on sd.id = ga.small_depot_id and ifnull(sd.delete_flag,'0')!='1'
+        left join location l on l.id = ga.location_id and ifnull(l.delete_flag,'0')!='1'
+        left join jsh_user u on ga.creator = u.id and ifnull(u.Status,'0') !='1'
+        where 1=1
+        <if test="depotId != null and depotId !=''">
+            and ga.depot_id=#{depotId}
+        </if>
+        <if test="smallDepotId != null and smallDepotId !=''">
+            and ga.small_depot_id=#{smallDepotId}
+        </if>
+        <if test="number != null">
+            <bind name="bindName" value="'%'+number+'%'"/>
+            and ga.number like #{number}
+        </if>
+        <if test="capacityStatus != null">
+            and ga.capacity_status = #{capacityStatus}
+        </if>
+        <if test="enabled ==1">
+            and ga.enabled = #{enabled}
+        </if>
+        and ifnull(ga.delete_flag,'0') !='1'
+        order by ga.id desc
+        <if test="offset != null and rows != null">
+            limit #{offset},#{rows}
+        </if>
+    </select>
+
+    <select id="countsByGoodsAllocation" resultType="java.lang.Long">
+        select
+        count(1)
+        from goods_allocation
+        where 1=1
+        <if test="depotId != null and depotId !=''">
+            and depot_id=#{depotId}
+        </if>
+        <if test="smallDepotId != null and smallDepotId !=''">
+            and small_depot_id=#{smallDepotId}
+        </if>
+        <if test="number != null">
+            <bind name="bindName" value="'%'+number+'%'"/>
+            and number like #{number}
+        </if>
+        <if test="capacityStatus != null">
+            and capacity_status = #{capacityStatus}
+        </if>
+        <if test="enabled ==1">
+            and enabled = #{enabled}
+        </if>
+        and ifnull(delete_flag,'0') !='1'
+    </select>
+
+    <update id="batchDeleteGoodsAllocationByIds">
+        update goods_allocation
+        set delete_flag='1',updater=#{updater},update_time=#{updateTime}
+        where 1=1
+        and id in (
+        <foreach collection="idArray" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+    </update>
+
+    <select id="selectRepetitionGoods" resultType="com.jsh.erp.datasource.entities.GoodsAllocation">
+        select *
+        from goods_allocation
+        where 1=1
+        <if test="depotId != null and depotId !=''">
+            and depot_id=#{depotId}
+        </if>
+        <if test="goodsAllocation != null and goodsAllocation !=''">
+            and goods_allocation=#{goodsAllocation}
+        </if>
+        and ifnull(delete_flag,'0') !='1'
+    </select>
+
+    <select id="countIsActive" resultType="java.lang.Long">
+        select count(1)
+        from goods_allocation
+        where 1=1
+        and id in (
+        <foreach collection="idArray" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+        and enabled = 1
+        and ifnull(delete_flag, '0') != '1'
+    </select>
+</mapper>

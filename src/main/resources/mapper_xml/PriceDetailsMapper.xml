@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsh.erp.datasource.mappers.PriceDetailsMapper">
+  <resultMap id="BaseResultMap" type="com.jsh.erp.datasource.entities.PriceDetails">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="number" jdbcType="VARCHAR" property="number" />
+    <result column="supplier_id" jdbcType="BIGINT" property="supplierId" />
+    <result column="supplier" jdbcType="VARCHAR" property="supplier" />
+    <result column="receipts_number" jdbcType="VARCHAR" property="receiptsNumber" />
+    <result column="bring_in" jdbcType="VARCHAR" property="bringIn" />
+    <result column="other_price_type" jdbcType="VARCHAR" property="otherPriceType" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="subtotal" jdbcType="DECIMAL" property="subtotal" />
+    <result column="price_number" jdbcType="DECIMAL" property="priceNumber" />
+    <result column="time_measurement" jdbcType="VARCHAR" property="timeMeasurement" />
+    <result column="weight_measurement" jdbcType="VARCHAR" property="weightMeasurement" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="creator" jdbcType="BIGINT" property="creator" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="updater" jdbcType="BIGINT" property="updater" />
+    <result column="delete_flag" jdbcType="VARCHAR" property="deleteFlag" />
+    <result column="tenant_id" jdbcType="BIGINT" property="tenantId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, number, supplier_id, supplier, receipts_number, bring_in, other_price_type, price, 
+    subtotal, price_number, time_measurement, weight_measurement, status, remark, create_time, 
+    creator, update_time, updater, delete_flag, tenant_id
+  </sql>
+  <select id="selectByExample" parameterType="com.jsh.erp.datasource.entities.PriceDetailsExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from price_details
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from price_details
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from price_details
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jsh.erp.datasource.entities.PriceDetailsExample">
+    delete from price_details
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jsh.erp.datasource.entities.PriceDetails">
+    insert into price_details (id, number, supplier_id, 
+      supplier, receipts_number, bring_in, 
+      other_price_type, price, subtotal, 
+      price_number, time_measurement, weight_measurement, 
+      status, remark, create_time, 
+      creator, update_time, updater, 
+      delete_flag, tenant_id)
+    values (#{id,jdbcType=BIGINT}, #{number,jdbcType=VARCHAR}, #{supplierId,jdbcType=BIGINT}, 
+      #{supplier,jdbcType=VARCHAR}, #{receiptsNumber,jdbcType=VARCHAR}, #{bringIn,jdbcType=VARCHAR}, 
+      #{otherPriceType,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, #{subtotal,jdbcType=DECIMAL}, 
+      #{priceNumber,jdbcType=DECIMAL}, #{timeMeasurement,jdbcType=VARCHAR}, #{weightMeasurement,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{creator,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=BIGINT}, 
+      #{deleteFlag,jdbcType=VARCHAR}, #{tenantId,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jsh.erp.datasource.entities.PriceDetails">
+    insert into price_details
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="number != null">
+        number,
+      </if>
+      <if test="supplierId != null">
+        supplier_id,
+      </if>
+      <if test="supplier != null">
+        supplier,
+      </if>
+      <if test="receiptsNumber != null">
+        receipts_number,
+      </if>
+      <if test="bringIn != null">
+        bring_in,
+      </if>
+      <if test="otherPriceType != null">
+        other_price_type,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="subtotal != null">
+        subtotal,
+      </if>
+      <if test="priceNumber != null">
+        price_number,
+      </if>
+      <if test="timeMeasurement != null">
+        time_measurement,
+      </if>
+      <if test="weightMeasurement != null">
+        weight_measurement,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="updater != null">
+        updater,
+      </if>
+      <if test="deleteFlag != null">
+        delete_flag,
+      </if>
+      <if test="tenantId != null">
+        tenant_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="number != null">
+        #{number,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierId != null">
+        #{supplierId,jdbcType=BIGINT},
+      </if>
+      <if test="supplier != null">
+        #{supplier,jdbcType=VARCHAR},
+      </if>
+      <if test="receiptsNumber != null">
+        #{receiptsNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="bringIn != null">
+        #{bringIn,jdbcType=VARCHAR},
+      </if>
+      <if test="otherPriceType != null">
+        #{otherPriceType,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="subtotal != null">
+        #{subtotal,jdbcType=DECIMAL},
+      </if>
+      <if test="priceNumber != null">
+        #{priceNumber,jdbcType=DECIMAL},
+      </if>
+      <if test="timeMeasurement != null">
+        #{timeMeasurement,jdbcType=VARCHAR},
+      </if>
+      <if test="weightMeasurement != null">
+        #{weightMeasurement,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null">
+        #{updater,jdbcType=BIGINT},
+      </if>
+      <if test="deleteFlag != null">
+        #{deleteFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="tenantId != null">
+        #{tenantId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jsh.erp.datasource.entities.PriceDetailsExample" resultType="java.lang.Long">
+    select count(*) from price_details
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update price_details
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.number != null">
+        number = #{record.number,jdbcType=VARCHAR},
+      </if>
+      <if test="record.supplierId != null">
+        supplier_id = #{record.supplierId,jdbcType=BIGINT},
+      </if>
+      <if test="record.supplier != null">
+        supplier = #{record.supplier,jdbcType=VARCHAR},
+      </if>
+      <if test="record.receiptsNumber != null">
+        receipts_number = #{record.receiptsNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bringIn != null">
+        bring_in = #{record.bringIn,jdbcType=VARCHAR},
+      </if>
+      <if test="record.otherPriceType != null">
+        other_price_type = #{record.otherPriceType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.price != null">
+        price = #{record.price,jdbcType=DECIMAL},
+      </if>
+      <if test="record.subtotal != null">
+        subtotal = #{record.subtotal,jdbcType=DECIMAL},
+      </if>
+      <if test="record.priceNumber != null">
+        price_number = #{record.priceNumber,jdbcType=DECIMAL},
+      </if>
+      <if test="record.timeMeasurement != null">
+        time_measurement = #{record.timeMeasurement,jdbcType=VARCHAR},
+      </if>
+      <if test="record.weightMeasurement != null">
+        weight_measurement = #{record.weightMeasurement,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.creator != null">
+        creator = #{record.creator,jdbcType=BIGINT},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updater != null">
+        updater = #{record.updater,jdbcType=BIGINT},
+      </if>
+      <if test="record.deleteFlag != null">
+        delete_flag = #{record.deleteFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tenantId != null">
+        tenant_id = #{record.tenantId,jdbcType=BIGINT},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update price_details
+    set id = #{record.id,jdbcType=BIGINT},
+      number = #{record.number,jdbcType=VARCHAR},
+      supplier_id = #{record.supplierId,jdbcType=BIGINT},
+      supplier = #{record.supplier,jdbcType=VARCHAR},
+      receipts_number = #{record.receiptsNumber,jdbcType=VARCHAR},
+      bring_in = #{record.bringIn,jdbcType=VARCHAR},
+      other_price_type = #{record.otherPriceType,jdbcType=VARCHAR},
+      price = #{record.price,jdbcType=DECIMAL},
+      subtotal = #{record.subtotal,jdbcType=DECIMAL},
+      price_number = #{record.priceNumber,jdbcType=DECIMAL},
+      time_measurement = #{record.timeMeasurement,jdbcType=VARCHAR},
+      weight_measurement = #{record.weightMeasurement,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      creator = #{record.creator,jdbcType=BIGINT},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      updater = #{record.updater,jdbcType=BIGINT},
+      delete_flag = #{record.deleteFlag,jdbcType=VARCHAR},
+      tenant_id = #{record.tenantId,jdbcType=BIGINT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jsh.erp.datasource.entities.PriceDetails">
+    update price_details
+    <set>
+      <if test="number != null">
+        number = #{number,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierId != null">
+        supplier_id = #{supplierId,jdbcType=BIGINT},
+      </if>
+      <if test="supplier != null">
+        supplier = #{supplier,jdbcType=VARCHAR},
+      </if>
+      <if test="receiptsNumber != null">
+        receipts_number = #{receiptsNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="bringIn != null">
+        bring_in = #{bringIn,jdbcType=VARCHAR},
+      </if>
+      <if test="otherPriceType != null">
+        other_price_type = #{otherPriceType,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="subtotal != null">
+        subtotal = #{subtotal,jdbcType=DECIMAL},
+      </if>
+      <if test="priceNumber != null">
+        price_number = #{priceNumber,jdbcType=DECIMAL},
+      </if>
+      <if test="timeMeasurement != null">
+        time_measurement = #{timeMeasurement,jdbcType=VARCHAR},
+      </if>
+      <if test="weightMeasurement != null">
+        weight_measurement = #{weightMeasurement,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null">
+        updater = #{updater,jdbcType=BIGINT},
+      </if>
+      <if test="deleteFlag != null">
+        delete_flag = #{deleteFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="tenantId != null">
+        tenant_id = #{tenantId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jsh.erp.datasource.entities.PriceDetails">
+    update price_details
+    set number = #{number,jdbcType=VARCHAR},
+      supplier_id = #{supplierId,jdbcType=BIGINT},
+      supplier = #{supplier,jdbcType=VARCHAR},
+      receipts_number = #{receiptsNumber,jdbcType=VARCHAR},
+      bring_in = #{bringIn,jdbcType=VARCHAR},
+      other_price_type = #{otherPriceType,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DECIMAL},
+      subtotal = #{subtotal,jdbcType=DECIMAL},
+      price_number = #{priceNumber,jdbcType=DECIMAL},
+      time_measurement = #{timeMeasurement,jdbcType=VARCHAR},
+      weight_measurement = #{weightMeasurement,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      creator = #{creator,jdbcType=BIGINT},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      updater = #{updater,jdbcType=BIGINT},
+      delete_flag = #{deleteFlag,jdbcType=VARCHAR},
+      tenant_id = #{tenantId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

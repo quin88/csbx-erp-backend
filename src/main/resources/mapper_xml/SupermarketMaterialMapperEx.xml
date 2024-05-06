@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsh.erp.datasource.mappers.SupermarketMaterialMapperEx">
+    <resultMap extends="com.jsh.erp.datasource.mappers.SupermarketMaterialMapper.BaseResultMap" id="ResultMapEx"
+               type="com.jsh.erp.datasource.vo.SupermarketMaterialVoList">
+        <result column="categoryName" jdbcType="VARCHAR" property="categoryName"/>
+        <result column="secondCategoryName" jdbcType="VARCHAR" property="secondCategoryName"/>
+        <result column="thirdCategoryName" jdbcType="VARCHAR" property="thirdCategoryName"/>
+        <result column="supplier" jdbcType="VARCHAR" property="supplier"/>
+        <result column="provinceName" jdbcType="VARCHAR" property="provinceName"/>
+        <result column="cityName" jdbcType="VARCHAR" property="cityName"/>
+        <result column="countyName" jdbcType="VARCHAR" property="countyName"/>
+        <result column="createdName" jdbcType="VARCHAR" property="createdName"/>
+    </resultMap>
+
+    <resultMap extends="com.jsh.erp.datasource.mappers.SupermarketMaterialMapper.BaseResultMap" id="ResultMapExByPrimaryKey"
+               type="com.jsh.erp.datasource.vo.SupermarketMaterialVo">
+        <result column="categoryNumber" jdbcType="VARCHAR" property="categoryNumber"/>
+        <result column="secondCategoryNumber" jdbcType="VARCHAR" property="secondCategoryNumber"/>
+        <result column="thirdCategoryNumber" jdbcType="VARCHAR" property="thirdCategoryNumber"/>
+        <result column="supplierNumber" jdbcType="VARCHAR" property="supplierNumber"/>
+        <result column="provinceNumber" jdbcType="VARCHAR" property="provinceNumber"/>
+        <result column="cityNumber" jdbcType="VARCHAR" property="cityNumber"/>
+        <result column="provinceName" jdbcType="VARCHAR" property="provinceName"/>
+        <result column="cityName" jdbcType="VARCHAR" property="cityName"/>
+        <result column="countyName" jdbcType="VARCHAR" property="countyName"/>
+        <result column="countyNumber" jdbcType="VARCHAR" property="countyNumber"/>
+    </resultMap>
+
+    <resultMap extends="com.jsh.erp.datasource.mappers.SupermarketMaterialMapper.BaseResultMap" id="SupermarketMaterialVo4" type="com.jsh.erp.datasource.entities.SupermarketMaterialVo4">
+        <result column="supplier" jdbcType="VARCHAR" property="supplier" />
+        <result column="category" jdbcType="VARCHAR" property="category" />
+        <result column="secondCategory" jdbcType="VARCHAR" property="secondCategory" />
+        <result column="thirdCategory" jdbcType="VARCHAR" property="thirdCategory" />
+        <result column="provinceName" jdbcType="VARCHAR" property="provinceName" />
+        <result column="cityName" jdbcType="VARCHAR" property="cityName" />
+        <result column="countyName" jdbcType="VARCHAR" property="countyName" />
+    </resultMap>
+
+    <select id="selectByPrimaryKey" parameterType="com.jsh.erp.datasource.entities.SupermarketMaterialExample"
+            resultMap="ResultMapExByPrimaryKey">
+        select m.*, mc.serial_no categoryNumber, s.number supplierNumber, sc_mc.serial_no secondCategoryNumber,
+        th_mc.serial_no thirdCategoryNumber,
+        p.province_number provinceNumber,p.province_name provinceName,c.city_number cityNumber, c.city_name cityName,
+        c1.county_number countyNumber, c1.county_name countyName
+        from supermarket_material m
+        left join jsh_material_category mc on m.category_id = mc.id and ifnull(mc.delete_Flag,'0') !='1'
+        left join jsh_material_category sc_mc on m.second_category_id = sc_mc.id and ifnull(sc_mc.delete_Flag,'0') !='1'
+        left join jsh_material_category th_mc on m.third_category_id = th_mc.id and ifnull(th_mc.delete_Flag,'0') !='1'
+        left join province p on m.province = p.id and ifnull(p.delete_Flag,'0') !='1'
+        left join city c on m.city = c.id and ifnull(c.delete_Flag,'0') !='1'
+        left join county c1 on m.county = c1.id and ifnull(c1.delete_Flag,'0') !='1'
+        left join supermarket_supplier s on m.supplier_id=s.id and ifnull(s.delete_flag,'0')!='1'
+        where 1=1
+        <if test="id != null">
+            and m.id=#{id}
+        </if>
+        and ifnull(m.delete_flag,'0') !='1'
+    </select>
+
+
+    <select id="selectByConditionSupermarketMaterial" parameterType="com.jsh.erp.datasource.entities.SupermarketMaterialExample" resultMap="ResultMapEx">
+        select m.*, mc.name categoryName, s.name supplier, sc_mc.name secondCategoryName, th_mc.name thirdCategoryName, ju.username createdName,
+        p.province_number provinceNumber,p.province_name provinceName,c.city_number cityNumber,  c.city_name cityName, c1.county_number countyNumber,
+        c1.county_name countyName
+        from supermarket_material m
+        left join jsh_material_category mc on m.category_id = mc.id and ifnull(mc.delete_Flag,'0') !='1'
+        left join jsh_material_category sc_mc on m.second_category_id = sc_mc.id and ifnull(sc_mc.delete_Flag,'0') !='1'
+        left join jsh_material_category th_mc on m.third_category_id = th_mc.id and ifnull(th_mc.delete_Flag,'0') !='1'
+        left join supermarket_supplier s on m.supplier_id=s.id and ifnull(s.delete_flag,'0')!='1'
+        left join jsh_user ju on ju.id = m.creator
+        left join province p on m.province = p.id and ifnull(p.delete_Flag,'0') !='1'
+        left join city c on m.city = c.id and ifnull(c.delete_Flag,'0') !='1'
+        left join county c1 on m.county = c1.id and ifnull(c1.delete_Flag,'0') !='1'
+        where 1=1
+        <if test="supplierId != null">
+            and m.supplier_id=#{supplierId}
+        </if>
+        <if test="categoryId != null">
+            and m.category_id=#{categoryId}
+        </if>
+        <if test="secondCategoryId != null">
+            and m.second_category_id=#{secondCategoryId}
+        </if>
+        <if test="thirdCategoryId != null">
+            and m.third_category_id=#{thirdCategoryId}
+        </if>
+        <if test="materialParam != null and materialParam !=''">
+            <bind name="bindKey" value="'%'+materialParam+'%'"/>
+            and (m.name like #{bindKey} or m.number like #{bindKey})
+        </if>
+        <if test="temperatureCondition != null and temperatureCondition !=''">
+            <bind name="bindTemperatureCondition" value="'%'+temperatureCondition+'%'"/>
+            and m.temperature_condition like #{bindTemperatureCondition}
+        </if>
+        <if test="aquaticType != null and aquaticType !=''">
+            <bind name="bindAquaticType" value="'%'+aquaticType+'%'"/>
+            and m.aquatic_type like #{bindAquaticType}
+        </if>
+        <if test="statusArray != null and statusArray !=''">
+            and m.status in (
+            <foreach collection="statusArray" item="status" separator=",">
+                #{status}
+            </foreach>
+            )
+        </if>
+        and ifnull(m.delete_flag,'0') !='1'
+        group by m.id
+        order by m.id desc
+        <if test="offset != null and rows != null">
+            limit #{offset},#{rows}
+        </if>
+    </select>
+
+    <select id="countBySupermarketMaterial" resultType="java.lang.Long">
+        select count(1)
+        from supermarket_material m
+        left join jsh_material_category mc on m.category_id = mc.id and ifnull(mc.delete_Flag,'0') !='1'
+        left join supermarket_supplier s on m.supplier_id=s.id and ifnull(s.delete_flag,'0')!='1'
+        where 1=1
+        <if test="supplierId != null">
+            and m.supplier_id=#{supplierId}
+        </if>
+        <if test="categoryId != null">
+            and m.category_id=#{categoryId}
+        </if>
+        <if test="secondCategoryId != null">
+            and m.second_category_id=#{secondCategoryId}
+        </if>
+        <if test="thirdCategoryId != null">
+            and m.third_category_id=#{thirdCategoryId}
+        </if>
+        <if test="materialParam != null and materialParam !=''">
+            <bind name="bindKey" value="'%'+materialParam+'%'"/>
+            and (m.name like #{bindKey} or m.number like #{bindKey})
+        </if>
+        <if test="temperatureCondition != null and temperatureCondition !=''">
+            <bind name="bindTemperatureCondition" value="'%'+temperatureCondition+'%'"/>
+            and m.temperature_condition like #{bindTemperatureCondition}
+        </if>
+        <if test="aquaticType != null and aquaticType !=''">
+            <bind name="bindAquaticType" value="'%'+aquaticType+'%'"/>
+            and m.aquatic_type like #{bindAquaticType}
+        </if>
+        <if test="statusArray != null and statusArray !=''">
+            and m.status in (
+            <foreach collection="statusArray" item="status" separator=",">
+                #{status}
+            </foreach>
+            )
+        </if>
+        and ifnull(m.delete_flag,'0') !='1'
+    </select>
+
+    <select id="findBySelect" parameterType="com.jsh.erp.datasource.entities.SupermarketSupplierExample"
+            resultMap="ResultMapEx">
+        select m.*, fc.name categoryName,s.name supplier,p.province_name provinceName,c.city_name cityName,c2. county_name
+        countyName,mc.name categoryName,sc_mc.name secondCategoryName, th_mc.name thirdCategoryName from supermarket_material m
+        left join jsh_material_category mc on m.category_id = mc.id and ifnull(mc.delete_Flag,'0') !='1'
+        left join supermarket_supplier s on m.supplier_id=s.id and ifnull(s.delete_flag,'0')!='1'
+        left join province p on m.province=p.id and ifnull(p.delete_flag,'0')!='1'
+        left join city c on m.city = c.id and ifnull(p.delete_flag,'0')!='1'
+        left join county c2 on m.county = c2.id and ifnull(p.delete_flag,'0')!='1'
+        left join jsh_material_category fc on m.category_id = fc.id and ifnull(mc.delete_Flag,'0') !='1'
+        left join jsh_material_category sc_mc on m.second_category_id = sc_mc.id and ifnull(sc_mc.delete_Flag,'0') !='1'
+        left join jsh_material_category th_mc on m.third_category_id = th_mc.id and ifnull(th_mc.delete_Flag,'0') !='1'
+        where 1=1
+        and m.status ='1'
+        and m.enabled='1'
+        <if test="supplierId != null">
+            and m.supplier_id=#{supplierId}
+        </if>
+        <if test="materialParam != null and materialParam !=''">
+            <bind name="bindKey" value="'%'+materialParam+'%'"/>
+            and (m.name like #{bindKey} or m.number like #{bindKey})
+        </if>
+        <if test="temperatureCondition != null and temperatureCondition !=''">
+            <bind name="bindTemperatureCondition" value="'%'+temperatureCondition+'%'"/>
+            and m.temperature_condition like #{bindTemperatureCondition}
+        </if>
+        <if test="province != null and province !=''">
+            and p.province_name = #{province}
+        </if>
+        <if test="city != null and city !=''">
+            and c.city_name = #{city}
+        </if>
+        <if test="county != null and county !=''">
+            and c2.county_name = #{county}
+        </if>
+        <if test="aquaticType != null and aquaticType !=''">
+            <bind name="bindAquaticType" value="'%'+aquaticType+'%'"/>
+            and m.aquatic_type like #{bindAquaticType}
+        </if>
+        and ifnull(m.delete_flag,'0') !='1'
+        group by m.id
+        order by m.id desc
+        <if test="offset != null and rows != null">
+            limit #{offset},#{rows}
+        </if>
+    </select>
+
+    <select id="findBySelectCount" resultType="java.lang.Integer">
+        select count(1) from supermarket_material m
+        left join jsh_material_category mc on m.category_id = mc.id and ifnull(mc.delete_Flag,'0') !='1'
+        left join supermarket_supplier s on m.supplier_id=s.id and ifnull(s.delete_flag,'0')!='1'
+        left join province p on m.province=p.id and ifnull(p.delete_flag,'0')!='1'
+        left join city c on m.city = c.id and ifnull(p.delete_flag,'0')!='1'
+        left join county c2 on m.county = c2.id and ifnull(p.delete_flag,'0')!='1'
+        left join jsh_material_category fc on m.category_id = fc.id and ifnull(mc.delete_Flag,'0') !='1'
+        left join jsh_material_category sc_mc on m.second_category_id = sc_mc.id and ifnull(sc_mc.delete_Flag,'0') !='1'
+        left join jsh_material_category th_mc on m.third_category_id = th_mc.id and ifnull(th_mc.delete_Flag,'0') !='1'
+        where 1=1
+        and m.status ='1'
+        and m.enabled='1'
+        <if test="supplierId != null">
+            and m.supplier_id=#{supplierId}
+        </if>
+        <if test="materialParam != null and materialParam !=''">
+            <bind name="bindKey" value="'%'+materialParam+'%'"/>
+            and (m.name like #{bindKey} or m.number like #{bindKey})
+        </if>
+        <if test="temperatureCondition != null and temperatureCondition !=''">
+            <bind name="bindTemperatureCondition" value="'%'+temperatureCondition+'%'"/>
+            and m.temperature_condition like #{bindTemperatureCondition}
+        </if>
+        <if test="province != null and province !=''">
+            and p.province_name = #{province}
+        </if>
+        <if test="city != null and city !=''">
+            and c.city_name = #{city}
+        </if>
+        <if test="county != null and county !=''">
+            and c2.county_name = #{county}
+        </if>
+        <if test="aquaticType != null and aquaticType !=''">
+            <bind name="bindAquaticType" value="'%'+aquaticType+'%'"/>
+            and m.aquatic_type like #{bindAquaticType}
+        </if>
+        and ifnull(m.delete_flag,'0') !='1'
+    </select>
+
+    <update id="batchDeleteSupermarketMaterialByIds">
+        update supermarket_material
+        set delete_flag='1'
+        where 1=1
+        and id in (
+        <foreach collection="ids" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+    </update>
+
+    <select id="countHasCounty" resultType="java.lang.Integer">
+        select count(1)
+        from supermarket_material
+        where 1 = 1
+        <if test="countyIds != null">
+            and county in
+            <foreach item="countyId" collection="countyIds" open="(" separator="," close=")">
+                #{countyId}
+            </foreach>
+        </if>
+        and ifnull(delete_flag,'0') != '1'
+    </select>
+
+    <select id="countHasCategory" resultType="java.lang.Integer">
+        select count(1)
+        from supermarket_material
+        where 1 = 1
+        and (
+        <foreach collection="categoryIds" item="categoryId" separator=" OR ">
+            category_id = #{categoryId} or second_category_id = #{categoryId} or third_category_id = #{categoryId}
+        </foreach>
+        )
+        and ifnull(delete_flag, '0') != '1'
+    </select>
+
+    <select id="findByIds" resultMap="SupermarketMaterialVo4">
+        select sm.*, ss.name supplier, jmc1.name category, jmc2.name secondCategory, jmc3.name thirdCategory,
+               p.province_name provinceName, c.city_name cityName, ct.county_name countyName
+        FROM supermarket_material sm
+        left join supermarket_supplier ss on ss.id = sm.supplier_id and ifnull(ss.delete_Flag,'0') !='1'
+        left join jsh_material_category jmc1 on jmc1.id = sm.category_id and ifnull(jmc1.delete_Flag,'0') !='1'
+        left join jsh_material_category jmc2 on jmc2.id = sm.second_category_id and ifnull(jmc2.delete_Flag,'0') !='1'
+        left join jsh_material_category jmc3 on jmc3.id = sm.third_category_id and ifnull(jmc3.delete_Flag,'0') !='1'
+        left join province p on p.id = sm.province and ifnull(p.delete_Flag,'0') !='1'
+        left join city c on c.id = sm.city and ifnull(c.delete_Flag,'0') !='1'
+        left join county ct on ct.id = sm.county and ifnull(ct.delete_Flag,'0') !='1'
+        where 1=1
+        <if test="ids != null and ids.size() > 0">
+            and sm.id in (
+            <foreach collection="ids" item="id" separator=",">
+                #{id}
+            </foreach>
+            )
+        </if>
+        and ifnull(sm.delete_flag,'0') !='1'
+    </select>
+
+    <select id="getOnlyNUmberByMaxId" resultType="java.lang.String">
+        select number from supermarket_material order by id desc limit 1
+    </select>
+</mapper>

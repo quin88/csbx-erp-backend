@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsh.erp.datasource.mappers.SupermarketDocumentMapperEx">
+    <resultMap extends="com.jsh.erp.datasource.mappers.SupermarketDocumentMapper.BaseResultMap" id="ResultMapEx"
+               type="com.jsh.erp.datasource.entities.SupermarketDocumentVo4Body">
+        <result column="shipper" jdbcType="VARCHAR" property="shipper" />
+        <result column="receiver" jdbcType="VARCHAR" property="receiver" />
+    </resultMap>
+
+    <select id="selectIdByNumber" resultType="java.lang.Long">
+        select id
+        from supermarket_document
+        where number = #{number}
+          and ifnull(delete_flag, '0') !='1'
+    </select>
+
+    <select id="getSupermarketDocumentListBySignatureIds" resultType="com.jsh.erp.datasource.entities.SupermarketDocument">
+        select *
+        from supermarket_document
+        where 1=1
+        and ifnull(delete_flag,'0') !='1'
+        and (shipper_id in (
+        <foreach collection="ids" item="id" separator=",">
+            #{id}
+        </foreach>
+        ) or receiver_id in (
+        <foreach collection="ids" item="id" separator=",">
+            #{id}
+        </foreach>
+        ))
+    </select>
+
+    <select id="selectSupermarketDocument" resultMap="ResultMapEx">
+        select sd.*, s1.name shipper, s2.name receiver
+        from supermarket_document sd
+        left join signature s1 on s1.id = sd.shipper_id and ifnull(s1.delete_Flag,'0') !='1'
+        left join signature s2 on s2.id = sd.receiver_id and ifnull(s2.delete_Flag,'0') !='1'
+        where 1=1
+        <if test="supplier != null">
+            <bind name="supplier" value="'%'+supplier+'%'"/>
+            and sd.supplier like #{supplier}
+        </if>
+        <if test="organ != null">
+            <bind name="organ" value="'%'+organ+'%'"/>
+            and sd.organ like #{organ}
+        </if>
+        <if test="invoiceNumber != null">
+            <bind name="invoiceNumber" value="'%'+invoiceNumber+'%'"/>
+            and sd.invoice_number like #{invoiceNumber}
+        </if>
+        <if test="number != null">
+            <bind name="number" value="'%'+number+'%'"/>
+            and sd.number like #{number}
+        </if>
+        <if test="beginTime != null">
+            and sd.create_time >= #{beginTime}
+        </if>
+        <if test="endTime != null">
+            and sd.create_time &lt;= #{endTime}
+        </if>
+        <if test="status != null">
+            and sd.status = #{status}
+        </if>
+        <if test="type != null">
+            and sd.type = #{type}
+        </if>
+        and ifnull(sd.delete_flag,'0') !='1'
+        order by sd.id desc
+        <if test="offset != null and rows != null">
+            limit #{offset},#{rows}
+        </if>
+    </select>
+
+    <select id="countSupermarketDocument" resultType="java.lang.Long">
+        select count(1)
+        from supermarket_document
+        where 1=1
+        <if test="supplier != null">
+            <bind name="supplier" value="'%'+supplier+'%'"/>
+            and supplier like #{supplier}
+        </if>
+        <if test="organ != null">
+            <bind name="organ" value="'%'+organ+'%'"/>
+            and organ like #{organ}
+        </if>
+        <if test="invoiceNumber != null">
+            <bind name="invoiceNumber" value="'%'+invoiceNumber+'%'"/>
+            and invoice_number like #{invoiceNumber}
+        </if>
+        <if test="number != null">
+            <bind name="number" value="'%'+number+'%'"/>
+            and number like #{number}
+        </if>
+        <if test="beginTime != null">
+            and create_time >= #{beginTime}
+        </if>
+        <if test="endTime != null">
+            and create_time &lt;= #{endTime}
+        </if>
+        <if test="status != null">
+            and status = #{status}
+        </if>
+        <if test="type != null">
+            and type = #{type}
+        </if>
+        and ifnull(delete_flag,'0') !='1'
+    </select>
+
+    <select id="countIsSubmit" resultType="java.lang.Long">
+        select count(1)
+        from supermarket_document
+        where 1=1
+        and id in (
+        <foreach collection="idArray" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+        and status = 1
+        and ifnull(delete_flag, '0') != '1'
+    </select>
+
+    <update id="batchDeleteSuperDocumentByIds">
+        update supermarket_document
+        set delete_flag='1',updater=#{updater},update_time=#{updateTime}
+        where 1=1
+        and id in (
+        <foreach collection="ids" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+    </update>
+
+    <select id="selectSupermarketDocumentById" resultMap="ResultMapEx">
+        select sd.*, s1.name shipper, s2.name receiver
+        from supermarket_document sd
+        left join signature s1 on s1.id = sd.shipper_id and ifnull(s1.delete_Flag,'0') !='1'
+        left join signature s2 on s2.id = sd.receiver_id and ifnull(s2.delete_Flag,'0') !='1'
+        where 1=1
+        <if test="id != null">
+            and sd.id = #{id}
+        </if>
+        and ifnull(sd.delete_flag,'0') !='1'
+    </select>
+</mapper>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsh.erp.datasource.mappers.BalanceRecordsMapperEx">
+    <select id="selectBySupplierId" resultType="com.jsh.erp.datasource.entities.BalanceRecords">
+        select *
+        FROM balance_records
+        where supplier_id=#{supplierId}
+    </select>
+</mapper>

@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsh.erp.datasource.mappers.SmallDepotMapper">
+  <resultMap id="BaseResultMap" type="com.jsh.erp.datasource.entities.SmallDepot">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="depot_id" jdbcType="BIGINT" property="depotId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="number" jdbcType="VARCHAR" property="number" />
+    <result column="area" jdbcType="INTEGER" property="area" />
+    <result column="area_unit" jdbcType="VARCHAR" property="areaUnit" />
+    <result column="volume" jdbcType="INTEGER" property="volume" />
+    <result column="volume_unit" jdbcType="VARCHAR" property="volumeUnit" />
+    <result column="max_goods_quantity" jdbcType="INTEGER" property="maxGoodsQuantity" />
+    <result column="max_temperature" jdbcType="VARCHAR" property="maxTemperature" />
+    <result column="min_temperature" jdbcType="VARCHAR" property="minTemperature" />
+    <result column="refrigeration_method" jdbcType="VARCHAR" property="refrigerationMethod" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="enabled" jdbcType="BIT" property="enabled" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="creator" jdbcType="BIGINT" property="creator" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="updater" jdbcType="BIGINT" property="updater" />
+    <result column="delete_flag" jdbcType="VARCHAR" property="deleteFlag" />
+    <result column="tenant_id" jdbcType="BIGINT" property="tenantId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, depot_id, name, number, area, area_unit, volume, volume_unit, max_goods_quantity, 
+    max_temperature, min_temperature, refrigeration_method, type, enabled, remark, create_time, 
+    creator, update_time, updater, delete_flag, tenant_id
+  </sql>
+  <select id="selectByExample" parameterType="com.jsh.erp.datasource.entities.SmallDepotExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from small_depot
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from small_depot
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from small_depot
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jsh.erp.datasource.entities.SmallDepotExample">
+    delete from small_depot
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jsh.erp.datasource.entities.SmallDepot">
+    insert into small_depot (id, depot_id, name, 
+      number, area, area_unit, 
+      volume, volume_unit, max_goods_quantity, 
+      max_temperature, min_temperature, refrigeration_method, 
+      type, enabled, remark, 
+      create_time, creator, update_time, 
+      updater, delete_flag, tenant_id
+      )
+    values (#{id,jdbcType=BIGINT}, #{depotId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, 
+      #{number,jdbcType=VARCHAR}, #{area,jdbcType=INTEGER}, #{areaUnit,jdbcType=VARCHAR}, 
+      #{volume,jdbcType=INTEGER}, #{volumeUnit,jdbcType=VARCHAR}, #{maxGoodsQuantity,jdbcType=INTEGER}, 
+      #{maxTemperature,jdbcType=VARCHAR}, #{minTemperature,jdbcType=VARCHAR}, #{refrigerationMethod,jdbcType=VARCHAR}, 
+      #{type,jdbcType=VARCHAR}, #{enabled,jdbcType=BIT}, #{remark,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{updater,jdbcType=BIGINT}, #{deleteFlag,jdbcType=VARCHAR}, #{tenantId,jdbcType=BIGINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jsh.erp.datasource.entities.SmallDepot">
+    insert into small_depot
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="depotId != null">
+        depot_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="number != null">
+        number,
+      </if>
+      <if test="area != null">
+        area,
+      </if>
+      <if test="areaUnit != null">
+        area_unit,
+      </if>
+      <if test="volume != null">
+        volume,
+      </if>
+      <if test="volumeUnit != null">
+        volume_unit,
+      </if>
+      <if test="maxGoodsQuantity != null">
+        max_goods_quantity,
+      </if>
+      <if test="maxTemperature != null">
+        max_temperature,
+      </if>
+      <if test="minTemperature != null">
+        min_temperature,
+      </if>
+      <if test="refrigerationMethod != null">
+        refrigeration_method,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="enabled != null">
+        enabled,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="updater != null">
+        updater,
+      </if>
+      <if test="deleteFlag != null">
+        delete_flag,
+      </if>
+      <if test="tenantId != null">
+        tenant_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="depotId != null">
+        #{depotId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null">
+        #{number,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null">
+        #{area,jdbcType=INTEGER},
+      </if>
+      <if test="areaUnit != null">
+        #{areaUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="volume != null">
+        #{volume,jdbcType=INTEGER},
+      </if>
+      <if test="volumeUnit != null">
+        #{volumeUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="maxGoodsQuantity != null">
+        #{maxGoodsQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="maxTemperature != null">
+        #{maxTemperature,jdbcType=VARCHAR},
+      </if>
+      <if test="minTemperature != null">
+        #{minTemperature,jdbcType=VARCHAR},
+      </if>
+      <if test="refrigerationMethod != null">
+        #{refrigerationMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="enabled != null">
+        #{enabled,jdbcType=BIT},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null">
+        #{updater,jdbcType=BIGINT},
+      </if>
+      <if test="deleteFlag != null">
+        #{deleteFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="tenantId != null">
+        #{tenantId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jsh.erp.datasource.entities.SmallDepotExample" resultType="java.lang.Long">
+    select count(*) from small_depot
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update small_depot
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.depotId != null">
+        depot_id = #{record.depotId,jdbcType=BIGINT},
+      </if>
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.number != null">
+        number = #{record.number,jdbcType=VARCHAR},
+      </if>
+      <if test="record.area != null">
+        area = #{record.area,jdbcType=INTEGER},
+      </if>
+      <if test="record.areaUnit != null">
+        area_unit = #{record.areaUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.volume != null">
+        volume = #{record.volume,jdbcType=INTEGER},
+      </if>
+      <if test="record.volumeUnit != null">
+        volume_unit = #{record.volumeUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maxGoodsQuantity != null">
+        max_goods_quantity = #{record.maxGoodsQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="record.maxTemperature != null">
+        max_temperature = #{record.maxTemperature,jdbcType=VARCHAR},
+      </if>
+      <if test="record.minTemperature != null">
+        min_temperature = #{record.minTemperature,jdbcType=VARCHAR},
+      </if>
+      <if test="record.refrigerationMethod != null">
+        refrigeration_method = #{record.refrigerationMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=VARCHAR},
+      </if>
+      <if test="record.enabled != null">
+        enabled = #{record.enabled,jdbcType=BIT},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.creator != null">
+        creator = #{record.creator,jdbcType=BIGINT},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updater != null">
+        updater = #{record.updater,jdbcType=BIGINT},
+      </if>
+      <if test="record.deleteFlag != null">
+        delete_flag = #{record.deleteFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tenantId != null">
+        tenant_id = #{record.tenantId,jdbcType=BIGINT},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update small_depot
+    set id = #{record.id,jdbcType=BIGINT},
+      depot_id = #{record.depotId,jdbcType=BIGINT},
+      name = #{record.name,jdbcType=VARCHAR},
+      number = #{record.number,jdbcType=VARCHAR},
+      area = #{record.area,jdbcType=INTEGER},
+      area_unit = #{record.areaUnit,jdbcType=VARCHAR},
+      volume = #{record.volume,jdbcType=INTEGER},
+      volume_unit = #{record.volumeUnit,jdbcType=VARCHAR},
+      max_goods_quantity = #{record.maxGoodsQuantity,jdbcType=INTEGER},
+      max_temperature = #{record.maxTemperature,jdbcType=VARCHAR},
+      min_temperature = #{record.minTemperature,jdbcType=VARCHAR},
+      refrigeration_method = #{record.refrigerationMethod,jdbcType=VARCHAR},
+      type = #{record.type,jdbcType=VARCHAR},
+      enabled = #{record.enabled,jdbcType=BIT},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      creator = #{record.creator,jdbcType=BIGINT},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      updater = #{record.updater,jdbcType=BIGINT},
+      delete_flag = #{record.deleteFlag,jdbcType=VARCHAR},
+      tenant_id = #{record.tenantId,jdbcType=BIGINT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jsh.erp.datasource.entities.SmallDepot">
+    update small_depot
+    <set>
+      <if test="depotId != null">
+        depot_id = #{depotId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null">
+        number = #{number,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null">
+        area = #{area,jdbcType=INTEGER},
+      </if>
+      <if test="areaUnit != null">
+        area_unit = #{areaUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="volume != null">
+        volume = #{volume,jdbcType=INTEGER},
+      </if>
+      <if test="volumeUnit != null">
+        volume_unit = #{volumeUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="maxGoodsQuantity != null">
+        max_goods_quantity = #{maxGoodsQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="maxTemperature != null">
+        max_temperature = #{maxTemperature,jdbcType=VARCHAR},
+      </if>
+      <if test="minTemperature != null">
+        min_temperature = #{minTemperature,jdbcType=VARCHAR},
+      </if>
+      <if test="refrigerationMethod != null">
+        refrigeration_method = #{refrigerationMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="enabled != null">
+        enabled = #{enabled,jdbcType=BIT},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null">
+        updater = #{updater,jdbcType=BIGINT},
+      </if>
+      <if test="deleteFlag != null">
+        delete_flag = #{deleteFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="tenantId != null">
+        tenant_id = #{tenantId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jsh.erp.datasource.entities.SmallDepot">
+    update small_depot
+    set depot_id = #{depotId,jdbcType=BIGINT},
+      name = #{name,jdbcType=VARCHAR},
+      number = #{number,jdbcType=VARCHAR},
+      area = #{area,jdbcType=INTEGER},
+      area_unit = #{areaUnit,jdbcType=VARCHAR},
+      volume = #{volume,jdbcType=INTEGER},
+      volume_unit = #{volumeUnit,jdbcType=VARCHAR},
+      max_goods_quantity = #{maxGoodsQuantity,jdbcType=INTEGER},
+      max_temperature = #{maxTemperature,jdbcType=VARCHAR},
+      min_temperature = #{minTemperature,jdbcType=VARCHAR},
+      refrigeration_method = #{refrigerationMethod,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      enabled = #{enabled,jdbcType=BIT},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      creator = #{creator,jdbcType=BIGINT},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      updater = #{updater,jdbcType=BIGINT},
+      delete_flag = #{deleteFlag,jdbcType=VARCHAR},
+      tenant_id = #{tenantId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
